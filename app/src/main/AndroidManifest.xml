@@ -33,7 +33,8 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".complainActivity.ComplainActivity" />
-        <activity android:name=".expenceActivity.ExpenseActivity"></activity>
+        <activity android:name=".expenceActivity.ExpenseActivity" />
+        <activity android:name=".Signup"></activity>
     </application>
 
 </manifest>

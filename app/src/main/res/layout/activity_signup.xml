@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_signup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="bilal.com.captain.Signup"
+    android:orientation="vertical"
+    android:background="@drawable/login_background">
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="88dp"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_box2">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Username"
+            android:layout_marginTop="13dp"
+            android:textColorHint="@color/lightGray"
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:paddingLeft="13dp"
+
+            android:id="@+id/editText2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_box2">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="13dp"
+            android:textColorHint="@color/lightGray"
+            android:background="@android:color/transparent"
+            android:hint="Email"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+            android:paddingLeft="13dp"
+            android:id="@+id/editText3"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_box2">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:textColorHint="@color/lightGray"
+            android:background="@android:color/transparent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="13dp"
+            android:hint="Password"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+            android:paddingLeft="13dp"
+            android:id="@+id/editText4" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_box2">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="13dp"
+            android:textColorHint="@color/lightGray"
+            android:hint="Confirm Password"
+            android:textSize="20dp"
+            android:id="@+id/editText5"
+            android:textColor="@color/colorWhite"
+            android:paddingLeft="13dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="30dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/slider"
+            android:text="Signup"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            android:id="@+id/button2"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
