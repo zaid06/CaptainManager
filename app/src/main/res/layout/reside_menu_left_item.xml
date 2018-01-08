@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:id="@+id/lo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="65dp"
+            android:layout_height="52dp"
+            android:src="@drawable/ic_sync" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:gravity="center_horizontal"
+
+            android:textColor="@color/colorBlack" />
+
+        <View
+            android:id="@+id/myView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/lightGray" />
+    </LinearLayout>
+    <!--android:text="Today"-->
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lo"
+        android:orientation="vertical">
+
+        <TextView
+
+            android:layout_marginBottom="9dp"
+
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:gravity="center_horizontal"
+
+            android:textColor="@color/colorBlack" />
+        <!--android:text="Today"-->
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    android:orientation="vertical"
+    tools:context="bilal.com.captain.LoginActivity">
+
+    <ImageView
+        android:layout_margin="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/logo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:orientation="vertical"
+        android:background="@drawable/login_box">
+
+        <EditText
+
+            android:inputType="text"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/transparent"
+            android:hint="Username"
+            android:textColorHint="@color/lightGray"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+        <EditText
+            android:inputType="textPassword"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/lightGray"
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:background="@drawable/slider">
+
+        <TextView
+            android:text="Login"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"></LinearLayout>
+
+
+</LinearLayout>
