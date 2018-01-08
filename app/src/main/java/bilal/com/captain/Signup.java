@@ -1,12 +1,33 @@
 package bilal.com.captain;
 
 import android.app.ProgressDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.valdesekamdem.library.mdtoast.MDToast;
+
+import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
+import bilal.com.captain.Util.Util;
+
 
 public class Signup extends AppCompatActivity {
 
@@ -39,6 +60,7 @@ public class Signup extends AppCompatActivity {
         inputPassword = (EditText)findViewById(R.id.editText4);
 
         buttonsignup = (Button)findViewById(R.id.button2);
+
 
         buttonsignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +116,6 @@ public class Signup extends AppCompatActivity {
 
 
 
-
     }
+
 }

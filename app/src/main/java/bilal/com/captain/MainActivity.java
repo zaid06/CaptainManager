@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         radial_right = (ImageView) findViewById(R.id.ic_arrow_right);
 
         complaint = (LinearLayout) findViewById(R.id.complaint);
