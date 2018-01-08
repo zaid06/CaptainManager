@@ -5,18 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="20dp"
-    android:paddingRight="3dp"
-    android:paddingLeft="3dp"
+    android:paddingBottom="10dp"
     tools:context="bilal.com.captain.expenceActivity.ExpenseActivity">
 
     <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:id="@+id/toplayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".4"
+        android:background="@color/colorMain">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:id="@+id/button_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="27dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_back_arrow" />
+
+        </LinearLayout>
+
+
+        <bilal.com.captain.classes.BoldCustomTextView
+            android:layout_weight="1"
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="Expence"
+            android:textColor="@color/colorWhite"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginRight="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/fuel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -25,6 +71,7 @@
             android:background="@color/colorMain"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -32,6 +79,7 @@
                 android:layout_weight="2"
                 android:padding="0dp"
                 android:src="@drawable/fuel" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -44,6 +92,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/puncture"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -52,6 +101,7 @@
             android:background="@color/colorMain"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -59,6 +109,7 @@
                 android:layout_weight="2"
                 android:padding="0dp"
                 android:src="@drawable/puncture" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -74,11 +125,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginRight="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
+
         <LinearLayout
+            android:id="@+id/repair"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -87,6 +142,7 @@
             android:background="@color/colorMain"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -94,6 +150,7 @@
                 android:layout_weight="2"
                 android:padding="0dp"
                 android:src="@drawable/repair" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -106,6 +163,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/challan"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -114,6 +172,7 @@
             android:background="@color/colorMain"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -121,6 +180,7 @@
                 android:layout_weight="2"
                 android:padding="0dp"
                 android:src="@drawable/challan" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -134,11 +194,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginRight="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
+
         <LinearLayout
+            android:id="@+id/others"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -147,13 +211,15 @@
             android:background="@color/colorMain"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:layout_weight="2"
                 android:padding="0dp"
-                android:src="@drawable/mic" />
+                android:src="@drawable/others" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -166,32 +232,31 @@
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:layout_marginRight="5dp"-->
-            <!--android:layout_weight=".5"-->
-            <!--android:background="@color/colorMain"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
-            <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_weight="2"-->
-                <!--android:padding="0dp"-->
-                <!--android:src="@drawable/mic" />-->
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_gravity="top"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:text="Complaint"-->
-                <!--android:textColor="@color/colorWhite"-->
-                <!--android:textSize="25sp" />-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_weight=".5"-->
+        <!--android:background="@color/colorMain"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="vertical">-->
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:padding="0dp"-->
+        <!--android:src="@drawable/mic" />-->
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_gravity="top"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Complaint"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:textSize="25sp" />-->
         <!--</LinearLayout>-->
-
 
 
     </LinearLayout>
@@ -201,7 +266,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"
-        android:layout_weight=".4"
+        android:layout_weight=".1"
         android:orientation="horizontal" />
 
 </LinearLayout>

@@ -19,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import bilal.com.captain.complainActivity.ComplainActivity;
+import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ImageView radial_right, radial_left;
 
-    LinearLayout complaint;
+    LinearLayout complaint, expense;
     private Timer timer;
     private TimerTask timerTask;
     TextView time;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radial_right = (ImageView) findViewById(R.id.ic_arrow_right);
 
         complaint = (LinearLayout) findViewById(R.id.complaint);
+
+        expense = (LinearLayout) findViewById(R.id.expense);
 
         time = (TextView) findViewById(R.id.time);
 
@@ -84,6 +87,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ComplainActivity.class));
+            }
+        });
+
+        expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ExpenseActivity.class));
             }
         });
 //        setUpMenu();
