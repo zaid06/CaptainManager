@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
     EditText et_email, et_password;
 
     LinearLayout login;
+
+    TextView Signup;
 
     FirebaseAuth firebaseAuth;
 
@@ -58,6 +61,10 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
         login = (LinearLayout) findViewById(R.id.login);
 
         login.setOnClickListener(LoginActivity.this);
+
+        Signup = (TextView)findViewById(R.id.signuptextview);
+
+        Signup.setOnClickListener(LoginActivity.this);
     }
 
     @Override
@@ -97,6 +104,9 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
 
                 }
                 break;
+
+            case R.id.signuptextview:
+                startActivity(new Intent(LoginActivity.this, bilal.com.captain.Signup.class));
 
         }
 

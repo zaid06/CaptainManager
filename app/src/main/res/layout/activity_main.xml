@@ -22,10 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Welcome User"
+            android:text="Dashboard"
             android:gravity="center"
             android:textSize="35sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"
+            android:id="@+id/welcometextview"/>
 
         <View
             android:layout_width="match_parent"
