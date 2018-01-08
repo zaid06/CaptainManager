@@ -12,6 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -176,37 +182,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // attach to current activity;
         resideMenu = new ResideMenu(this);
-//        resideMenu.setImageAndName(/*"Bilal(Offline user)"*/userData.get("fname") + " " + userData.get("lname"), "V 2.1.7", R.drawable.ic_user);
 
-//        resideMenu.setUse3D(true);
-//        resideMenu.setBackground(R.mipmap.menu_background);
+
+
         resideMenu.attachToActivity(this);
         resideMenu.setMenuListener(menuListener);
-        //valid scale factor is between 0.0f and 1.0f. leftmenu'width is 150dip.
         resideMenu.setScaleValue(0.5f);
-
-        // create menu items;
+        getCurrentUserName(resideMenu);
         itemTodayJc = new ResideMenuItem(this, R.drawable.ic_sync, "Today's JC", ResideMenu.DIRECTION_LEFT);
         itemVisitSchedule = new ResideMenuItem(this, R.drawable.ic_sync, "Visit Schedule", ResideMenu.DIRECTION_LEFT);
-//        itemDayEnd = new ResideMenuItem(this, R.drawable.ic_sync, "Day End", ResideMenu.DIRECTION_LEFT);
         itemDayEnd = new ResideMenuItem(this, R.drawable.ic_sync, "Reports", ResideMenu.DIRECTION_LEFT);
         itemHierarchy = new ResideMenuItem(this, R.drawable.ic_sync, "Download product Hierarchy", ResideMenu.DIRECTION_LEFT);
-//        itemPassword = new ResideMenuItem(this, R.drawable.ic_change_password, "Change Password", ResideMenu.DIRECTION_LEFT);
 
         itemPassword = new ResideMenuItem(this, R.drawable.ic_sync, "Change Password", ResideMenu.DIRECTION_LEFT);
         itemLogout = new ResideMenuItem(this, R.drawable.ic_sync, "Logout", ResideMenu.DIRECTION_LEFT);
 
         itemText = new ResideMenuItem(getApplicationContext(), "", ResideMenu.DIRECTION_LEFT);
-
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//        String defaultValue = getResources().getString("myNewDate");
-//        date = SaveInSharedPreference.getInSharedPreference(MainActivity.this).getDate();
-
-//        if (date != null && date != "") {
-////            itemText = new ResideMenuItem(getApplicationContext(),"", ResideMenu.DIRECTION_LEFT);
-//            itemText.updateDate("Last Sync: " + date);
-//        }
-
 
         itemTodayJc.setOnClickListener(this);
         itemVisitSchedule.setOnClickListener(this);
@@ -227,15 +218,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        // You can disable a direction by setting ->
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
 
-//        findViewById(R.id.button_left_drawer).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
-//            }
-//        });
+        itemLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intentLogout = new Intent(MainActivity.this, LoginActivity.class);
+                intentLogout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intentLogout);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -259,4 +253,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         resideMenu.closeMenu();
     }
+
+    private void getCurrentUserName(final ResideMenu r){
+
+        FirebaseDatabase.getInstance().getReference().child("USER").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Firebase firebase = dataSnapshot.getValue(Firebase.class);
+
+                Log.d("data", "onChildAdded: "+firebase.getUsername());
+
+                r.setImageAndName(/*"Bilal(Offline user)"*/firebase.getUsername(), "V 2.2.6", R.drawable.ic_user);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+
+    ChildEventListener childEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 }

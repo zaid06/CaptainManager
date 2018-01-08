@@ -97,7 +97,7 @@ public class ResideMenu extends FrameLayout {
 
     public void setImageAndName(String name, String version, int image){
         tv_username.setText(name);
-        tv_version.setText(version);
+//        tv_version.setText(version);
         iv_user.setBackgroundResource(image);
     }
 

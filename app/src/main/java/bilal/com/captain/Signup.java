@@ -87,11 +87,12 @@ public class Signup extends AppCompatActivity {
 
                                     Firebase firebase = new Firebase(id,email,password,username);
 
-                                    FirebaseDatabase.getInstance().getReference().child("USER").push().child("user").setValue(firebase);
+                                    FirebaseDatabase.getInstance().getReference().child("USER").child(auth.getCurrentUser().getUid()).child("user").setValue(firebase);
+
 
                                     startActivity(new Intent(Signup.this,LoginActivity.class));
                                     finish();
-
+//                                    auth.signOut();
                                 }
 
                                 else{
