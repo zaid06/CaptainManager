@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "551205230466",
+    "firebase_url": "https://captainmanager-ecd6d.firebaseio.com",
+    "project_id": "captainmanager-ecd6d",
+    "storage_bucket": "captainmanager-ecd6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551205230466:android:69c10e5816274358",
+        "android_client_info": {
+          "package_name": "bilal.com.captain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551205230466-i9r4rdf7s68gmb01pvsse69eb1gfihma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfvedJmPywJ8Nub2zskn-kSI0vnKXjE8A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

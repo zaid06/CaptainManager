@@ -25,12 +25,12 @@
         android:background="@drawable/login_box">
 
         <EditText
-
+            android:id="@+id/email"
             android:inputType="text"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="3dp"
             android:background="@android:color/transparent"
-            android:hint="Username"
+            android:hint="Email"
             android:textColorHint="@color/lightGray"
             android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
@@ -38,6 +38,7 @@
             android:layout_weight="1"
             />
         <EditText
+            android:id="@+id/password"
             android:inputType="textPassword"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="3dp"
