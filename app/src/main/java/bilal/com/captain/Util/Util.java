@@ -1,5 +1,6 @@
 package bilal.com.captain.Util;
 
+import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +20,21 @@ public class Util {
         }
         return true;
     }
+
+    public static boolean emailValidate(EditText edittext){
+        String validate = edittext.getText().toString();
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(validate).matches()){
+
+            edittext.setError("Email Format Is Invalid");
+
+            return false;
+
+        }
+
+        return true;
+    }
+
 
     public static void tvInvalidate(EditText tv){
 

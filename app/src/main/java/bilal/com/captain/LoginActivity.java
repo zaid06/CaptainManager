@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
         switch (v.getId()){
 
             case R.id.login:
-                if(Util.etValidate(et_email) && Util.etValidate(et_password)){
+                if(Util.etValidate(et_email) && Util.emailValidate(et_email) && Util.etValidate(et_password)){
 
                     String email = et_email.getText().toString().trim();
 
