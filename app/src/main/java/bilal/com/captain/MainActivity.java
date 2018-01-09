@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
+import bilal.com.captain.models.ExpenseModel;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
 
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean timerCheck = true;
 
+    TextView tv_expence;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         expense = (LinearLayout) findViewById(R.id.expense);
 
         time = (TextView) findViewById(R.id.time);
+
+        tv_expence = (TextView) findViewById(R.id.tv_expence);
 
         radial_right.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -115,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         timerShow();
         setUpMenu();
+
+        getDataFromServer();
     }
 
     private void timerShow() {
@@ -242,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (view == itemVisitSchedule) {
 
+            Tracker tracker = new Tracker(MainActivity.this);
+
+            Toast.makeText(this, tracker.getLatitude()+"   "+tracker.getLongitude(), Toast.LENGTH_SHORT).show();
+
         } else if (view == itemDayEnd) {
 
         } else if (view == itemHierarchy) {
@@ -291,11 +303,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    ChildEventListener childEventListener = new ChildEventListener() {
+    long totalExpence = 0;
+
+    ChildEventListener expenceEventListner = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
 
+            totalExpence += expenseModel.getExpence();
+
+            tv_expence.setText(totalExpence+"");
 
         }
 
@@ -306,6 +324,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
+
+            totalExpence -= expenseModel.getExpence();
+
+            tv_expence.setText(totalExpence+"");
 
         }
 
@@ -319,4 +343,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     };
+
+    public void getDataFromServer() {
+
+        FirebaseDatabase.
+                getInstance().
+                getReference().
+                child("Expense").
+                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                addChildEventListener(expenceEventListner);
+
+    }
 }

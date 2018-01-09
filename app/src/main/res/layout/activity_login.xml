@@ -9,46 +9,46 @@
     tools:context="bilal.com.captain.LoginActivity">
 
     <ImageView
-        android:layout_margin="50dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="50dp"
         android:layout_weight="1"
         android:background="@drawable/logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:orientation="vertical"
-        android:background="@drawable/login_box">
+        android:layout_weight="0.5"
+        android:background="@drawable/login_box"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/email"
-            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="3dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="Email"
-            android:textColorHint="@color/lightGray"
+            android:inputType="text"
             android:textColor="@color/colorWhite"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:textColorHint="@color/lightGray" />
+
         <EditText
             android:id="@+id/password"
-            android:inputType="textPassword"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="3dp"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/lightGray"
-            android:hint="Password"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/lightGray" />
 
 
     </LinearLayout>
@@ -62,18 +62,18 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
+        android:layout_weight="0.2"
         android:background="@drawable/slider">
 
         <TextView
-            android:text="Login"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="Login"
+            android:textColor="@color/colorWhite" />
 
     </LinearLayout>
 
@@ -84,15 +84,14 @@
         android:layout_weight="0.5">
 
         <TextView
+            android:id="@+id/signuptextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:paddingLeft="90dp"
             android:text="Signup for Captain Manager"
-            android:textSize="15dp"
             android:textColor="@color/colorWhite"
-            android:id="@+id/signuptextview"
-            />
+            android:textSize="15dp" />
 
 
     </LinearLayout>

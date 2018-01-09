@@ -14,6 +14,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
+import com.valdesekamdem.library.mdtoast.MDToast;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,8 +53,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import bilal.com.captain.R;
+import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.classes.RegularCustomTextView;
+import bilal.com.captain.models.ComplainModel;
 
 public class ComplainActivity extends Activity implements Camera.PictureCallback, SurfaceHolder.Callback, View.OnClickListener {
 
@@ -144,19 +157,22 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
     boolean isRecord = true;
 
+    File recordFile = null;
+
     private View.OnClickListener mRecaptureImageButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mCaptureImageButton.setVisibility(View.VISIBLE);
+//            mCaptureImageButton.setVisibility(View.VISIBLE);
 
 //            setupImageCapture();
 
 
             if (isRecord) {
+                recordFile = getRecordtMediaFile();
                 mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
                 mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                mRecorder.setOutputFile(getRecordtMediaFile().getPath().toString());
+                mRecorder.setOutputFile(recordFile.getPath().toString());
                 mRecorder.setMaxDuration(180000);
 
                 try {
@@ -183,6 +199,8 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
                 mRecorder.stop();
                 mRecorder.release();
                 isRecord = true;
+                recording.setVisibility(View.INVISIBLE);
+                doneButton.setVisibility(View.VISIBLE);
                 record_image.setImageResource(R.drawable.record_button);
                 Toast.makeText(getApplicationContext(), "Recording Stoped", Toast.LENGTH_LONG).show();
             }
@@ -215,7 +233,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
 //        check = (TextView) findViewById(R.id.check);
 
-        dialogSave.setMessage("Saving Image...");
+        dialogSave.setMessage("Sending Complain...");
 
 //        check.setVisibility(View.GONE);
 
@@ -668,7 +686,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
     }
 
 
-    class SavingFile extends AsyncTask<Void, Void, Void> {
+    class SavingFile extends AsyncTask<Void, Void, String> {
 
 
         @Override
@@ -679,7 +697,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
             if (bitmapGlobal != null) {
 
@@ -708,6 +726,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
                     uri = Uri.parse(pictureFile.getPath());
 
+                    return uri.toString();
 //                    finish();
 
                 } catch (FileNotFoundException e) {
@@ -722,17 +741,95 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(String uri) {
+            super.onPostExecute(uri);
 
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
-            setResult(RESULT_OK, intent);
+            uploadImageOnFireBase(uri);
 
-            finish();
+//            Intent intent = new Intent();
+//            intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
+//            setResult(RESULT_OK, intent);
+//
+//            finish();
 
 
         }
+    }
+
+    private void uploadImageOnFireBase(final String uri) {
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        FirebaseStorage.
+                getInstance().
+                getReference().
+                child("Files").
+                child(timeStamp).
+                putFile(Uri.fromFile(new File(uri))).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                new File(uri).delete();
+
+                uploadRecording(String.valueOf(taskSnapshot.getDownloadUrl()));
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e);
+                CustomToast.showToast(ComplainActivity.this, "Please Check Your Connection", MDToast.TYPE_ERROR);
+
+            }
+        });
+
+    }
+
+    private void uploadRecording(final String downloadUriForImage) {
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+        FirebaseStorage.
+                getInstance().
+                getReference().
+                child("Files").
+                child(timeStamp).
+                putFile(Uri.fromFile(recordFile)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                String key = FirebaseDatabase.
+                        getInstance().
+                        getReference().
+                        child("Complain").
+                        child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                        push().
+                        getKey();
+
+                ComplainModel complainModel = new ComplainModel(key, downloadUriForImage, String.valueOf(taskSnapshot.getDownloadUrl()));
+
+                FirebaseDatabase.
+                        getInstance().
+                        getReference().
+                        child("Complain").
+                        child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                        child(complainModel.getKey()).
+                        setValue(complainModel);
+
+                dialogSave.dismiss();
+
+                CustomToast.showToast(ComplainActivity.this, "Your Complain Is Sent Successfully", MDToast.TYPE_SUCCESS);
+
+                recordFile.delete();
+
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e);
+                CustomToast.showToast(ComplainActivity.this, "Please Check Your Connection", MDToast.TYPE_ERROR);
+            }
+        });
+
     }
 
 

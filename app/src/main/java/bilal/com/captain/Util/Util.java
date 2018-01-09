@@ -22,7 +22,7 @@ public class Util {
     }
 
     public static boolean emailValidate(EditText edittext){
-        String validate = edittext.getText().toString();
+        String validate = edittext.getText().toString().trim();
 
         if(!Patterns.EMAIL_ADDRESS.matcher(validate).matches()){
 
