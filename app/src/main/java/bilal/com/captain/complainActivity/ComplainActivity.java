@@ -38,24 +38,26 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import bilal.com.captain.R;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.classes.RegularCustomTextView;
 
-public class ComplainActivity extends Activity implements Camera.PictureCallback, SurfaceHolder.Callback,View.OnClickListener {
+public class ComplainActivity extends Activity implements Camera.PictureCallback, SurfaceHolder.Callback, View.OnClickListener {
 
     public static final String EXTRA_CAMERA_DATA = "camera_data";
 
     private static final String KEY_IS_CAPTURING = "is_capturing";
-    private static final String TAG = "Tag" ;
+    private static final String TAG = "Tag";
 
-    LinearLayout doneButton, reset;
+    LinearLayout doneButton, recording;
 
     private Camera mCamera;
     private ImageView mCameraImage;
     private SurfaceView mCameraPreview;
-    private ImageView mCaptureImageButton;
+    private LinearLayout mCaptureImageButton;
     private ImageView flash;
     private byte[] mCameraData;
     private boolean mIsCapturing;
@@ -76,13 +78,17 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
     ProgressDialog dialogSave;
 
-    TextView check;
+    private MediaRecorder mRecorder;
 
     Camera.Parameters parameters;
 
     float mDist = 0;
 
-    private File getOutputMediaFile(){
+    int secondsCounter = 0;
+
+    ImageView record_image;
+
+    private File getOutputMediaFile() {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
@@ -92,18 +98,42 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
 //                return null;
             }
         }
         // Create a media file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
         File mediaFile;
-        String mImageName="MI_"+ timeStamp +".jpg";
+        String mImageName = "MI_" + timeStamp + ".jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
+
+    private File getRecordtMediaFile() {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Captain/recording/");
+
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+//                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        File mediaFile;
+        String mImageName = "Re" + timeStamp + ".3gp";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
+    }
+
 
     private View.OnClickListener mCaptureImageButtonClickListener = new View.OnClickListener() {
         @Override
@@ -112,18 +142,51 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         }
     };
 
+    boolean isRecord = true;
+
     private View.OnClickListener mRecaptureImageButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mCaptureImageButton.setVisibility(View.VISIBLE);
 
-            setupImageCapture();
+//            setupImageCapture();
 
-//            Intent intent = getIntent();
-//
-//            finish();
-//
-//            startActivity(intent);
+
+            if (isRecord) {
+                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                mRecorder.setOutputFile(getRecordtMediaFile().getPath().toString());
+                mRecorder.setMaxDuration(180000);
+
+                try {
+                    mRecorder.prepare();
+                } catch (Exception e) {
+                    Log.e("Error", "prepare() failed" + e);
+                }
+                mRecorder.start();
+
+                mRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+                    @Override
+                    public void onInfo(MediaRecorder mr, int what, int extra) {
+
+                        Log.d("InfoListners", "onInfo: " + what);
+                        mr.stop();
+                        mr.release();
+                    }
+                });
+
+                Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_LONG).show();
+                isRecord = false;
+                record_image.setImageResource(R.drawable.record_stop);
+            } else {
+                mRecorder.stop();
+                mRecorder.release();
+                isRecord = true;
+                record_image.setImageResource(R.drawable.record_button);
+                Toast.makeText(getApplicationContext(), "Recording Stoped", Toast.LENGTH_LONG).show();
+            }
+
         }
     };
 
@@ -132,9 +195,15 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         public void onClick(View v) {
 
 
-
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,21 +230,14 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
         flash = (ImageView) findViewById(R.id.flash);
 
-        findViewById(R.id.button_back).setOnClickListener(new View.OnClickListener() {
-            @Override
+        mRecorder = new MediaRecorder();
 
-            public void onClick(View v) {
-
-                ComplainActivity.this.onBackPressed();
-            }
-        });
-
-
+        record_image = (ImageView) findViewById(R.id.record_image);
 
         OrientationEventListener orientationListener = new OrientationEventListener(ComplainActivity.this, SensorManager.SENSOR_DELAY_NORMAL) {
             public void onOrientationChanged(int orientation) {
 
-                Log.d("orientation", ""+orientation);
+                Log.d("orientation", "" + orientation);
 
 //                if(canShow(orientation)){
 //                    show();
@@ -189,7 +251,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
             @Override
             public void onClick(View v) {
 
-                if(parameters.getFlashMode() == Camera.Parameters.FLASH_MODE_ON){
+                if (parameters.getFlashMode() == Camera.Parameters.FLASH_MODE_ON) {
 
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
 
@@ -199,7 +261,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
                     mCamera.startPreview();
 
-                }else {
+                } else {
 
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
 
@@ -212,50 +274,44 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 //                Toast.makeText(CameraActivity.this, "On Mode", Toast.LENGTH_SHORT).show();
 
 
-
             }
         });
-
-
 
 
         mCameraImage = (ImageView) findViewById(R.id.camera_image_view);
         mCameraImage.setVisibility(View.GONE);
         mCameraImage.setScaleType(ImageView.ScaleType.MATRIX);
 
-//        findViewById(R.id.rotate).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Matrix matrix = new Matrix();
-//                matrix.postRotate(90);
-//                mCameraImage.setImageMatrix(matrix);
-//
-//            }
-//        });
 
         mCameraPreview = (SurfaceView) findViewById(R.id.preview_view);
         final SurfaceHolder surfaceHolder = mCameraPreview.getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         surfaceHolder.setKeepScreenOn(true);
-        mCaptureImageButton = (ImageView) findViewById(R.id.capture_image_button);
-        reset = (LinearLayout) findViewById(R.id.reset);
+        mCaptureImageButton = (LinearLayout) findViewById(R.id.capture_image_button);
+        recording = (LinearLayout) findViewById(R.id.record_button);
 //        ok = (ImageView) findViewById(R.id.done);
         mCaptureImageButton.setOnClickListener(mCaptureImageButtonClickListener);
 
-        doneButton = (LinearLayout) findViewById(R.id.done);
+        doneButton = (LinearLayout) findViewById(R.id.ok_button);
 
-        doneButton.setVisibility(View.GONE);
-
-        reset.setVisibility(View.GONE);
-
-        reset.setOnClickListener(mRecaptureImageButtonClickListener);
+        recording.setOnClickListener(mRecaptureImageButtonClickListener);
 
         doneButton.setOnClickListener(this);
 
         mIsCapturing = true;
 
         sizeView.setVisibility(View.GONE);
+
+        findViewById(R.id.button_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View v) {
+
+                ComplainActivity.this.onBackPressed();
+            }
+        });
+
     }
 
     @Override
@@ -300,26 +356,26 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         }
         mDist = newDist;
 
-        Log.d("zooming", "handleZoom: "+ (float) zoom/maxZoom * 100);
+        Log.d("zooming", "handleZoom: " + (float) zoom / maxZoom * 100);
 
-        float mag = (float) zoom/maxZoom * 100;
+        float mag = (float) zoom / maxZoom * 100;
 
-        if(mag < 33.3){
+        if (mag < 33.3) {
 
-            sizeView.setText( "1 X");
+            sizeView.setText("1 X");
 
-        }else if(mag >= 33.3 && mag < 66.6){
+        } else if (mag >= 33.3 && mag < 66.6) {
 
-            sizeView.setText( "2 X");
+            sizeView.setText("2 X");
 
 
-        }else if(mag >= 66.6 && mag <99.9){
+        } else if (mag >= 66.6 && mag < 99.9) {
 
-            sizeView.setText( "3 X");
+            sizeView.setText("3 X");
 
-        }else {
+        } else {
 
-            sizeView.setText( "4 X");
+            sizeView.setText("4 X");
 
         }
 
@@ -353,9 +409,9 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
 
-        Log.d("fingerSpacing", "getFingerSpacing: "+ (float)x * x + y * y);
+        Log.d("fingerSpacing", "getFingerSpacing: " + (float) x * x + y * y);
 
-        return (float)Math.sqrt(x * x + y * y);
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     @Override
@@ -395,7 +451,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
                 int rotation = 0;
 
-                switch (screenOrientation){
+                switch (screenOrientation) {
 
                     case Surface.ROTATION_0:
 
@@ -426,10 +482,9 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
                         break;
 
 
-
                 }
 
-                Log.d("rotaion", "onResume: "+rotation);
+                Log.d("rotaion", "onResume: " + rotation);
 
 //                mCamera.setDisplayOrientation(90);
                 if (mIsCapturing) {
@@ -450,6 +505,24 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
             mCamera.release();
             mCamera = null;
         }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+//        if (mRecorder != null) {
+//            try {
+//                mRecorder.stop();
+//                mRecorder.release();
+//            } catch (Throwable e) {
+//
+//                Log.d("StopError", "onStop: "+e);
+//
+//            }
+//
+//        }
     }
 
     @Override
@@ -505,9 +578,9 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
                         bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
 
 
-                    }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && rotationField == 1){// LANDSCAPE MODE
+                    } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && rotationField == 1) {// LANDSCAPE MODE
                         //No need to reverse width and height
-                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth,screenHeight , true);
+                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
                         int w = scaled.getWidth();
                         int h = scaled.getHeight();
                         // Setting post rotate to 90
@@ -517,15 +590,14 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
 
                         bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
-                    }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && rotationField == 3){
+                    } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && rotationField == 3) {
 
-                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth,screenHeight , true);
+                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
                         int w = scaled.getWidth();
                         int h = scaled.getHeight();
                         // Setting post rotate to 90
                         Matrix mtx = new Matrix();
                         mtx.postRotate(180);
-
 
 
                         bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
@@ -539,11 +611,10 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 //                photoPreview.setVisibility(View.VISIBLE);
 //                surfaceView.setVisibility(View.GONE);
             }
-        } );
-        mCaptureImageButton.setVisibility(View.GONE);
-        mCameraImage.setVisibility(View.VISIBLE);
-        doneButton.setVisibility(View.VISIBLE);
-        reset.setVisibility(View.VISIBLE);
+        });
+        mCaptureImageButton.setVisibility(View.INVISIBLE);
+//        doneButton.setVisibility(View.VISIBLE);
+        recording.setVisibility(View.VISIBLE);
 
     }
 
@@ -551,21 +622,21 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
 
         try {
-            if (mCamera != null) {
-                reset.setVisibility(View.GONE);
-                doneButton.setVisibility(View.GONE);
-                mCameraImage.setVisibility(View.INVISIBLE);
 
-                mCameraPreview.setVisibility(View.VISIBLE);
-                mCamera.stopPreview();
-                mCamera.startPreview();
-                mCaptureImageButton.setVisibility(View.VISIBLE);
+            recording.setVisibility(View.GONE);
+            doneButton.setVisibility(View.GONE);
+            mCameraImage.setVisibility(View.INVISIBLE);
+
+            mCameraPreview.setVisibility(View.VISIBLE);
+            mCamera.stopPreview();
+            mCamera.startPreview();
+            mCaptureImageButton.setVisibility(View.VISIBLE);
 //        mCaptureImageButton.setText(R.string.capture_image);
-                mCaptureImageButton.setOnClickListener(mCaptureImageButtonClickListener);
-            }
-        }catch (Exception e){
+            mCaptureImageButton.setOnClickListener(mCaptureImageButtonClickListener);
 
-            Log.d(TAG, ""+e);
+        } catch (Throwable e) {
+
+            Log.d(TAG, "" + e);
 
         }
     }
@@ -587,7 +658,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == R.id.done) {
+        if (v.getId() == R.id.ok_button) {
 
 
             new SavingFile().execute();
@@ -597,7 +668,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
     }
 
 
-    class SavingFile extends AsyncTask<Void,Void,Void>{
+    class SavingFile extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -610,33 +681,16 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
         @Override
         protected Void doInBackground(Void... params) {
 
-            if(bitmapGlobal != null) {
+            if (bitmapGlobal != null) {
 
                 File pictureFile = getOutputMediaFile();
                 if (pictureFile == null) {
                     Log.d(TAG,
                             "Error creating media file, check storage permissions: ");// e.getMessage());
-//                return;
                 }
                 try {
 
-//                    BitmapFactory.Options o = new BitmapFactory.Options();
-//                    o.inJustDecodeBounds = true;
-//                    BitmapFactory.decodeStream(new FileInputStream(f),null,o);
-//
-//                    //The new size we want to scale to
-//                    final int REQUIRED_SIZE=70;
-//
-//                    //Find the correct scale value. It should be the power of 2.
-//                    int scale=1;
-//                    while(o.outWidth/scale/2>=REQUIRED_SIZE && o.outHeight/scale/2>=REQUIRED_SIZE)
-//                        scale*=2;
-//
-//                    //Decode with inSampleSize
-//                    BitmapFactory.Options o2 = new BitmapFactory.Options();
-//                    o2.inSampleSize=scale;
-//
-                    bitmapGlobal = Bitmap.createScaledBitmap(bitmapGlobal,480,640,false);
+                    bitmapGlobal = Bitmap.createScaledBitmap(bitmapGlobal, 480, 640, false);
 
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -664,13 +718,6 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
                 }
             }
 
-//
-//            dialogSave.dismiss();
-//
-//            finish();
-
-
-
             return null;
         }
 
@@ -690,66 +737,6 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-//            dialogSave.show();
-////            if (bitmapGlobal != null) {
-//
-//                mCameraImage.setVisibility(View.GONE);
-//
-//                doneButton.setVisibility(View.GONE);
-//
-//                reset.setVisibility(View.GONE);
-//
-//                check.setVisibility(View.VISIBLE);
-
-//                File pictureFile = getOutputMediaFile();
-//                if (pictureFile == null) {
-//                    Log.d(TAG,
-//                            "Error creating media file, check storage permissions: ");// e.getMessage());
-//                    return;
-//                }
-//                try {
-//                    FileOutputStream fos = new FileOutputStream(pictureFile);
-//                    bitmapGlobal.compress(Bitmap.CompressFormat.PNG, 90, fos);
-//                    fos.close();
-//
-//                    uri = Uri.parse(pictureFile.getPath());
-//
-////                    finish();
-//
-//                } catch (FileNotFoundException e) {
-//
-//                    Log.d(TAG, "File not found: " + e.getMessage());
-//                } catch (IOException e) {
-//                    Log.d(TAG, "Error accessing file: " + e.getMessage());
-//                }
-//
-//
-//                Intent intent = new Intent();
-//                intent.putExtra(EXTRA_CAMERA_DATA, mCameraData);
-//                setResult(RESULT_OK, intent);
-//
-//                dialogSave.dismiss();
-//
-//                finish();
-
-//                alert.dismiss();
-//            }
-//            else {
-//                setResult(RESULT_CANCELED);
-//
-//                finish();
-//            }
 
 
 

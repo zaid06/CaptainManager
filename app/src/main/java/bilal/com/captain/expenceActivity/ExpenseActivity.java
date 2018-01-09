@@ -3,15 +3,24 @@ package bilal.com.captain.expenceActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.valdesekamdem.library.mdtoast.MDToast;
+
 import bilal.com.captain.CaptainInterfaces.Initialization;
 import bilal.com.captain.R;
+import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.Util;
+import bilal.com.captain.models.ExpenseModel;
 
 public class ExpenseActivity extends AppCompatActivity implements Initialization, View.OnClickListener {
 
@@ -60,71 +69,91 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
     @Override
     public void onClick(View v) {
 
+        if (v.getId() == R.id.fuel) {
 
+            openAlert("Fuel", R.drawable.fuel);
+
+        } else if (v.getId() == R.id.puncture) {
+
+            openAlert("Puncture", R.drawable.puncture);
+
+        } else if (v.getId() == R.id.repair) {
+
+            openAlert("Repair", R.drawable.repair);
+
+        } else if (v.getId() == R.id.challan) {
+
+            openAlert("Challan", R.drawable.challan);
+
+        } else if (v.getId() == R.id.others) {
+
+            openAlert("Others", R.drawable.others);
+
+        }
+
+    }
+
+    private void openAlert(final String type, final int imageResource) {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(ExpenseActivity.this);
 
         View view = getLayoutInflater().inflate(R.layout.alert_layout, null);
 
-        EditText et_fuel = (EditText) view.findViewById(R.id.writeExpence);
+        final EditText et_expence = (EditText) view.findViewById(R.id.writeExpence);
+
+        final ImageView icon = (ImageView) view.findViewById(R.id.image);
+
+        icon.setImageResource(imageResource);
 
         LinearLayout submit = (LinearLayout) view.findViewById(R.id.submit);
+
+        alert.setView(view);
+
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme; //style id
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Util.etValidate(et_expence)){
 
-                Toast.makeText(ExpenseActivity.this, tem, Toast.LENGTH_SHORT).show();
+                    try {
+                        long expence = Long.valueOf(et_expence.getText().toString().trim());
 
+                        String key =  FirebaseDatabase.
+                                            getInstance().
+                                            getReference().
+                                            child("Expense").
+                                            child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                            push().
+                                            getKey();
+
+                        ExpenseModel expenseModel = new ExpenseModel(key,expence,type);
+
+                        FirebaseDatabase.
+                                getInstance().
+                                getReference().
+                                child("Expense").
+                                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                child(expenseModel.getKey()).
+                                setValue(expenseModel);
+
+                        dialog.dismiss();
+
+                        CustomToast.showToast(ExpenseActivity.this,"Submitted",MDToast.TYPE_SUCCESS);
+
+                    }catch (Throwable e){
+                        Log.d("Error", "onClick: "+e);
+                    }
+
+                }
             }
         });
 
-        alert.setView(view);
 
-        AlertDialog dialog = alert.create();
+        dialog.show();
 
-
-
-        if (v.getId() == R.id.fuel) {
-
-            tem = "fuel";
-
-            dialog.show();
-
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        } else if (v.getId() == R.id.puncture) {
-
-            tem = "puncture";
-
-            dialog.show();
-
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        } else if (v.getId() == R.id.repair) {
-
-            tem = "repair";
-
-            dialog.show();
-
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        } else if (v.getId() == R.id.challan) {
-
-            tem = "challan";
-
-            dialog.show();
-
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        } else if (v.getId() == R.id.others) {
-
-            tem = "others";
-
-            dialog.show();
-
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 }

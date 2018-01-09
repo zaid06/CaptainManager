@@ -52,8 +52,8 @@
     </FrameLayout>
 
 
-    <RelativeLayout
-
+    <LinearLayout
+        android:orientation="horizontal"
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="72dp"
@@ -63,85 +63,83 @@
         <LinearLayout
             android:layout_margin="8dp"
             android:background="@drawable/background_radius_tab"
-            android:id="@+id/reset"
+            android:id="@+id/capture_image_button"
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:layout_centerVertical="true"
-            android:layout_width="170sp"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <ImageView
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
-
-                android:src="@drawable/clear_button" />
+                android:src="@drawable/camera_button_2" />
 
 
         </LinearLayout>
 
-
-        <ImageView
-            android:padding="30dp"
-            android:id="@+id/capture_image_button"
-            android:layout_width="112dp"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/camera_button_2"
-            android:scaleType="fitCenter"
-            android:text="SHOP DETAILS"
-            android:textSize="21sp" />
-
-
-        <!---->
         <LinearLayout
+            android:visibility="invisible"
             android:layout_margin="8dp"
             android:background="@drawable/background_radius_tab"
-            android:id="@+id/done"
-            android:outlineProvider="bounds"
-            android:layout_alignParentRight="true"
+            android:id="@+id/record_button"
             android:gravity="center_horizontal"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:layout_centerVertical="true"
-            android:layout_width="170sp"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <ImageView
-                android:padding="6dp"
-
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
+                android:id="@+id/record_image"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerVertical="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/record_button" />
 
-                android:src="@drawable/check_symbol"
 
-                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:layout_margin="8dp"
+            android:background="@drawable/background_radius_tab"
+            android:id="@+id/ok_button"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/check_symbol" />
 
 
         </LinearLayout>
 
 
-
-        <!---->
-        <!--<TextView-->
-        <!--android:id="@+id/check"-->
-        <!--android:textSize="25sp"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="#fff"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:text="Saving..." />-->
-
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/flash"
