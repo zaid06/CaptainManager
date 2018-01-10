@@ -17,6 +17,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ebanx.swipebtn.OnStateChangeListener;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +26,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import bilal.com.captain.Util.Tracker;
+
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.models.ExpenseModel;
@@ -34,6 +38,7 @@ import bilal.com.captain.resideMenu.ResideMenuItem;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
+    com.ebanx.swipebtn.SwipeButton swipeButton;
     private ResideMenu resideMenu;
     private ResideMenuItem itemTodayJc;
     private ResideMenuItem itemVisitSchedule;
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ResideMenuItem itemText;
 
-    ImageView radial_right, radial_left;
+
 
     LinearLayout complaint, expense;
     private Timer timer;
@@ -61,7 +66,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        radial_right = (ImageView) findViewById(R.id.ic_arrow_right);
+        swipeButton = (com.ebanx.swipebtn.SwipeButton) findViewById(R.id.swipebutton);
+
+        swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
+            @Override
+            public void onStateChange(boolean active) {
+                Toast.makeText(MainActivity.this, "Active:", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         complaint = (LinearLayout) findViewById(R.id.complaint);
 
@@ -71,30 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tv_expence = (TextView) findViewById(R.id.tv_expence);
 
-        radial_right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        //Movement logic here
-
-                        radial_right.setX(radial_right.getX() * 2);
-
-                        Log.d("touch", "move: ");
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        //Release logic here
-
-                        radial_right.setX(radial_right.getX());
-                        Log.d("touch", "up: ");
-                        return true;
-                }
-
-                return false;
-            }
-        });
 
         complaint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,9 +110,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        });
 
         timerShow();
-        setUpMenu();
+//        setUpMenu();
 
-        getDataFromServer();
+
+
+//        getDataFromServer();
     }
 
     private void timerShow() {

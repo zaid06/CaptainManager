@@ -13,19 +13,23 @@
     android:background="@drawable/login_background">
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="88dp"
-        android:layout_height="50dp"
+        android:layout_marginTop="110dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:orientation="vertical"
         android:background="@drawable/login_box2">
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:hint="Username"
             android:layout_marginTop="13dp"
             android:textColorHint="@color/lightGray"
+            android:textColor="@color/colorWhite"
             android:textSize="20dp"
             android:background="@android:color/transparent"
             android:paddingLeft="13dp"
@@ -36,16 +40,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:background="@drawable/login_box2">
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="13dp"
             android:textColorHint="@color/lightGray"
             android:background="@android:color/transparent"
@@ -59,10 +66,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:background="@drawable/login_box2">
 
@@ -70,7 +79,8 @@
             android:layout_width="match_parent"
             android:textColorHint="@color/lightGray"
             android:background="@android:color/transparent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="13dp"
             android:hint="Password"
             android:textSize="20dp"
@@ -81,16 +91,20 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:orientation="vertical"
+        android:layout_marginTop="10dp"
         android:background="@drawable/login_box2">
 
         <EditText
             android:layout_width="match_parent"
             android:background="@android:color/transparent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="13dp"
             android:textColorHint="@color/lightGray"
             android:hint="Confirm Password"
@@ -102,8 +116,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="180dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="30dp">
 
