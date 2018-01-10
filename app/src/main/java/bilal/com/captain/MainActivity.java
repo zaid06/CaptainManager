@@ -38,6 +38,7 @@ import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
+import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
@@ -173,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.dismiss();
 
                         CustomToast.showToast(MainActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
+
+                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
                     }catch(Throwable e){
                         Log.d("Error", "onClick: "+e);
                     }

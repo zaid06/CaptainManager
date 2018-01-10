@@ -402,6 +402,7 @@
         app:button_image_disabled="@drawable/ic_chevron_right_black_24dp"
         app:button_top_padding="10dp"
         app:button_bottom_padding="10dp"
+        app:button_image_enabled="@drawable/ic_lock_open_black_24dp"
         app:inner_text_background="@drawable/slider"
         android:id="@+id/swipebutton"/>
 
