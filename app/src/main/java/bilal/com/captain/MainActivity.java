@@ -1,12 +1,15 @@
 package bilal.com.captain;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,17 +21,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ebanx.swipebtn.OnStateChangeListener;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
+import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.Tracker;
 
+import bilal.com.captain.Util.Util;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.models.ExpenseModel;
@@ -71,9 +78,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
             public void onStateChange(boolean active) {
-                Toast.makeText(MainActivity.this, "Active:", Toast.LENGTH_SHORT).show();
+                if(active == true){
+                    openAlert();
+                }
             }
         });
+
 
 
 
@@ -115,6 +125,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //        getDataFromServer();
+    }
+
+
+    private void openAlert(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.swipealertlayout,null);
+        final EditText name = (EditText)view.findViewById(R.id.customerName);
+        LinearLayout submit = (LinearLayout)view.findViewById(R.id.swipeSubmit);
+
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if((Util.etValidate(name))){
+
+                    try{
+
+                        Tracker tracker = new Tracker(MainActivity.this);
+                        String et_name = String.valueOf(name.getText().toString());
+                        Double et_long = tracker.getLongitude();
+                        Double et_lat = tracker.getLatitude();
+
+                        String currtime = (DateFormat.format("dd-MM-yyyy hh:mm:ss", new java.util.Date()).toString());
+
+
+                        String key =  FirebaseDatabase.
+                                getInstance().
+                                getReference().
+                                child("Riding").
+                                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                push().
+                                getKey();
+
+                        Log.d("key", "onClick: "+key);
+
+                        StartRide startRide = new StartRide(key,et_name,et_lat,et_long,Double.valueOf(0),Double.valueOf(0),currtime);
+
+                        FirebaseDatabase.getInstance().getReference().child("Riding").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child(startRide.getKey()).setValue(startRide);
+
+                        dialog.dismiss();
+
+                        CustomToast.showToast(MainActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
+                    }catch(Throwable e){
+                        Log.d("Error", "onClick: "+e);
+                    }
+
+
+                }
+            }
+        });
+
     }
 
     private void timerShow() {
