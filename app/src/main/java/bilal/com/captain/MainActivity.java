@@ -31,6 +31,7 @@ import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
+import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
@@ -65,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
 
         swipeButton = (com.ebanx.swipebtn.SwipeButton) findViewById(R.id.swipebutton);
 
