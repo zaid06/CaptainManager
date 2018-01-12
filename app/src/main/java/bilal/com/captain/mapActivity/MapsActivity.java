@@ -1,23 +1,46 @@
 package bilal.com.captain.mapActivity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ebanx.swipebtn.OnStateChangeListener;
+import com.google.android.gms.location.LocationListener;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,12 +71,21 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import bilal.com.captain.MainActivity;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.Tracker;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
+
+    com.ebanx.swipebtn.SwipeButton swipeButton;
+
+    LocationManager locationManager;
+    String provider;
+
+    GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
     private ImageButton mUpdateLocation;
 
@@ -69,39 +101,136 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ProgressDialog progressDialog;
     private Timer timer;
     private TimerTask timerTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mUpdateLocation = (ImageButton) findViewById(R.id.button_update);
-//        mUpdateLocation.setVisibility(View.GONE);
-        mUpdateLocation.setOnClickListener(this);
 
-        progressDialog = new ProgressDialog(this);
-
-        progressDialog.setMessage("getting routes please wait");
-
-        progressDialog.setCancelable(false);
-        tracker = new Tracker(MapsActivity.this);
-
-        bundle = getIntent().getExtras();
-        if (bundle != null){
-            popId = bundle.getString("popId");
-        }
-
-        getPopLocation();
-        dialogBuilder();
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        swipeButton = (com.ebanx.swipebtn.SwipeButton)findViewById(R.id.swipeend);
+
+        swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
+            @Override
+            public void onStateChange(boolean active) {
+                openAlert();
+            }
+        });
+
+//        mUpdateLocation = (ImageButton) findViewById(R.id.button_update);
+////        mUpdateLocation.setVisibility(View.GONE);
+//        mUpdateLocation.setOnClickListener(this);
+//
+//        progressDialog = new ProgressDialog(this);
+//
+//        progressDialog.setMessage("getting routes please wait");
+//
+//        progressDialog.setCancelable(false);
+//        tracker = new Tracker(MapsActivity.this);
+//
+//        bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            popId = bundle.getString("popId");
+//        }
+//
+//        getPopLocation();
+//        dialogBuilder();
+//
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+
+
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//
+//        provider = locationManager.getBestProvider(new Criteria(), false);
+
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        locationManager.requestLocationUpdates(provider, 400, 1, this);
+
+    }
+
+    private void openAlert() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        final View view = getLayoutInflater().inflate(R.layout.end_ride_layout,null);
+
+        final RadioButton cash = (RadioButton)view.findViewById(R.id.cash);
+        final RadioButton wallet = (RadioButton)view.findViewById(R.id.wallet);
+        final RadioButton credit = (RadioButton)view.findViewById(R.id.credit);
+
+        TextView submit = (TextView)view.findViewById(R.id.submit2);
+
+        final EditText enteramount = (EditText)view.findViewById(R.id.enter_amount);
+
+
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+
+        cash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    enteramount.setVisibility(view.VISIBLE);
+                }
+            }
+        });
+
+        wallet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    enteramount.setVisibility(view.VISIBLE);
+                }
+            }
+        });
+
+        credit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    enteramount.setVisibility(view.GONE);
+                }
+
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MapsActivity.this,MainActivity.class));
+            }
+
+
+        });
+
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_update:
                 dialogLocation = dialogLocationBuilder.create();
                 dialogLocation.show();
@@ -121,16 +250,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        HashMap<String, String> userData;
+        //Initialize Google Play Services
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }
+        }
+        else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
 
-
-
-
-
-        if (tracker.checkGPSStatus()){
-            userLatitude = tracker.userLatitude;
-            userLongitude = tracker.userLongitude;
+//        mMap = googleMap;
+//
+//        HashMap<String, String> userData;
+//
+//
+//        if (tracker.checkGPSStatus()) {
+//            userLatitude = tracker.userLatitude;
+//            userLongitude = tracker.userLongitude;
 //            LatLng pjpPosition = new LatLng(userLatitude, userLongitude);
 //            mMap.addMarker(new MarkerOptions()
 //                    .position(pjpPosition)
@@ -140,73 +283,85 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //            title("PJP Location")
 
-            try {
-                timer = new Timer();
+//            try {
+//                timer = new Timer();
+//
+//                timerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//
+////                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+//
+//
+//                            }
+//                        });
+//                    }
+//                };
+//                //1800000
+////                timer.schedule(timerTask, 3000 , 3000);
+//
+//                timer.schedule(timerTask, 10000, 10000);
+//            } catch (Exception e) {
+//
+//                Log.d("exc", e.toString());
+//
+//            }
 
-                timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-//                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-
-                                LatLng pjpPosition = new LatLng(tracker.getLatitude(), tracker.getLatitude());
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(pjpPosition)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike))
-                                        .title("Hello"));
-
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pjpPosition,
-                                        15));
-
-                                LatLng popPosition = new LatLng(24.9072716, 67.0815411);
-                                popMarker = mMap.addMarker(new MarkerOptions()
-                                        .position(popPosition)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
-                                        .title("hello"));
+//            LatLng pjpPosition = new LatLng(tracker.getLatitude(), tracker.getLatitude());
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(pjpPosition)
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike))
+//                    .title("Hello"));
+//
+//
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pjpPosition,
+//                    15));
+//
+//            LatLng popPosition = new LatLng(24.9072716, 67.0815411);
+//            popMarker = mMap.addMarker(new MarkerOptions()
+//                    .position(popPosition)
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
+//                    .title("hello"));
 
 //        title("POP Location")5
 
 
 //        mMap.addPolyline(new PolylineOptions().add(new LatLng(userLatitude,userLongitude), new LatLng(latitude,longitude)).width(5).color(R.color.colorMain));
 
-                                LatLng origin = new LatLng(userLatitude,userLongitude);
+//            LatLng origin = new LatLng(userLatitude, userLongitude);
+//
+//            LatLng dest = new LatLng(24.9072716, 67.0815411);
+//
+//            String url = getUrl(origin, dest);
+//
+//
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            builder.include(origin);
+//            builder.include(dest);
+//            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+//                    builder.build(), 250, 250, 0);
+//
+//            mMap.moveCamera(cameraUpdate);
 
-                                LatLng dest = new LatLng(24.9072716,67.0815411);
 
-                                String url = getUrl(origin,dest);
-
-
-                                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                                builder.include(origin);
-                                builder.include(dest);
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
-                                        builder.build(), 250, 250, 0);
-
-                                mMap.moveCamera(cameraUpdate);
-
-
-                            }
-                        });
-                    }
-                };
-                //1800000
-//                timer.schedule(timerTask, 3000 , 3000);
-
-                timer.schedule(timerTask, 10000, 10000);
-            } catch (Exception e) {
-
-                Log.d("exc", e.toString());
-
-            }
-
-        }else{
-            tracker.showSettingsAlert();
+//        } else {
+//            tracker.showSettingsAlert();
         }
+
+    protected synchronized void buildGoogleApiClient() {
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
 
         // Add a marker in Sydney and move the camera
 
@@ -216,16 +371,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                builder.build(), 0, 250, 0);
 
 
-
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(popPosition));
 
 //        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(popPosition,
 //                15));
 
 //        new RoutesAsync().execute(url);
-    }
 
-    private void dialogBuilder(){
+
+    private void dialogBuilder() {
         dialogLocationBuilder = new AlertDialog.Builder(this);
         dialogLocationBuilder.setTitle("Warning");
         dialogLocationBuilder.setMessage("Do you want to update POP Location?");
@@ -233,7 +387,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                if (userLatitude != 0.0 && userLongitude != 0.0){
+                if (userLatitude != 0.0 && userLongitude != 0.0) {
                     ContentValues cv = new ContentValues();
                     cv.put("latitude", String.valueOf(userLatitude));
                     cv.put("longitude", String.valueOf(userLongitude));
@@ -244,7 +398,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(popUpdatedPosition,
                             15));
                     Toast.makeText(MapsActivity.this, "Update Master Location", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(MapsActivity.this, "Error Get Location", Toast.LENGTH_SHORT).show();
                 }
 
@@ -258,7 +412,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    private void getPopLocation(){
+    private void getPopLocation() {
 
     }
 
@@ -300,7 +454,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public String getUrl(LatLng origin, LatLng dest){
+    public String getUrl(LatLng origin, LatLng dest) {
 
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
@@ -322,7 +476,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         return url;
-
 
 
     }
@@ -367,8 +520,91 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return data;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+        Location mLastLocation;
+        Marker mCurrLocationMarker = null;
+
+        mLastLocation = location;
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+
+        //    mMarker.setPosition(new LatLon(latLng));
+        }
+
+        //Place current location marker
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Position");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point));
+        mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+//                    15));
+
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+        }
 
 
+    }
+
+//    @Override
+//    public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderEnabled(String s) {
+//
+//    }
+//
+//    @Override
+//    public void onProviderDisabled(String s) {
+//
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
     //Todo getting map routs
 

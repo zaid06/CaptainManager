@@ -395,7 +395,7 @@
 
     <com.ebanx.swipebtn.SwipeButton
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_margin="18dp"
         app:inner_text="Swipe to start ride"
         app:inner_text_size="23dp"
