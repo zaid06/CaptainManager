@@ -12,13 +12,24 @@ public class ExpenseModel {
 
     String type;
 
-    public ExpenseModel(String key, long expence, String type) {
+    String date;
+
+    public ExpenseModel(String key, long expence, String type, String date) {
         this.key = key;
         this.expence = expence;
         this.type = type;
+        this.date = date;
     }
 
     public ExpenseModel() {
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setType(String type) {

@@ -3,6 +3,7 @@ package bilal.com.captain.expenceActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,6 +120,8 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
                 if(Util.etValidate(et_expence)){
 
                     try {
+                        String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+
                         long expence = Long.valueOf(et_expence.getText().toString().trim());
 
                         String key =  FirebaseDatabase.
@@ -129,7 +132,7 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
                                             push().
                                             getKey();
 
-                        ExpenseModel expenseModel = new ExpenseModel(key,expence,type);
+                        ExpenseModel expenseModel = new ExpenseModel(key,expence,type,currtime);
 
                         FirebaseDatabase.
                                 getInstance().

@@ -12,13 +12,24 @@ public class ComplainModel {
 
     String recordingUrl;
 
-    public ComplainModel(String key, String imageUrl, String recordingUrl) {
+    String date;
+
+    public ComplainModel(String key, String imageUrl, String recordingUrl,String date) {
         this.key = key;
         this.imageUrl = imageUrl;
         this.recordingUrl = recordingUrl;
+        this.date = date;
     }
 
     public ComplainModel() {
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getKey() {

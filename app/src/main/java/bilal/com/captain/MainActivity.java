@@ -1,5 +1,6 @@
 package bilal.com.captain;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +35,7 @@ import java.util.TimerTask;
 
 
 import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
@@ -40,6 +43,7 @@ import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
+import bilal.com.captain.models.IncomeModel;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
 
@@ -66,7 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean timerCheck = true;
 
-    TextView tv_expence;
+    TextView tv_cash,tv_expence,todaysGoal,tv_achieved,tv_remaining;
+
+    ArrayList<IncomeModel> incomeModelArrayList;
+
+    ArrayList<ExpenseModel> expenseModelArrayList;
+
+    int totalGoal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+        incomeModelArrayList = new ArrayList<>();
+
+        expenseModelArrayList = new ArrayList<>();
 
         complaint = (LinearLayout) findViewById(R.id.complaint);
 
@@ -100,8 +113,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         time = (TextView) findViewById(R.id.time);
 
+        tv_cash = (TextView) findViewById(R.id.tv_cash);
+
         tv_expence = (TextView) findViewById(R.id.tv_expence);
 
+        todaysGoal = (TextView) findViewById(R.id.todaysGoal);
+
+        tv_remaining = (TextView) findViewById(R.id.tv_remaining);
+
+        totalGoal = Integer.valueOf(todaysGoal.getText().toString().trim());
+
+        tv_achieved = (TextView) findViewById(R.id.tv_achieved);
 
         complaint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,8 +154,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //        getDataFromServer();
+        achieved();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        getDataFromServer();
+
+
+    }
 
     private void openAlert(){
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -180,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.dismiss();
 
                         CustomToast.showToast(MainActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
+
+                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
                     }catch(Throwable e){
                         Log.d("Error", "onClick: "+e);
                     }
@@ -371,15 +404,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     long totalExpence = 0;
 
-    ChildEventListener expenceEventListner = new ChildEventListener() {
+    ChildEventListener cashEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
+            IncomeModel incomeModel = dataSnapshot.getValue(IncomeModel.class);
 
-            totalExpence += expenseModel.getExpence();
-
-            tv_expence.setText(totalExpence+"");
+            incomeModelArrayList.add(incomeModel);
 
         }
 
@@ -390,12 +421,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
-
-            totalExpence -= expenseModel.getExpence();
-
-            tv_expence.setText(totalExpence+"");
 
         }
 
@@ -410,14 +435,133 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    ChildEventListener expenceEventListner = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
+
+            expenseModelArrayList.add(expenseModel);
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+//            ExpenseModel expenseModel = dataSnapshot.getValue(ExpenseModel.class);
+//
+//            totalExpence -= expenseModel.getExpence();
+//
+//            tv_expence.setText(totalExpence+"");
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    public void achieved(){
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+
+        progressDialog.setMessage("Please Wait...");
+
+        progressDialog.show();
+
+        try {
+            final Timer timerForCheckAchievment = new Timer();
+
+            TimerTask timer = new TimerTask() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                            if(InternetConnection.internetConnectionAvailable(2000)){
+                                if(incomeModelArrayList != null && expenseModelArrayList != null){
+
+                                    int totalIncome = 0;
+
+                                    int expense = 0;
+
+                                    for (IncomeModel incomeModel : incomeModelArrayList){
+
+                                        totalIncome += incomeModel.getIncome();
+
+                                    }
+
+                                    for (ExpenseModel expenseModel : expenseModelArrayList){
+
+                                        expense += expenseModel.getExpence();
+
+                                    }
+
+                                    tv_cash.setText("Rs. "+totalIncome);
+
+                                    tv_expence.setText(""+expense);
+
+                                    tv_achieved.setText( (incomeModelArrayList.size())+"" );
+
+                                    tv_remaining.setText( (totalGoal - incomeModelArrayList.size())+"" );
+
+                                    progressDialog.dismiss();
+
+                                }
+                            }else {
+
+                                progressDialog.dismiss();
+
+                            }
+                        }
+                    });
+                }
+            };
+            //1800000
+//                timer.schedule(timerTask, 3000 , 3000);
+
+            timerForCheckAchievment.schedule(timer, 6000, 6000);
+        } catch (Exception e) {
+
+            Log.d("exc", e.toString());
+
+        }
+
+    }
+
     public void getDataFromServer() {
+
+        String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
         FirebaseDatabase.
                 getInstance().
                 getReference().
                 child("Expense").
                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                orderByChild("date").
+                equalTo(currtime).
                 addChildEventListener(expenceEventListner);
+
+        FirebaseDatabase.
+                getInstance().
+                getReference().
+                child("Cash").
+                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                orderByChild("date").equalTo(currtime).
+                addChildEventListener(cashEventListener);
 
     }
 }

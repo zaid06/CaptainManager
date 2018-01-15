@@ -786,7 +786,9 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
     private void uploadRecording(final String downloadUriForImage) {
 
-        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        final String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+        final String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
 
         FirebaseStorage.
                 getInstance().
@@ -804,7 +806,7 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
                         push().
                         getKey();
 
-                ComplainModel complainModel = new ComplainModel(key, downloadUriForImage, String.valueOf(taskSnapshot.getDownloadUrl()));
+                ComplainModel complainModel = new ComplainModel(key, downloadUriForImage, String.valueOf(taskSnapshot.getDownloadUrl()),timeStamp);
 
                 FirebaseDatabase.
                         getInstance().

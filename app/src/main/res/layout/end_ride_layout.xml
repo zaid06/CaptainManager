@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/themeColor">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:text="Credit"
+            android:id="@+id/credit"
+            />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:id="@+id/cash"
+        />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wallet"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/wallet"
+            />
+
+        <EditText
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter amount here"
+            android:textSize="22dp"
+            android:inputType="number"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/enter_amount"/>
+
+        <LinearLayout
+            android:id="@+id/swipeSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:background="@drawable/slider">
+
+        <TextView
+            android:text="Submit"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/submit2"/>
+
+        </LinearLayout>
+
+
+
+
+    </RadioGroup>
+
+
+
+
+
+</LinearLayout>
