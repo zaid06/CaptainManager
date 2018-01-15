@@ -53,7 +53,7 @@ import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.Tracker;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
-
+//AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o
     private GoogleMap mMap;
     private ImageButton mUpdateLocation;
 
@@ -140,69 +140,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //            title("PJP Location")
 
-            try {
-                timer = new Timer();
+//            try {
+//                timer = new Timer();
+//
+//                timerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//
+////                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+//
+//
+//                            }
+//                        });
+//                    }
+//                };
+//                //1800000
+////                timer.schedule(timerTask, 3000 , 3000);
+//
+//                timer.schedule(timerTask, 10000, 10000);
+//            } catch (Exception e) {
+//
+//                Log.d("exc", e.toString());
+//
+//            }
 
-                timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
+            LatLng pjpPosition = new LatLng(24.9072716, 67.0815411);
+            Log.d("latLng", "onMapReady: "+tracker.getLatitude()+"  "+tracker.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(pjpPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike))
+                    .title("Hello"));
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
 
-//                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pjpPosition,
+                    15));
 
-                                LatLng pjpPosition = new LatLng(tracker.getLatitude(), tracker.getLatitude());
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(pjpPosition)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike))
-                                        .title("Hello"));
-
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pjpPosition,
-                                        15));
-
-                                LatLng popPosition = new LatLng(24.9072716, 67.0815411);
-                                popMarker = mMap.addMarker(new MarkerOptions()
-                                        .position(popPosition)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
-                                        .title("hello"));
+            LatLng popPosition = new LatLng(24.9072716, 67.0815411);
+            popMarker = mMap.addMarker(new MarkerOptions()
+                    .position(popPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
+                    .title("hello"));
 
 //        title("POP Location")5
 
 
 //        mMap.addPolyline(new PolylineOptions().add(new LatLng(userLatitude,userLongitude), new LatLng(latitude,longitude)).width(5).color(R.color.colorMain));
 
-                                LatLng origin = new LatLng(userLatitude,userLongitude);
+            LatLng origin = new LatLng(userLatitude,userLongitude);
 
-                                LatLng dest = new LatLng(24.9072716,67.0815411);
+            LatLng dest = new LatLng(24.9072716,67.0815411);
 
-                                String url = getUrl(origin,dest);
-
-
-                                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                                builder.include(origin);
-                                builder.include(dest);
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
-                                        builder.build(), 250, 250, 0);
-
-                                mMap.moveCamera(cameraUpdate);
+            String url = getUrl(origin,dest);
 
 
-                            }
-                        });
-                    }
-                };
-                //1800000
-//                timer.schedule(timerTask, 3000 , 3000);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(origin);
+            builder.include(dest);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+                    builder.build(), 250, 250, 0);
 
-                timer.schedule(timerTask, 10000, 10000);
-            } catch (Exception e) {
+            mMap.moveCamera(cameraUpdate);
 
-                Log.d("exc", e.toString());
 
-            }
+
 
         }else{
             tracker.showSettingsAlert();
