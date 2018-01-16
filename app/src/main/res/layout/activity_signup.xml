@@ -33,7 +33,7 @@
             android:textSize="20dp"
             android:background="@android:color/transparent"
             android:paddingLeft="13dp"
-
+            android:singleLine="true"
             android:id="@+id/editText2"
             />
 
@@ -50,6 +50,7 @@
         android:background="@drawable/login_box2">
 
         <EditText
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -76,6 +77,8 @@
         android:background="@drawable/login_box2">
 
         <EditText
+            android:inputType="textPassword"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:textColorHint="@color/lightGray"
             android:background="@android:color/transparent"
@@ -91,6 +94,7 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_height="65dp"
@@ -101,6 +105,8 @@
         android:background="@drawable/login_box2">
 
         <EditText
+            android:inputType="textPassword"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:background="@android:color/transparent"
             android:layout_height="0dp"
@@ -117,7 +123,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="45dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:layout_gravity="center_horizontal"

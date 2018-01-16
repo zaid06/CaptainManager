@@ -275,25 +275,27 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
 
     public String getUrl(LatLng origin, LatLng dest){
 
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+//        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+//
+//        // Destination of route
+//        String str_dest = "destination=" + 24.827677 + "," + 67.034857;
+//
+//
+//        // Sensor enabled
+//        String sensor = "sensor=false";
+//        String mode = "mode=driving";
+//
+//        // Building the parameters to the web service
+//        String parameters = "key=AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o"+"&"+ str_origin + "&" + str_dest + "&" + sensor; //+"&"+mode
+//
+//        // Output format
+//        String output = "json";
 
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor+"&"+mode;
-
-        // Output format
-        String output = "json";
+        String url = "https://maps.googleapis.com/maps/api/directions/json?origin="+origin.latitude+","+origin.longitude+"&destination="+dest.latitude+","+dest.longitude+"&%20waypoints=optimize:true%7C17.3916642,78.4346606%7C17.3865225743848,78.4374928101897%7C17.3813395082035,78.4382585808635&sensor=false&key=AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
 
         return url;

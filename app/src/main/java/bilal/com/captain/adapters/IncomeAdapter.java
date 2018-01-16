@@ -54,7 +54,7 @@ public class IncomeAdapter extends ArrayAdapter<StartRide> implements Serializab
 
         final StartRide startRide = getItem(position);
 
-        ViewHolder viewHolder = new ViewHolder(convertView);
+        final ViewHolder viewHolder = new ViewHolder(convertView);
 
 
         final int pos = position;
@@ -69,6 +69,19 @@ public class IncomeAdapter extends ArrayAdapter<StartRide> implements Serializab
             int pixels = (int) (fpixels + 0.5f);
 
             layoutParams.setMargins(pixels,0,pixels,8);
+
+            viewHolder.cardView.setLayoutParams(layoutParams);
+
+        }else {
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+            float dp = 8f;
+            float fpixels = metrics.density * dp;
+            int pixels = (int) (fpixels + 0.5f);
+
+            layoutParams.setMargins(pixels,0,pixels,0);
 
             viewHolder.cardView.setLayoutParams(layoutParams);
 
