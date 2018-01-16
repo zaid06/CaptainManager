@@ -11,4 +11,5 @@
     <color name="silverGray">#C0C0C0</color>
     <color name="transparent">#00000000</color>
     <color name="offWhite">#f5f5f5</color>
+    <color name="borderGray">#d6d6d6</color>
 </resources>

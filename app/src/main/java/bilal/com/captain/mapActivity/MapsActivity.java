@@ -113,6 +113,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private String key;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -383,7 +385,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
                     child(MapsActivity.this.key).
                     child("endlongitude").
-                    setValue(tracker.getLatitude());
+                    setValue(tracker.getLongitude());
 //                            startActivity(new Intent(MapsActivity.this, MainActivity.class));
 
         }catch (Exception e){
@@ -615,6 +617,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MapsActivity.this.latitude = location.getLatitude();
+        MapsActivity.this.longitude = location.getLongitude();
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");

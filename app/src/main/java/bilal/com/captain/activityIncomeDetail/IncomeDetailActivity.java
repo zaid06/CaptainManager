@@ -1,8 +1,11 @@
 package bilal.com.captain.activityIncomeDetail;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import bilal.com.captain.MapsRouting;
 import bilal.com.captain.R;
 import bilal.com.captain.StartRide;
 import bilal.com.captain.adapters.IncomeAdapter;
@@ -45,6 +49,7 @@ public class IncomeDetailActivity extends AppCompatActivity {
         listView.setAdapter(incomeAdapter);
 
         syncDataFromServer();
+
 
     }
 
