@@ -9,10 +9,10 @@ import java.util.Date;
 public class StartRide {
     String name;
     String key;
-    Double StartLatitude;
-    Double StartLongitude;
-    Double EndLatitude;
-    Double EndLongitude;
+    Double startlatitude;
+    Double startlongitude;
+    Double endlatitude;
+    Double endlongitude;
     String time;
 
 
@@ -21,33 +21,31 @@ public class StartRide {
 
 
 
-    public StartRide(String key, String name, Double StartLatitude, Double StartLongitude,Double EndLatitude,Double EndLongitude, String time) {
+    public StartRide(String key, String name, Double startlatitude, Double startlongitude,Double endlatitude,Double endlongitude, String time) {
         this.key = key;
         this.name = name;
-        this.StartLatitude = StartLatitude;
-        this.StartLongitude = StartLongitude;
-        this.EndLatitude = EndLatitude;
-        this.EndLongitude = EndLongitude;
+        this.startlatitude = startlatitude;
+        this.startlongitude = startlongitude;
+        this.endlatitude = endlatitude;
+        this.endlongitude = endlongitude;
         this.time = time;
     }
 
-    public Double getStartLatitude() {
-        return StartLatitude;
+    public Double getStartlatitude() {
+        return startlatitude;
     }
 
-    public Double getStartLongitude() {
-        return StartLongitude;
+    public Double getStartlongitude() {
+        return startlongitude;
     }
 
-    public Double getEndLatitude() {
-        return EndLatitude;
+    public Double getEndlatitude() {
+        return endlatitude;
     }
 
-    public Double getEndLongitude() {
-        return EndLongitude;
+    public Double getEndlongitude() {
+        return endlongitude;
     }
-
-
 
     public String getName() {
         return name;

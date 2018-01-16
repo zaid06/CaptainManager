@@ -10,21 +10,32 @@ public class IncomeModel {
 
     String key;
 
+    String incometype;
+
     String latitude;
 
     String longitude;
 
     String date;
 
-    public IncomeModel(int income, String key, String date,String latitude, String longitude) {
+    public IncomeModel(int income, String key, String incometype, String date,String latitude, String longitude) {
         this.income = income;
         this.key = key;
+        this.incometype = incometype;
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
     public IncomeModel() {
+    }
+
+    public String getIncometype() {
+        return incometype;
+    }
+
+    public void setIncometype(String incometype) {
+        this.incometype = incometype;
     }
 
     public String getDate() {

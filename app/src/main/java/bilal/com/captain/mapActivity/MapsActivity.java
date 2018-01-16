@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,10 +83,7 @@ import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.models.IncomeModel;
 
-//<<<<<<< HEAD
-//public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
-////AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o
-//=======
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
@@ -95,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String provider;
 
     GoogleApiClient mGoogleApiClient;
-    //>>>>>>> cb52230c19749ab9d9dfd7aaf01a26e540d4a17c
+
     private GoogleMap mMap;
     private ImageButton mUpdateLocation;
 
@@ -112,10 +111,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Timer timer;
     private TimerTask timerTask;
 
+    private String key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Bundle bundle = getIntent().getExtras();
+
+        key = bundle.getString("key");
 
         tracker = new Tracker(MapsActivity.this);
 
@@ -175,13 +180,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    String cash_type = "";
+
     private void openAlert() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
         final View view = getLayoutInflater().inflate(R.layout.end_ride_layout, null);
 
-        final RadioButton cash = (RadioButton) view.findViewById(R.id.cash);
-        final RadioButton wallet = (RadioButton) view.findViewById(R.id.wallet);
-        final RadioButton credit = (RadioButton) view.findViewById(R.id.credit);
+        final LinearLayout cash = (LinearLayout) view.findViewById(R.id.cash);
+        final LinearLayout wallet = (LinearLayout) view.findViewById(R.id.wallet);
+        final LinearLayout credit = (LinearLayout) view.findViewById(R.id.credit);
+
+        final TextView tv_credit = (TextView) view.findViewById(R.id.tv_credit);
+
+        final TextView tv_cash = (TextView) view.findViewById(R.id.tv_cash);
+
+        final TextView tv_wallet = (TextView) view.findViewById(R.id.tv_wallet);
 
         TextView submit = (TextView) view.findViewById(R.id.submit2);
 
@@ -191,115 +204,129 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         alert.setView(view);
         final AlertDialog dialog = alert.create();
         dialog.setCancelable(false);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.MapDialogTheme;
         dialog.show();
 
-        cash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        credit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked()) {
-                    enteramount.setVisibility(view.VISIBLE);
-                }
-            }
-        });
+            public void onClick(View v) {
 
-        wallet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked()) {
-                    enteramount.setVisibility(view.VISIBLE);
-                }
-            }
-        });
+                credit.setBackgroundColor(getResources().getColor(R.color.lightGray));
 
-        credit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked()) {
-                    enteramount.setVisibility(view.GONE);
-                }
+                tv_credit.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                cash.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_cash.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                wallet.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_wallet.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                enteramount.setVisibility(View.GONE);
+
+                cash_type = tv_credit.getText().toString().trim();
 
             }
         });
+
+        cash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                credit.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_credit.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                cash.setBackgroundColor(getResources().getColor(R.color.lightGray));
+
+                tv_cash.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                wallet.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_wallet.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                enteramount.setVisibility(View.VISIBLE);
+
+                cash_type = tv_cash.getText().toString().trim();
+
+            }
+        });
+
+        wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                credit.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_credit.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                cash.setBackgroundColor(getResources().getColor(R.color.themeColor));
+
+                tv_cash.setTextColor(getResources().getColor(R.color.colorWhite));
+
+                wallet.setBackgroundColor(getResources().getColor(R.color.lightGray));
+
+                tv_wallet.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                enteramount.setVisibility(View.VISIBLE);
+
+                cash_type = tv_wallet.getText().toString().trim();
+
+
+            }
+        });
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(cash_type.equals("")){
+
+                    dialog.dismiss();
+
+                    CustomToast.showToast(MapsActivity.this,"Select From Tab",MDToast.TYPE_ERROR);
+
+                    return;
+
+                }
                 if (InternetConnection.internetConnectionAvailable(2000)) {
-                    if (credit.isChecked()) {
+                    if (cash_type.equals("Credit")) {
 
-                    } else if (cash.isChecked()) {
+                        saveIntoDb(0,"credit");
 
-                        try {
-                            String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+                        dialog.dismiss();
 
-                            int cash = Integer.valueOf(enteramount.getText().toString().trim());
+                        finish();
 
-                            String key = FirebaseDatabase.
-                                        getInstance().
-                                        getReference().
-                                        child("Cash").
-                                        child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                        push().getKey();
+                        CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
-                            IncomeModel incomeModel = new IncomeModel(cash,key,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()));
 
-                            FirebaseDatabase.
-                                    getInstance().
-                                    getReference().
-                                    child("Cash").
-                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                    child(incomeModel.getKey()).setValue(incomeModel);
+                    } else if (cash_type.equals("Cash")) {
 
-                            dialog.dismiss();
+                        int amount = Integer.valueOf(enteramount.getText().toString().trim());
 
-                            finish();
+                        saveIntoDb(amount,"cash");
 
-                            CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
+                        dialog.dismiss();
 
-//                            startActivity(new Intent(MapsActivity.this, MainActivity.class));
+                        finish();
 
-                        }catch (Exception e){
+                        CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
-                            Log.d("error", "onClick: "+e);
 
-                        }
-                    }else if(wallet.isChecked()){
+                    }else if(cash_type.equals("Wallet")){
 
-                        try {
-                            String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+                        int amount = Integer.valueOf(enteramount.getText().toString().trim());
 
-                            int wallet = Integer.valueOf(enteramount.getText().toString().trim());
+                        saveIntoDb(amount,"wallet");
 
-                            String key = FirebaseDatabase.
-                                    getInstance().
-                                    getReference().
-                                    child("Wallet").
-                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                    push().getKey();
+                        dialog.dismiss();
 
-                            IncomeModel incomeModel = new IncomeModel(wallet,key,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()));
+                        finish();
 
-                            FirebaseDatabase.
-                                    getInstance().
-                                    getReference().
-                                    child("Wallet").
-                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                    child(incomeModel.getKey()).setValue(incomeModel);
-
-                            dialog.dismiss();
-
-                            finish();
-
-                            CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
-
-//                            startActivity(new Intent(MapsActivity.this, MainActivity.class));
-
-                        }catch (Exception e){
-
-                            Log.d("error", "onClick: "+e);
-
-                        }
+                        CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
                     }
                     else {
@@ -312,10 +339,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     CustomToast.showToast(MapsActivity.this,"Please Check Internet Connection",MDToast.TYPE_ERROR);
 
                 }
+
             }
-
-
         });
+
+
+    }
+
+    private void saveIntoDb(int amount,String type){
+
+        try {
+            String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+
+            String key = FirebaseDatabase.
+                    getInstance().
+                    getReference().
+                    child("Income").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    push().getKey();
+
+            IncomeModel incomeModel = new IncomeModel(amount,key,type,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()));
+
+            FirebaseDatabase.
+                    getInstance().
+                    getReference().
+                    child("Income").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    child(incomeModel.getKey()).setValue(incomeModel);
+
+            FirebaseDatabase.
+                    getInstance().
+                    getReference().
+                    child("Riding").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    child(MapsActivity.this.key).
+                    child("endlatitude").
+                    setValue(tracker.getLatitude());
+
+            FirebaseDatabase.
+                    getInstance().
+                    getReference().
+                    child("Riding").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    child(MapsActivity.this.key).
+                    child("endlongitude").
+                    setValue(tracker.getLatitude());
+//                            startActivity(new Intent(MapsActivity.this, MainActivity.class));
+
+        }catch (Exception e){
+
+            Log.d("error", "onClick: "+e);
+
+        }
 
 
     }
@@ -346,7 +421,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE); //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -469,7 +544,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-
         // Sensor enabled
         String sensor = "sensor=false";
 
@@ -482,9 +556,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-
         return url;
-
 
     }
 

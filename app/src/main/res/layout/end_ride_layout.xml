@@ -1,79 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/themeColor">
+    android:background="@color/transparent"
+    android:orientation="vertical">
 
-    <RadioGroup
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="22dp">
+        android:layout_height="match_parent"
+        android:background="@color/offWhite"
+        android:orientation="vertical">
 
-        <RadioButton
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/colorMain">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="Payment Type"
+                android:textColor="@color/colorWhite"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!--<RadioGroup-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="22dp">-->
+
+        <!--<RadioButton-->
+        <!--android:checked="true"-->
+        <!--android:backgroundTint="@color/themeColor"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/themeColor"-->
+        <!--android:textSize="20dp"-->
+        <!--android:text="Credit"-->
+        <!--android:id="@+id/credit"-->
+        <!--/>-->
+
+        <!--<RadioButton-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Cash"-->
+        <!--android:textColor="@color/themeColor"-->
+        <!--android:textSize="20dp"-->
+        <!--android:id="@+id/cash"-->
+        <!--/>-->
+
+        <!--<RadioButton-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Wallet"-->
+        <!--android:textSize="20dp"-->
+        <!--android:textColor="@color/themeColor"-->
+        <!--android:id="@+id/wallet"-->
+        <!--/>-->
+
+
+        <!--</RadioGroup>-->
+
+
+        <!---->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            android:text="Credit"
-            android:id="@+id/credit"
-            />
+            android:layout_gravity="center"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cash"
-            android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            android:id="@+id/cash"
-        />
+            <LinearLayout
+                android:id="@+id/credit"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/lightGray">
 
-        <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wallet"
-            android:textSize="20dp"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/wallet"
-            />
+                <TextView
+                    android:id="@+id/tv_credit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Credit"
+                    android:textColor="@color/colorBlack" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cash"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/themeColor">
+
+                <TextView
+                    android:id="@+id/tv_cash"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Cash"
+                    android:textColor="@color/colorWhite" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wallet"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/themeColor">
+
+                <TextView
+                    android:id="@+id/tv_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Wallet"
+                    android:textColor="@color/colorWhite" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <EditText
-            android:visibility="gone"
+            android:id="@+id/enter_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:hint="Enter amount here"
-            android:textSize="22dp"
             android:inputType="number"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/enter_amount"/>
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/themeColor"
+            android:textSize="22dp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/swipeSubmit"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="80dp"
-            android:background="@drawable/slider">
+            android:layout_height="48dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/rounded_button">
 
-        <TextView
-            android:text="Submit"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/colorWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/submit2"/>
+            <TextView
+                android:id="@+id/submit2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="Submit"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
 
-
-
-    </RadioGroup>
-
-
-
+    </LinearLayout>
 
 
 </LinearLayout>

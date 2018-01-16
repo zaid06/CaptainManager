@@ -39,6 +39,7 @@ import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
+import bilal.com.captain.activityIncomeDetail.IncomeDetailActivity;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+//                startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
 
@@ -98,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(active == true){
                     openAlert();
                 }
+            }
+        });
+
+        findViewById(R.id.achieve).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, IncomeDetailActivity.class));
             }
         });
 
@@ -154,14 +162,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //        getDataFromServer();
+        getDataFromServer();
         achieved();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        getDataFromServer();
 
 
     }
@@ -212,7 +219,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         CustomToast.showToast(MainActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
-                        startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+
+                        intent.putExtra("key",startRide.getKey());
+
+                        startActivity(intent);
                     }catch(Throwable e){
                         Log.d("Error", "onClick: "+e);
                     }
@@ -558,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseDatabase.
                 getInstance().
                 getReference().
-                child("Cash").
+                child("Income").
                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
                 orderByChild("date").equalTo(currtime).
                 addChildEventListener(cashEventListener);
