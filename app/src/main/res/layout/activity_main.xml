@@ -122,7 +122,8 @@
             android:layout_weight="2.1"
             android:background="@color/colorMain"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:onClick="clickListener">
 
             <View
                 android:layout_width="match_parent"

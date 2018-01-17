@@ -68,12 +68,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Timer timer;
     private TimerTask timerTask;
     TextView time;
+    LinearLayout cashinhand;
 
     boolean timerCheck = true;
 
     TextView tv_cash,tv_expence,todaysGoal,tv_achieved,tv_remaining;
 
     ArrayList<IncomeModel> incomeModelArrayList;
+
 
     ArrayList<ExpenseModel> expenseModelArrayList;
 
@@ -106,6 +108,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, IncomeDetailActivity.class));
+            }
+        });
+
+        cashinhand = (LinearLayout)findViewById(R.id.cash);
+
+        cashinhand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Global.curr = incomeModelArrayList;
+                startActivity(new Intent(MainActivity.this,CashInHand.class));
             }
         });
 
