@@ -85,10 +85,11 @@ public class Signup extends AppCompatActivity {
                                 if(task.isSuccessful()){
                                     String id = auth.getCurrentUser().getUid();
 
-                                    Firebase firebase = new Firebase(id,email,password,username);
+                                    Firebase firebase = new Firebase(id,email,password,username,true);
 
                                     FirebaseDatabase.getInstance().getReference().child("USER").child(auth.getCurrentUser().getUid()).child("user").setValue(firebase);
 
+                                    FirebaseDatabase.getInstance().getReference().child("Public_User").child(auth.getCurrentUser().getUid()).setValue(firebase);
 
                                     startActivity(new Intent(Signup.this,LoginActivity.class));
                                     finish();

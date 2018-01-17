@@ -10,15 +10,21 @@ public class Firebase {
     String id;
     String email;
     String password;
+    boolean isonline;
 
     public Firebase() {
     }
 
-    public Firebase(String id, String email, String password,String username) {
+    public Firebase(String id, String email, String password,String username, boolean isonline ) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.isonline = isonline;
+    }
+
+    public boolean getIsonline() {
+        return isonline;
     }
 
     public String getId() {

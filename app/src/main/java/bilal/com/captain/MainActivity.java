@@ -40,6 +40,7 @@ import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.activityIncomeDetail.IncomeDetailActivity;
+import bilal.com.captain.chatActivity.ChatActivity;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
@@ -109,6 +110,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        findViewById(R.id.news_feed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,NewsFeedActivity.class));
+
+            }
+        });
+
+        findViewById(R.id.chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            }
+        });
 
 
         incomeModelArrayList = new ArrayList<>();

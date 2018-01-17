@@ -145,7 +145,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             LatLng pjpPosition = new LatLng(startLatitude, startLongitude);
             mMap.addMarker(new MarkerOptions()
                     .position(pjpPosition)
-                    .title("Abcdefg"));
+                    .title("Start"));
 //            userData.get("fname")
 
 //            title("PJP Location")
@@ -162,7 +162,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         popMarker = mMap.addMarker(new MarkerOptions()
                 .position(popPosition)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
-                .title("abcd"));
+                .title("End"));
 
 //        title("POP Location")
 
@@ -387,7 +387,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog.show();
+//            progressDialog.show();
         }
 
         // Parsing the data in non-ui thread
@@ -455,11 +455,11 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
                 if (lineOptions != null) {
                     mMap.addPolyline(lineOptions);
 
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
                 } else {
                     Log.d("onPostExecute", "without Polylines drawn");
 
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
                 }
 
             }else {

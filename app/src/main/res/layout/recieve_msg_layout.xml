@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="left"
+            android:background="@drawable/receive_msg_borders"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"></LinearLayout>-->
+
+            <LinearLayout
+                android:padding="4dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <bilal.com.captain.classes.BoldCustomTextView
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:gravity="center"
+                    android:id="@+id/name"/>
+                <bilal.com.captain.classes.RegularCustomTextView
+                    android:textSize="15sp"
+                    android:id="@+id/message"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+</LinearLayout>

@@ -182,7 +182,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    String cash_type = "";
+    String cash_type = "Credit";
 
     private void openAlert() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
