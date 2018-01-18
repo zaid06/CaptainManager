@@ -40,6 +40,7 @@ import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.activityIncomeDetail.IncomeDetailActivity;
+import bilal.com.captain.chatActivity.ChatActivity;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TimerTask timerTask;
     TextView time;
     LinearLayout cashinhand;
+    LinearLayout expenseDetails;
 
     boolean timerCheck = true;
 
@@ -121,6 +123,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        expenseDetails = (LinearLayout)findViewById(R.id.remaining);
+
+        expenseDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,ExpenseDetails.class));
+            }
+        });
+
+        findViewById(R.id.news_feed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,NewsFeedActivity.class));
+
+            }
+        });
+
+        findViewById(R.id.chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            }
+        });
 
 
         incomeModelArrayList = new ArrayList<>();

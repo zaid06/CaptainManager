@@ -19,25 +19,25 @@ import bilal.com.captain.models.IncomeModel;
  * Created by shame on 2018-01-17.
  */
 
-public class CustomAdapter extends BaseAdapter {
+public class CashCustomAdapter extends BaseAdapter {
 
     TextView date,cash;
 
     Context context;
 
 
-    ArrayList<IncomeModel> data;
+    ArrayList<IncomeModel> data = new ArrayList<>();
 
     LayoutInflater inflater;
 
-    public CustomAdapter(Context context, ArrayList<IncomeModel> data) {
+    public CashCustomAdapter(Context context, ArrayList<IncomeModel> data) {
         this.context = context;
         this.data = data;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return data.size();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CustomAdapter extends BaseAdapter {
         cash = (TextView)view.findViewById(R.id.cashcash);
 
         date.setText(data.get(i).getDate());
-        cash.setText(data.get(i).getIncome());
+        cash.setText(String.valueOf(data.get(i).getIncome()));
 
 
 

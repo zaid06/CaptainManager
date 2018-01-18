@@ -54,7 +54,12 @@
             android:name=".mapActivity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".activityIncomeDetail.IncomeDetailActivity" />
-        <activity android:name=".CashInHand"></activity>
+        <activity android:name=".CashInHand" />
+        <activity android:name=".MapsRouting" />
+        <activity android:name=".NewsFeedActivity" />
+        <activity android:name=".chatActivity.ChatActivity" />
+        <activity android:name=".chatActivity.StartOneToOneChatting" />
+        <activity android:name=".ExpenseDetails"></activity>
     </application>
 
 </manifest>

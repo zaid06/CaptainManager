@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import bilal.com.captain.Global;
 import bilal.com.captain.R;
+import bilal.com.captain.adapters.CashCustomAdapter;
+import bilal.com.captain.adapters.WalletCustomAdapter;
 import bilal.com.captain.models.IncomeModel;
 
 /**
@@ -21,6 +24,12 @@ public class WalletFragment extends Fragment {
     ArrayList<IncomeModel>wallet = new ArrayList<>();
 
     View view;
+
+    ListView listView;
+
+    WalletCustomAdapter customAdapter;
+
+
 
 
 
@@ -40,6 +49,13 @@ public class WalletFragment extends Fragment {
                 wallet.add(Global.curr.get(i));
             }
         }
+
+        listView = (ListView) view.findViewById(R.id.walletlistview);
+
+        customAdapter = new WalletCustomAdapter(getContext(), wallet);
+
+        listView.setAdapter(customAdapter);
+
         return  view;
     }
 

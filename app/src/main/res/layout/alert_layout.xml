@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_margin="10dp"
-    android:background="@color/themeColor"
+    android:background="@color/cream"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,10 +27,10 @@
                 android:src="@drawable/challan"/>
 
             <EditText
-                android:textColorHint="@color/lightGray"
+                android:textColorHint="@color/themeColor"
                 android:inputType="number"
                 android:hint="Write Expence Here"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorBlack"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:id="@+id/writeExpence"/>

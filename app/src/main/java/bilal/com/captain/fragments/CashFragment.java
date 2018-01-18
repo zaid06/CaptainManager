@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import bilal.com.captain.Global;
 import bilal.com.captain.R;
-import bilal.com.captain.adapters.CustomAdapter;
+import bilal.com.captain.adapters.CashCustomAdapter;
 import bilal.com.captain.models.IncomeModel;
 
 /**
@@ -24,7 +24,7 @@ public class CashFragment extends Fragment {
 
     ArrayList<IncomeModel>data = new ArrayList<>();
 
-    CustomAdapter customAdapter;
+    CashCustomAdapter customAdapter;
 
     View view;
 
@@ -47,10 +47,10 @@ public class CashFragment extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.cashlistview);
 
-
-        customAdapter = new CustomAdapter(getContext(), data);
+        customAdapter = new CashCustomAdapter(getContext(), data);
 
         listView.setAdapter(customAdapter);
+
 
         return view;
 
