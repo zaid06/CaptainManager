@@ -3,6 +3,7 @@ package bilal.com.captain.adapters;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,7 +17,11 @@ import android.widget.SeekBar;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import bilal.com.captain.R;
 import bilal.com.captain.classes.BoldCustomTextView;
@@ -91,7 +96,7 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
 
                     } else {
 
-                        viewHolder.play_pause.setImageResource(R.drawable.pause);
+                        viewHolder.play_pause.setImageResource(R.drawable.stop);
 
 
 
@@ -100,6 +105,7 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
 //                            mediaPlayer.setDataSource(complainModel.getRecordingUrl());
                             mediaPlayer[0].setDataSource(complainModel[0].getRecordingUrl());
                             mediaPlayer[0].setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                            viewHolder.seekBar.setMax(mediaPlayer[0].getDuration());
                             mediaPlayer[0].prepare(); // might take long! (for buffering, etc)
                             mediaPlayer[0].start();
                             mediaPlayer[0].setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -110,6 +116,39 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
                                     viewHolder.play_pause.setImageResource(R.drawable.play);
                                 }
                             });
+
+//                            Timer timer = new Timer();
+//
+//                            TimerTask timerTask = new TimerTask() {
+//                                @Override
+//                                public void run() {
+//
+//                                    viewHolder.seekBar.setProgress(mediaPlayer[0].getCurrentPosition());
+//
+//                                }
+//                            };
+//
+//                            timer.schedule(timerTask,1000,1000);
+//
+//                            viewHolder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//                                @Override
+//                                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//                                    mediaPlayer[0].seekTo(seekBar.getProgress());
+//
+//                                }
+//                            });
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -126,6 +165,7 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
 
         return convertView;
     }
+
 
     static class ViewHolder {
 
