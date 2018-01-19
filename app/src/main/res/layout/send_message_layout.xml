@@ -11,20 +11,22 @@
             android:padding="4dp"
             android:layout_margin="8dp"
             android:layout_gravity="right"
-            android:background="@drawable/send_msg_border"
+
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
 
             <LinearLayout
+                android:background="@drawable/send_msg_border"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:orientation="vertical"
-                android:padding="4dp">
+                android:padding="6dp">
 
                 <bilal.com.captain.classes.BoldCustomTextView
+                    android:visibility="gone"
                     android:id="@+id/name"
                     android:textSize="20sp"
                     android:layout_width="match_parent"
@@ -34,6 +36,7 @@
                     android:textColor="@color/colorWhite"/>
 
                 <bilal.com.captain.classes.RegularCustomTextView
+
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp"
                     android:id="@+id/message"
@@ -42,6 +45,15 @@
 
 
             </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_margin="3dp"
+                android:id="@+id/profile_image"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/bike"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#3b3e56"/>
 
             <!--<LinearLayout-->
                 <!--android:layout_width="0dp"-->
