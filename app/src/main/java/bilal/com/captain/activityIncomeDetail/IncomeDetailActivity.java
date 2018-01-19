@@ -3,6 +3,7 @@ package bilal.com.captain.activityIncomeDetail;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,11 +56,14 @@ public class IncomeDetailActivity extends AppCompatActivity {
 
     private void syncDataFromServer(){
 
+        String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+
         FirebaseDatabase.
                 getInstance().
                 getReference().
                 child("Riding").
                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                orderByChild("time").equalTo(currtime).
                 addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {

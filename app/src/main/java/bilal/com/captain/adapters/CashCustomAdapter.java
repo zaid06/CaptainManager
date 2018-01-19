@@ -59,7 +59,7 @@ public class CashCustomAdapter extends BaseAdapter {
         cash = (TextView)view.findViewById(R.id.cashcash);
 
         date.setText(data.get(i).getDate());
-        cash.setText(String.valueOf(data.get(i).getIncome()));
+        cash.setText("Rs. "+data.get(i).getIncome());
 
 
 

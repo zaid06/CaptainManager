@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Double et_long = tracker.getLongitude();
                         Double et_lat = tracker.getLatitude();
 
-                        String currtime = (DateFormat.format("dd-MM-yyyy hh:mm:ss", new java.util.Date()).toString());
+                        String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
 
                         String key =  FirebaseDatabase.

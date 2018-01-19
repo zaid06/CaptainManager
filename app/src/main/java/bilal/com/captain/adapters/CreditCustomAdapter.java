@@ -56,6 +56,8 @@ public class CreditCustomAdapter extends BaseAdapter {
 
         date.setText(data.get(i).getDate());
 
+        cash.setText("Rs. "+data.get(i).getIncome());
+
         return view;
     }
 }

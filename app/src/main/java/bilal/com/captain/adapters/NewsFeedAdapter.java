@@ -34,7 +34,6 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
 
     LayoutInflater inflater;
 
-    final MediaPlayer mediaPlayer = new MediaPlayer();
 
     public NewsFeedAdapter(@NonNull Context context, ArrayList<ComplainModel> arrayList) {
         super(context, 0, arrayList);
@@ -50,14 +49,25 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        if(convertView == null){
+        if (convertView == null) {
 
-            convertView = inflater.inflate(R.layout.news_feed_item,parent,false);
+            convertView = inflater.inflate(R.layout.news_feed_item, parent, false);
 
         }
 
+        final ComplainModel[] complainModel = {getItem(position)};
 
-        final ComplainModel complainModel = getItem(position);
+        final MediaPlayer[] mediaPlayer = {new MediaPlayer()};
+
+
+
+//        try {
+////            mediaPlayer.setDataSource(complainModel.getRecordingUrl());
+////            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
 
         final ViewHolder viewHolder = new ViewHolder(convertView);
 
@@ -66,30 +76,41 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
 //            viewHolder.boldCustomTextView_name.setText("");
 
             Glide.with(context)
-                    .load(complainModel.getImageUrl())
+                    .load(complainModel[0].getImageUrl())
                     .into(viewHolder.imageView_image);
 
             viewHolder.play_pause.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if(mediaPlayer.isPlaying()){
+                    if (mediaPlayer[0] != null && mediaPlayer[0].isPlaying()) {
 
                         viewHolder.play_pause.setImageResource(R.drawable.play);
 
-                        mediaPlayer.pause();
+                        mediaPlayer[0].stop();
 
-                        mediaPlayer.release();
-
-                    }else {
+                    } else {
 
                         viewHolder.play_pause.setImageResource(R.drawable.pause);
 
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
                         try {
-                            mediaPlayer.setDataSource(complainModel.getRecordingUrl());
-                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                            mediaPlayer.start();
+                            mediaPlayer[0] = new MediaPlayer();
+//                            mediaPlayer.setDataSource(complainModel.getRecordingUrl());
+                            mediaPlayer[0].setDataSource(complainModel[0].getRecordingUrl());
+                            mediaPlayer[0].setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            mediaPlayer[0].prepare(); // might take long! (for buffering, etc)
+                            mediaPlayer[0].start();
+                            mediaPlayer[0].setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+//                                    mediaPlayer.stop();
+//                                    mediaPlayer.reset();
+                                    viewHolder.play_pause.setImageResource(R.drawable.play);
+                                }
+                            });
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -97,16 +118,16 @@ public class NewsFeedAdapter extends ArrayAdapter<ComplainModel> {
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
-            Log.d("Exception", "getView: "+e);
+            Log.d("Exception", "getView: " + e);
 
         }
 
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
 
         ImageView imageView_image;
 
