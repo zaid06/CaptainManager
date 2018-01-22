@@ -45,7 +45,7 @@ public class ChattingPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Chatting";
             case 1:
-                return "Undefined";
+                return "Group";
             default:
                 return null;
 

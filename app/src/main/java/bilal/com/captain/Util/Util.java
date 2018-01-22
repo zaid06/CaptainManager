@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 public class Util {
 
+    public static final int REQUEST_CODE_CAPTURE_IMAGE = 124;
+
     public static boolean etValidate(EditText edittext){
         String validate = edittext.getText().toString();
         validate = validate.replaceAll("\\s+", " ").trim();

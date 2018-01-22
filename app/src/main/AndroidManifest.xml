@@ -22,6 +22,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -59,11 +61,9 @@
         <activity android:name=".NewsFeedActivity" />
         <activity android:name=".chatActivity.ChatActivity" />
         <activity android:name=".chatActivity.StartOneToOneChatting" />
-
-        <activity android:name=".chatActivity.StartGroupChattingActivity"></activity>
-
-        <activity android:name=".ExpenseDetails"></activity>
-
+        <activity android:name=".chatActivity.StartGroupChattingActivity" />
+        <activity android:name=".ExpenseDetails" />
+        <activity android:name=".galleryActivity.GalleryActivity"></activity>
     </application>
 
 </manifest>
