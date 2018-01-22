@@ -1,5 +1,7 @@
 package bilal.com.captain.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by ikodePC-1 on 1/17/2018.
  */
@@ -17,16 +19,27 @@ public class SingleChatModel {
 
     String key;
 
-    public SingleChatModel(String msgs, String from, boolean flag, String user, String date, String key) {
+    ArrayList<String> selectDownloadUrls;
+
+    public SingleChatModel(String msgs, String from, boolean flag, String user, String date, String key, ArrayList<String> selectDownloadUrls) {
         this.msgs = msgs;
         this.from = from;
         this.flag = flag;
         this.user = user;
         this.date = date;
         this.key = key;
+        this.selectDownloadUrls = selectDownloadUrls;
     }
 
     public SingleChatModel() {
+    }
+
+    public ArrayList<String> getSelectDownloadUrls() {
+        return selectDownloadUrls;
+    }
+
+    public void setSelectDownloadUrls(ArrayList<String> selectDownloadUrls) {
+        this.selectDownloadUrls = selectDownloadUrls;
     }
 
     public String getMsgs() {

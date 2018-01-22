@@ -23,24 +23,49 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:gravity="center_vertical"
+
         android:orientation="horizontal"
         android:weightSum="10">
 
         <ImageButton
-            android:visibility="gone"
+            android:layout_gravity="bottom"
             android:id="@+id/mPhotoPickerButton"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_weight="1"
-            android:background="@android:drawable/ic_menu_gallery"/>
+            android:background="@android:drawable/ic_menu_gallery" />
 
-        <EditText
-            android:id="@+id/messageEditText"
+        <LinearLayout
             android:layout_width="0dp"
+            android:layout_weight="8"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="8.9"/>
+            android:orientation="vertical">
+
+            <HorizontalScrollView
+                android:id="@+id/horizontal_scroll_view"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/parentImageShow">
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="8" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/sendButton"
@@ -49,7 +74,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:background="@android:drawable/ic_menu_send"
-            android:enabled="false"/>
+            android:enabled="false" />
 
     </LinearLayout>
 

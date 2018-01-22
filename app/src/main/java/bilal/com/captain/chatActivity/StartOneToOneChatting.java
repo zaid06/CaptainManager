@@ -1,26 +1,49 @@
 package bilal.com.captain.chatActivity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
+import bilal.com.captain.Firebase;
 import bilal.com.captain.R;
+import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
 
 public class StartOneToOneChatting extends AppCompatActivity {
@@ -39,6 +62,13 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
     ArrayList<SingleChatModel> arrayList;
 
+    ProgressDialog progressDialog;
+
+    HorizontalScrollView horizontal_scroll_view;
+
+    LinearLayout parentImageShow;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +79,15 @@ public class StartOneToOneChatting extends AppCompatActivity {
         uid = bundle.getString("uid");
 
         initialize();
+
+        findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+
+            }
+        });
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,17 +100,21 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                 String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 
+                if(selectedItems != null && selectedItems.size() > 0){
+                    progressDialog.show();
+                    uploadPictures(message);
 
-                SingleChatModel singleChatModel = new SingleChatModel(message,"Sender",true,"hello",date+" "+time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey());
+                }else {
+                    SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
 
-                FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                singleChatModel.setFlag(false);
+                    singleChatModel.setFlag(false);
 
-                FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                editText.setText("");
-
+                    editText.setText("");
+                }
 //                new SentReadMsgs( msg, "sender", firebaseAuth.getCurrentUser().getDisplayName(),dttm,databaseReference.push().getKey(),null,true);
 //
 //                databaseReference.child(uid).child(firebaseAuth.getCurrentUser().getUid()).child(sentReadMsgs.getKey()).setValue(sentReadMsgs);
@@ -102,6 +145,22 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
         listView.setAdapter(singleChattingAdapter);
 
+        progressDialog = new ProgressDialog(getApplicationContext());
+
+        progressDialog = new ProgressDialog(this);
+
+//        check = (TextView) findViewById(R.id.check);
+
+        progressDialog.setMessage("Sending Message...");
+
+//        check.setVisibility(View.GONE);
+
+        progressDialog.setCanceledOnTouchOutside(false);
+
+        horizontal_scroll_view = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
+
+        parentImageShow = (LinearLayout) findViewById(R.id.parentImageShow);
+
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -124,6 +183,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 
@@ -160,5 +221,120 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
             }
         });
+    }
+
+    ArrayList<String> selectedItems;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Util.REQUEST_CODE_CAPTURE_IMAGE:
+
+                    if(GalleryActivity.selectedItems != null && GalleryActivity.selectedItems.size() >0){
+
+                        horizontal_scroll_view.setVisibility(View.VISIBLE);
+
+//                        progressDialog.show();
+
+                        for (int i = 0; i < GalleryActivity.selectedItems.size(); i++){
+
+
+
+                            DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+                            float dp = 100f;
+                            float fpixels = metrics.density * dp;
+                            int pixels = (int) (fpixels + 0.5f);
+
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
+
+                            ImageView imageView = new ImageView(getApplicationContext());
+
+                            imageView.setLayoutParams(layoutParams);
+
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+                            Glide.with(getApplicationContext())
+                                    .load(GalleryActivity.selectedItems.get(i))
+                                    .into(imageView);
+
+
+                            parentImageShow.addView(imageView);
+
+                        }
+
+                        selectedItems = GalleryActivity.selectedItems;
+
+                    }
+//                    else if(){
+//
+//
+//                    }
+
+                break;
+        }
+    }
+
+    int index = 0;
+
+    ArrayList<String> selectDownloadUrls = new ArrayList<>();
+
+    private void uploadPictures(final String message){
+
+        if( (selectedItems.size()) == index ){
+
+            index = 0;
+
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+            String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+
+            SingleChatModel singleChatModel = new SingleChatModel(message,"Sender",true,"hello",date+" "+time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(),selectDownloadUrls);
+
+            FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+            singleChatModel.setFlag(false);
+
+            FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+            selectDownloadUrls.clear();
+
+            selectedItems.clear();
+
+            GalleryActivity.selectedItems = null;
+
+            selectedItems = null;
+
+            horizontal_scroll_view.setVisibility(View.GONE);
+
+            parentImageShow.removeAllViews();
+
+            progressDialog.dismiss();
+// ;
+
+            editText.setText("");
+
+
+        }else {
+
+            File file = new File(selectedItems.get(index));
+
+            String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+            FirebaseStorage.getInstance().getReference().child("Chatting").child(timeStamp).putFile(Uri.fromFile(file)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        index++;
+
+                        selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
+
+                        uploadPictures(message);
+                }
+            });
+
+
+        }
+
     }
 }
