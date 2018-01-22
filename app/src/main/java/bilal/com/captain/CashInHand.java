@@ -21,8 +21,8 @@ public class CashInHand extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_in_hand);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        toolbar = (Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager)findViewById(R.id.pager);

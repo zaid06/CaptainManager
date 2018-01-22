@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         expenseDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ExpenseGlobal.e_array = expenseModelArrayList;
                 startActivity(new Intent(MainActivity.this,ExpenseDetails.class));
             }
         });

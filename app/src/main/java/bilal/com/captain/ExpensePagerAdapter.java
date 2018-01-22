@@ -57,21 +57,21 @@ public class ExpensePagerAdapter extends FragmentPagerAdapter {
         return 5;
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position){
-            case 0:
-                return "Fuel";
-            case 1:
-                return "Puncture";
-            case 2:
-                return "Repair";
-            case 3:
-                return "Challan";
-            case 4:
-                return "Miscellaneous";
-            default:
-                return null;
-        }
-    }
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        switch (position){
+//            case 0:
+//                return "Fuel";
+//            case 1:
+//                return "Puncture";
+//            case 2:
+//                return "Repair";
+//            case 3:
+//                return "Challan";
+//            case 4:
+//                return "Miscellaneous";
+//            default:
+//                return null;
+//        }
+   //}
 }
