@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.Firebase;
 import bilal.com.captain.R;
 import bilal.com.captain.classes.BoldCustomTextView;
@@ -44,6 +45,7 @@ public class UsersListAdapter extends ArrayAdapter<Firebase> {
             convertView = layoutInflater.inflate(R.layout.users_list_item_for_single_chatting,parent,false);
 
         }
+
 
         Firebase firebase = getItem(position);
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,10 +41,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.Firebase;
+import bilal.com.captain.GlobalVariables;
+import bilal.com.captain.MainActivity;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
 
@@ -50,7 +56,13 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
     EditText editText;
 
+    BoldCustomTextView chatTitle;
+
     Button send;
+
+    Bundle id;
+
+    int position;
 
     ListView listView;
 
@@ -74,17 +86,32 @@ public class StartOneToOneChatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_one_to_one_chatting);
 
+
         bundle = getIntent().getExtras();
 
         uid = bundle.getString("uid");
 
+        id = getIntent().getExtras();
+
+        position = id.getInt("id");
+
         initialize();
+
+        chatTitle = (BoldCustomTextView)findViewById(R.id.chattitle);
+
+        chatTitle.setText(GlobalVariables.name);
+
+
+
+
 
         findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+                ShowDialog();
+
+
 
             }
         });
@@ -128,6 +155,40 @@ public class StartOneToOneChatting extends AppCompatActivity {
         });
 
         getMessages();
+
+    }
+
+    private void ShowDialog() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(StartOneToOneChatting.this);
+        View view = getLayoutInflater().inflate(R.layout.open_gallery_permission_alert,null);
+
+        final LinearLayout allow = (LinearLayout)view.findViewById(R.id.allow);
+        final LinearLayout dallow = (LinearLayout)view.findViewById(R.id.dontallow);
+
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+
+        allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+            }
+        });
+
+
+        dallow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(StartOneToOneChatting.this, "Permission not granted", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+
 
     }
 

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.R;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.classes.RegularCustomTextView;
@@ -32,6 +33,8 @@ import bilal.com.captain.models.SingleChatModel;
 public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
 
     ArrayList<SingleChatModel> arrayList;
+
+    BoldCustomTextView chatTitle;
 
     Context context;
 
@@ -50,7 +53,10 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
+
         SingleChatModel singleChatModel = getItem(position);
+
 
         if(singleChatModel.isFlag()){
 
@@ -120,6 +126,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
             }
 
         }
+
 
 
 
