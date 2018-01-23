@@ -70,18 +70,14 @@
         android:layout_gravity="right"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <GridView
             android:id="@+id/gridview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnWidth="100dip"
             android:gravity="center"
-            android:horizontalSpacing="4dip"
-            android:numColumns="3"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="4dip" />
+            android:numColumns="3"/>
 
 
     </LinearLayout>

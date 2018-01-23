@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onStateChange(boolean active) {
                 if(active == true){
                     openAlert();
+
                 }
             }
         });
