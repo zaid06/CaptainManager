@@ -14,8 +14,8 @@ public class ExpenseDetails extends AppCompatActivity {
     ExpensePagerAdapter expensePagerAdapter;
 
     private int[] tabIcons = {
-            R.drawable.fuel,
-            R.drawable.puncture,
+            R.drawable.fuel_1,
+            R.drawable.puncture_2,
             R.drawable.repair,
             R.drawable.challan,
             R.drawable.others

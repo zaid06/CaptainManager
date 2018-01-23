@@ -107,6 +107,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this,LiveVideoTestingUsingFirebase.class));
+            }
+        });
+
         findViewById(R.id.achieve).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

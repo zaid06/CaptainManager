@@ -257,11 +257,6 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
                 Log.d("orientation", "" + orientation);
 
-//                if(canShow(orientation)){
-//                    show();
-//                } else if(canDismiss(orientation)){
-//                    dismiss();
-//                }
             }
         };
 
