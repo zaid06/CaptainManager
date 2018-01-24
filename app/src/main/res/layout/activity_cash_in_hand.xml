@@ -6,11 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="bilal.com.captain.CashInHand">
+
+    <RelativeLayout
+        android:id="@+id/cashinhandtoplayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorMain"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/cashinhandbackbutton"
+            android:layout_width="30dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_back_arrow" />
+
+        <bilal.com.captain.classes.BoldCustomTextView
+            android:id="@+id/cashinhandtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Cash In Hand"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp" />
+
+
+    </RelativeLayout>
+
+
+
 
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
@@ -25,5 +53,10 @@
         android:id="@+id/pager">
 
     </android.support.v4.view.ViewPager>
+
+
+
+
+
 
 </LinearLayout>

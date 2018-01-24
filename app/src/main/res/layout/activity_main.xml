@@ -406,6 +406,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/news_feed"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -482,11 +483,11 @@
         app:inner_text="Swipe to start ride"
         app:inner_text_size="23dp"
         app:button_image_disabled="@drawable/ic_chevron_right_black_24dp"
-        app:button_top_padding="10dp"
-        app:button_bottom_padding="10dp"
+        app:button_top_padding="15dp"
+        app:button_bottom_padding="15dp"
         app:button_image_enabled="@drawable/ic_lock_open_black_24dp"
         app:inner_text_background="@drawable/slider"
-        android:id="@+id/swipebutton"/>
+        android:id="@+id/swipebutton" />
 
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->

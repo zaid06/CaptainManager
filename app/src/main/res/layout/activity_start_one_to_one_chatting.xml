@@ -7,6 +7,20 @@
     tools:context="bilal.com.captain.chatActivity.StartOneToOneChatting">
 
 
+
+
+    <ListView
+        android:layout_marginBottom="36dp"
+        android:id="@+id/messageListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -69,22 +83,14 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/messageListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-
     <RelativeLayout
         android:id="@+id/chattoplayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorMain">
+        android:background="@color/colorMain"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/chatbackbutton"

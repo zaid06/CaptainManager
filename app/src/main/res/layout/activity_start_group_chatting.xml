@@ -6,43 +6,22 @@
     android:layout_height="match_parent"
     tools:context="bilal.com.captain.chatActivity.StartGroupChattingActivity">
 
-    <RelativeLayout
-        android:id="@+id/grouptoplayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorMain">
-
-        <ImageView
-            android:id="@+id/groupbackbutton"
-            android:layout_width="30dp"
-            android:layout_height="27dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_back_arrow" />
-
-        <bilal.com.captain.classes.BoldCustomTextView
-            android:id="@+id/grouptitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="SHOP DETAILS"
-            android:textColor="@color/colorWhite"
-            android:textSize="21sp" />
 
 
-    </RelativeLayout>
 
 
 
     <ListView
+        android:layout_marginBottom="36dp"
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
         android:divider="@android:color/transparent"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -57,7 +36,7 @@
 
         <ImageButton
             android:layout_gravity="bottom"
-            android:id="@+id/mPhotoPickerButton"
+            android:id="@+id/groupPhotoPickerButton"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_weight="1"
@@ -106,7 +85,31 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/grouptoplayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorMain">
 
+        <ImageView
+            android:id="@+id/groupbackbutton"
+            android:layout_width="30dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_back_arrow" />
+
+        <bilal.com.captain.classes.BoldCustomTextView
+            android:id="@+id/grouptitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="SHOP DETAILS"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp" />
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

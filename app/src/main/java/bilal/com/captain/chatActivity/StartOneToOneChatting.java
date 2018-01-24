@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -43,20 +45,33 @@ import java.util.Date;
 
 import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.Firebase;
+
+import bilal.com.captain.LiveVideoTestingUsingFirebase;
+import bilal.com.captain.R;
+import bilal.com.captain.Util.Util;
+import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.config.OpenTokConfig;
+
 import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.MainActivity;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
 import bilal.com.captain.classes.BoldCustomTextView;
+
+import bilal.com.captain.fragments.AllUsersListForStartSingleChatting;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
+
+
 
 public class StartOneToOneChatting extends AppCompatActivity {
 
     EditText editText;
 
     BoldCustomTextView chatTitle;
+
+    ImageView chatbackbutton;
 
     Button send;
 
@@ -101,6 +116,13 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
         chatTitle.setText(GlobalVariables.name);
 
+        chatbackbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartOneToOneChatting.super.onBackPressed();
+            }
+        });
+
 
 
 
@@ -108,13 +130,32 @@ public class StartOneToOneChatting extends AppCompatActivity {
         findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ShowDialog();
-
-
-
             }
         });
+
+
+
+//        findViewById(R.id.call).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                OpenTokConfig.SESSION_ID = "1_MX40NjA0NDk1Mn5-MTUxNjcwMzE0Nzk1OX5yYjJFUHFRcG1PREpDN3NIV0szbzU1S0t-fg"+uid;
+//
+//                tempo_test();
+//
+//            }
+//        });
+//
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                OpenTokConfig.SESSION_ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//                startActivity(new Intent(StartOneToOneChatting.this,LiveVideoTestingUsingFirebase.class));
+//            }
+//        });
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +217,7 @@ public class StartOneToOneChatting extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+                dialog.dismiss();
             }
         });
 
@@ -199,6 +241,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
         singleChattingAdapter = new SingleChattingAdapter(StartOneToOneChatting.this,arrayList);
 
         editText = (EditText) findViewById(R.id.messageEditText);
+
+        chatbackbutton = (ImageView) findViewById(R.id.chatbackbutton);
 
         send = (Button) findViewById(R.id.sendButton);
 
@@ -396,6 +440,28 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
 
         }
+
+    }
+
+
+    private void tempo_test(){
+
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+        String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+        SingleChatModel singleChatModel = new SingleChatModel("", "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
+
+        FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+        singleChatModel.setFlag(false);
+
+        FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+
+        startActivity(new Intent(StartOneToOneChatting.this, LiveVideoTestingUsingFirebase.class));
+
+        editText.setText("");
 
     }
 }

@@ -75,6 +75,8 @@
         android:orientation="vertical">
 
         <GridView
+            android:verticalSpacing="2dp"
+            android:columnWidth="4dp"
             android:id="@+id/gridview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

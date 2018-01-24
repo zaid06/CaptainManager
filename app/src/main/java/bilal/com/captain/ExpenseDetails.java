@@ -5,17 +5,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 public class ExpenseDetails extends AppCompatActivity {
 
     Toolbar toolbar;
+    ImageView backbutton;
     TabLayout tabLayout;
     ViewPager viewPager;
     ExpensePagerAdapter expensePagerAdapter;
 
     private int[] tabIcons = {
-            R.drawable.fuel,
-            R.drawable.puncture,
+            R.drawable.fuel_1,
+            R.drawable.puncture_2,
             R.drawable.repair,
             R.drawable.challan,
             R.drawable.others
@@ -31,6 +34,14 @@ public class ExpenseDetails extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabsExpense);
         viewPager = (ViewPager)findViewById(R.id.pagerExpense);
+        backbutton = (ImageView)findViewById(R.id.expensedetailsbackbutton);
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExpenseDetails.super.onBackPressed();
+            }
+        });
 
         expensePagerAdapter =  new ExpensePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(expensePagerAdapter);

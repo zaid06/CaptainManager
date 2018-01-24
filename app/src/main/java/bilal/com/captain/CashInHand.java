@@ -6,12 +6,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class CashInHand extends AppCompatActivity {
 
     Toolbar toolbar;
+    ImageView backbutton;
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
@@ -23,6 +27,15 @@ public class CashInHand extends AppCompatActivity {
 
 //        toolbar = (Toolbar)findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+
+        backbutton =(ImageView) findViewById(R.id.cashinhandbackbutton);
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CashInHand.super.onBackPressed();
+            }
+        });
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager)findViewById(R.id.pager);

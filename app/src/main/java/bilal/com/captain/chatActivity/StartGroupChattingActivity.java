@@ -1,8 +1,11 @@
 package bilal.com.captain.chatActivity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +18,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +41,7 @@ import bilal.com.captain.R;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
 import bilal.com.captain.classes.BoldCustomTextView;
+import bilal.com.captain.fragments.MakingGroupOfUsers;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
 
@@ -47,6 +52,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
     Button send;
 
     ListView listView;
+
+    ImageView groupbackbutton;
 
     BoldCustomTextView groupTitle;
 
@@ -73,11 +80,19 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
         groupTitle.setText(GlobalVariables.groupName);
 
-        findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
+        groupbackbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartGroupChattingActivity.super.onBackPressed();
+
+            }
+        });
+
+        findViewById(R.id.groupPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivityForResult(new Intent(StartGroupChattingActivity.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+                openAlert();
 
             }
         });
@@ -143,6 +158,39 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
     }
 
+    private void openAlert() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(StartGroupChattingActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.open_gallery_permission_alert,null);
+
+        final LinearLayout allow = (LinearLayout)view.findViewById(R.id.allow);
+        final LinearLayout dallow = (LinearLayout)view.findViewById(R.id.dontallow);
+
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+
+        allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(StartGroupChattingActivity.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+                dialog.dismiss();
+            }
+        });
+
+
+        dallow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(StartGroupChattingActivity.this, "Permission not granted", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+    }
+
     private void initialize(){
 
         arrayList = new ArrayList<>();
@@ -154,6 +202,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
         send = (Button) findViewById(R.id.sendButton);
 
         listView = (ListView) findViewById(R.id.messageListView);
+
+        groupbackbutton = (ImageView) findViewById(R.id.groupbackbutton);
 
         listView.setAdapter(singleChattingAdapter);
 
