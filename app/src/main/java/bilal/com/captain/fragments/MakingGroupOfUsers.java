@@ -118,6 +118,8 @@ public class MakingGroupOfUsers extends Fragment {
 
                 GlobalVariables.groupNameUsersModel = groupNameUsersModel;
 
+                GlobalVariables.groupName =groupNameUsersModel.getGroupname();
+
                 startActivity(new Intent(getActivity(), StartGroupChattingActivity.class));
 
             }

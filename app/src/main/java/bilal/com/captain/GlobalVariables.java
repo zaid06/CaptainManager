@@ -10,4 +10,8 @@ public class GlobalVariables {
     public static StartRide startRide;
 
     public static GroupNameUsersModel groupNameUsersModel;
+
+    public static String name;
+
+    public static String groupName;
 }

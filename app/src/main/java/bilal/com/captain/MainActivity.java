@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
 
-                        String key =  FirebaseDatabase.
+                         String key =  FirebaseDatabase.
                                 getInstance().
                                 getReference().
                                 child("Riding").

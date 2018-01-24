@@ -18,7 +18,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.Firebase;
+import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
 import bilal.com.captain.adapters.UsersListAdapter;
 import bilal.com.captain.chatActivity.StartOneToOneChatting;
@@ -58,9 +60,15 @@ public class AllUsersListForStartSingleChatting extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Firebase firebase = (Firebase) parent.getItemAtPosition(position);
 
+                int itemPosition     = position;
+
+                GlobalVariables.name = firebase.getUsername();
+
                 Intent intent = new Intent(getActivity(), StartOneToOneChatting.class);
 
                 intent.putExtra("uid",firebase.getId());
+
+                intent.getIntExtra("id", itemPosition);
 
                 startActivity(intent);
             }

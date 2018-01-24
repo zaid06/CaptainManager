@@ -36,6 +36,7 @@ import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
 
@@ -46,6 +47,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
     Button send;
 
     ListView listView;
+
+    BoldCustomTextView groupTitle;
 
     Bundle bundle;
 
@@ -65,6 +68,10 @@ public class StartGroupChattingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_group_chatting);
 
         initialize();
+
+        groupTitle = (BoldCustomTextView)findViewById(R.id.grouptitle);
+
+        groupTitle.setText(GlobalVariables.groupName);
 
         findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
