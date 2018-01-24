@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context="bilal.com.captain.chatActivity.StartOneToOneChatting">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/call"/>
+
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"

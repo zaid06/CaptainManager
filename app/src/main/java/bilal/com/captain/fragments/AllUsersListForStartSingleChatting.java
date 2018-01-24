@@ -79,9 +79,7 @@ public class AllUsersListForStartSingleChatting extends Fragment {
 
         listView.setAdapter(usersListAdapter);
     }
-
     private void getFataFromServer(){
-
         FirebaseDatabase.getInstance().getReference().child("Public_User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -92,6 +90,7 @@ public class AllUsersListForStartSingleChatting extends Fragment {
 
                     arrayList.add(firebase);
                 }
+
                 usersListAdapter.notifyDataSetChanged();
 
             }
@@ -116,8 +115,5 @@ public class AllUsersListForStartSingleChatting extends Fragment {
 
             }
         });
-
-
     }
-
 }

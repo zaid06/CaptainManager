@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "bilal.com.captain"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+    }
+
 }
 
 
@@ -56,5 +62,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/universal-image-loader-1.6.1-with-src.jar')
     compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    compile 'com.opentok.android:opentok-accelerator-core:1.0.+'
+//    compile group: 'com.tokbox', name: 'opentok-server-sdk', version: '2.3.2'
 }
 apply plugin: 'com.google.gms.google-services'

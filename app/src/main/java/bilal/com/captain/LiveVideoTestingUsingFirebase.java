@@ -1,133 +1,603 @@
 package bilal.com.captain;
 
+import android.*;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.hardware.Camera;
+import android.os.Build;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.opentok.android.OpentokError;
+import com.tokbox.android.otsdkwrapper.listeners.AdvancedListener;
+import com.tokbox.android.otsdkwrapper.listeners.BasicListener;
+import com.tokbox.android.otsdkwrapper.listeners.ListenerException;
+import com.tokbox.android.otsdkwrapper.listeners.PausableAdvancedListener;
+import com.tokbox.android.otsdkwrapper.listeners.PausableBasicListener;
+import com.tokbox.android.otsdkwrapper.utils.MediaType;
+import com.tokbox.android.otsdkwrapper.utils.OTConfig;
+import com.tokbox.android.otsdkwrapper.utils.PreviewConfig;
+import com.tokbox.android.otsdkwrapper.wrapper.OTWrapper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import bilal.com.captain.complainActivity.ComplainActivity;
+import bilal.com.captain.config.OpenTokConfig;
+import bilal.com.captain.fragments.PreviewCameraFragment;
+import bilal.com.captain.fragments.PreviewControlFragment;
+import bilal.com.captain.fragments.RemoteControlFragment;
 
-public class LiveVideoTestingUsingFirebase extends AppCompatActivity implements Camera.PreviewCallback, SurfaceHolder.Callback, View.OnClickListener {
+public class LiveVideoTestingUsingFirebase extends AppCompatActivity implements PreviewControlFragment.PreviewControlCallbacks,
+        RemoteControlFragment.RemoteControlCallbacks, PreviewCameraFragment.PreviewCameraCallbacks {
 
-    SurfaceView surfaceView;
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private Camera mCamera;
+    private final String[] permissions = {android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.CAMERA};
+    private final int permsRequestCode = 200;
 
-    private boolean mIsCapturing;
+    private RelativeLayout mPreviewViewContainer;
+    private RelativeLayout mRemoteViewContainer;
+    private RelativeLayout.LayoutParams mLayoutParamsPreview;
+    private String mRemoteId;
+    private View mRemoteView;
+    private TextView mAlert;
+
+    //Audio only views
+    private RelativeLayout mLocalAudioOnlyView;
+    private RelativeLayout mRemoteAudioOnlyView;
+    private ImageView mLocalAudioOnlyImage;
+
+    //UI control bars fragments
+    private PreviewControlFragment mPreviewFragment;
+    private RemoteControlFragment mRemoteFragment;
+    private PreviewCameraFragment mCameraFragment;
+    private FragmentTransaction mFragmentTransaction;
+
+    //Loading dialog
+    ProgressDialog mProgressDialog;
+
+    //Permissions
+    private boolean mAudioPermission = false;
+    private boolean mVideoPermission = false;
+
+    //Communication status
+    private boolean isConnected = false;
+    private boolean isLocal = false;
+    private boolean isCallInProgress = false;
+
+    private OTWrapper mWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onCreate");
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_live_video_testing_using_firebase);
 
-        surfaceView = (SurfaceView) findViewById(R.id.myVideo);
-        final SurfaceHolder surfaceHolder = surfaceView.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        surfaceHolder.setKeepScreenOn(true);
-        mIsCapturing = true;
+        mPreviewViewContainer = (RelativeLayout) findViewById(R.id.publisherview);
+        mRemoteViewContainer = (RelativeLayout) findViewById(R.id.subscriberview);
+        mAlert = (TextView) findViewById(R.id.quality_warning);
 
-    }
+        //remote and local audio only view
+        mRemoteAudioOnlyView = (RelativeLayout) findViewById(R.id.remoteAudioOnlyView);
+        mLocalAudioOnlyView = (RelativeLayout) findViewById(R.id.localAudioOnlyView);
 
-    @Override
-    public void onPreviewFrame(byte[] data, Camera camera) {
-
-        Log.d("size", "onPreviewFrame: "+data.length);
-
-        String str = new String(data, StandardCharsets.UTF_8);
-
-        FirebaseDatabase.getInstance().getReference().child("Temp").child("call").setValue(str);
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if(mCamera != null){
-            mCamera.release();
-            mCamera = null;
-        }
-
-        if (mCamera == null) {
-            try {
-                mCamera = Camera.open();
-                mCamera.setPreviewDisplay(surfaceView.getHolder());
-                mCamera.setPreviewCallback(this);
-                mCamera.startPreview();
-            } catch (Exception e) {
-
-                Log.d("Error", ""+e);
-
+        //request Marshmallow camera permission
+        if (ContextCompat.checkSelfPermission(this, permissions[1]) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions, permsRequestCode);
             }
+        } else {
+            mVideoPermission = true;
+            mAudioPermission = true;
         }
-    }
 
+        //init the wrapper
+        OTConfig config =
+                new OTConfig.OTConfigBuilder(OpenTokConfig.SESSION_ID, OpenTokConfig.TOKEN,
+                        OpenTokConfig.API_KEY).name("one-to-one-sample-app").subscribeAutomatically(false).subscribeToSelf(false).build();
+        if ( config != null ) {
+            mWrapper = new OTWrapper(LiveVideoTestingUsingFirebase.this, config);
+            mWrapper.addBasicListener(mBasicListener);
+            mWrapper.addAdvancedListener(mAdvancedListener);
 
-
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-        if (mCamera != null) {
-            try {
-                mCamera.setPreviewDisplay(holder);
-                if (mIsCapturing) {
-                    mCamera.startPreview();
-                }
-            } catch (IOException e) {
-                Toast.makeText(LiveVideoTestingUsingFirebase.this, "Unable to start camera preview.", Toast.LENGTH_LONG).show();
+            if (mWrapper != null) {
+                mWrapper.connect();
             }
+
+            //init controls fragments
+            if (savedInstanceState == null) {
+                mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                initCameraFragment(); //to swap camera
+                initPreviewFragment(); //to enable/disable local media
+                mFragmentTransaction.commitAllowingStateLoss();
+            }
+
+            //show connecting dialog
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setTitle("Please wait");
+            mProgressDialog.setMessage("Connecting...");
+            mProgressDialog.show();
         }
-
+        else {
+            Log.e(LOG_TAG, "OpenTok credentials are invalid");
+            Toast.makeText(LiveVideoTestingUsingFirebase.this, "Credentials are invalid", Toast.LENGTH_LONG).show();
+            this.finish();
+        }
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
-
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        reloadViews();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if(mCamera != null){
-
-            mCamera.stopPreview();
-
+        if (mWrapper != null) {
+            mWrapper.pause();
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+        if ( mWrapper != null ){
+            mWrapper.resume(true);
+        }
+    }
 
-        if(mCamera != null){
-            mCamera.release();
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if ( mWrapper != null && isConnected ){
+            mWrapper.disconnect();
+        }
+    }
 
-            mCamera = null;
+    @Override
+    public void onRequestPermissionsResult(final int permsRequestCode, final String[] permissions,
+                                           int[] grantResults) {
+        switch (permsRequestCode) {
+            case 200:
+                mVideoPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                mAudioPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (!mVideoPermission || !mAudioPermission) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(LiveVideoTestingUsingFirebase.this);
+                    builder.setTitle(getResources().getString(R.string.permissions_denied_title));
+                    builder.setMessage(getResources().getString(R.string.alert_permissions_denied));
+                    builder.setPositiveButton("I'M SURE", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("RE-TRY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestPermissions(permissions, permsRequestCode);
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+        }
+    }
+
+    public void showRemoteControlBar(View v) {
+        if ( mRemoteFragment != null && mRemoteId != null ) {
+            mRemoteFragment.show();
+        }
+    }
+
+    public boolean isCallInProgress() {
+        return isCallInProgress;
+    }
+
+    public OTWrapper getWrapper() {
+        return mWrapper;
+    }
+
+    //Private methods
+    //Init the local fragment
+    private void initPreviewFragment() {
+        mPreviewFragment = new PreviewControlFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.actionbar_preview_fragment_container, mPreviewFragment).commit();
+    }
+
+    //Inti the remote fragment
+    private void initRemoteFragment(String remoteId) {
+        mRemoteFragment = new RemoteControlFragment();
+
+        Bundle args = new Bundle();
+        args.putString("remoteId", remoteId);
+        mRemoteFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.actionbar_remote_fragment_container, mRemoteFragment).commit();
+    }
+
+    //Init the local camera fragment
+    private void initCameraFragment() {
+        mCameraFragment = new PreviewCameraFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.camera_preview_fragment_container, mCameraFragment).commit();
+    }
+
+    //Clean views
+    private void cleanViewsAndControls() {
+        if ( mRemoteId != null ) {
+            mWrapper.removeRemote(mRemoteId);
+            mRemoteView = null;
+            setRemoteView(null);
+        }
+        if (isLocal) {
+            isLocal = false;
+            setLocalView(null);
+        }
+        if (mPreviewFragment != null)
+            mPreviewFragment.restart();
+        if (mRemoteFragment != null)
+            mRemoteFragment.restart();
+    }
+
+    //Reload views
+    private void reloadViews(){
+        mRemoteViewContainer.removeAllViews();
+
+        if (mRemoteId != null){
+            setRemoteView(mWrapper.getRemoteStreamStatus(mRemoteId).getView());
+        }
+    }
+
+    //Check if there are some connected remotes in the session
+    private void checkRemotes(){
+        if (mRemoteId != null){
+            //add the remote participant to the communication
+            mWrapper.addRemote(mRemoteId);
+            //check the status of the remote video stream
+            if (!mWrapper.isReceivedMediaEnabled(mRemoteId, MediaType.VIDEO)){
+                onRemoteAudioOnly(true);
+            }
+            else {
+                setRemoteView(mWrapper.getRemoteStreamStatus(mRemoteId).getView());
+            }
+        }
+    }
+
+
+    //here is working for firebase
+    //Set the local participant view
+    private void setLocalView(View localView){
+        if (localView != null) {
+            mPreviewViewContainer.removeAllViews();
+            isLocal = true;
+            mLayoutParamsPreview = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            if (mRemoteId != null) {
+                mLayoutParamsPreview.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
+                        RelativeLayout.TRUE);
+                mLayoutParamsPreview.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
+                        RelativeLayout.TRUE);
+                mLayoutParamsPreview.width = (int) getResources().getDimension(R.dimen.preview_width);
+                mLayoutParamsPreview.height = (int) getResources().getDimension(R.dimen.preview_height);
+                mLayoutParamsPreview.rightMargin = (int) getResources().getDimension(R.dimen.preview_rightMargin);
+                mLayoutParamsPreview.bottomMargin = (int) getResources().getDimension(R.dimen.preview_bottomMargin);
+            }
+            mPreviewViewContainer.addView(localView, mLayoutParamsPreview);
+        }
+        else {
+            mPreviewViewContainer.removeAllViews();
+        }
+    }
+
+    //Set the remote participant view
+    private void setRemoteView(View remoteView) {
+        if (mPreviewViewContainer.getChildCount() > 0) {
+            setLocalView(mPreviewViewContainer.getChildAt(0)); //main preview view
+        }
+        if (remoteView != null) {
+            //show remote view
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    this.getResources().getDisplayMetrics().widthPixels, this.getResources()
+                    .getDisplayMetrics().heightPixels);
+            mRemoteViewContainer.removeView(remoteView);
+            mRemoteViewContainer.addView(remoteView, layoutParams);
+            mRemoteViewContainer.setClickable(true);
+            if (mRemoteFragment != null)
+                mRemoteFragment.show();
+        } else { //view null --> remove view
+            if (mRemoteViewContainer.getChildCount() > 0) {
+                mRemoteViewContainer.removeAllViews();
+            }
+            mRemoteViewContainer.setClickable(false);
+            mRemoteAudioOnlyView.setVisibility(View.GONE);
+        }
+    }
+
+    //Set the remote audio only view
+    private void onRemoteAudioOnly(boolean enabled) {
+        if (mRemoteView != null) {
+            if (enabled) {
+                mRemoteView.setVisibility(View.GONE);
+                mRemoteAudioOnlyView.setVisibility(View.VISIBLE);
+            } else {
+                mRemoteAudioOnlyView.setVisibility(View.GONE);
+                mRemoteView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    //Converts dp to real pixels, according to the screen density.
+    private int dpToPx(int dp) {
+        double screenDensity = this.getResources().getDisplayMetrics().density;
+        return (int) (screenDensity * (double) dp);
+    }
+
+    //Basic Listener from OTWrapper
+    private BasicListener mBasicListener =
+            new PausableBasicListener(new BasicListener<OTWrapper>() {
+                @Override
+                public void onConnected(OTWrapper otWrapper, int participantsCount, String connId, String data) throws ListenerException {
+                    Log.i(LOG_TAG, "Connected to the session. Number of participants: "+participantsCount);
+                    isConnected = true;
+                    mProgressDialog.dismiss();
+                }
+
+                @Override
+                public void onDisconnected(OTWrapper otWrapper, int participantsCount, String connId, String data) throws ListenerException {
+                    Log.i(LOG_TAG, "Connection dropped: "+connId);
+                    if ( connId == mWrapper.getOwnConnId() ) {
+                        Log.i(LOG_TAG, "Disconnected to the session");
+                        cleanViewsAndControls();
+                    }
+                }
+
+                @Override
+                public void onPreviewViewReady(OTWrapper otWrapper, View localView) throws ListenerException {
+                    Log.i(LOG_TAG, "Local preview view is ready");
+                    setLocalView(localView);
+                }
+
+                @Override
+                public void onPreviewViewDestroyed(OTWrapper otWrapper, View localView) throws ListenerException {
+                    Log.i(LOG_TAG, "Local preview view is destroyed");
+                    setLocalView(null);
+                }
+
+                @Override
+                public void onRemoteViewReady(OTWrapper otWrapper, View remoteView, String remoteId, String data) throws ListenerException {
+                    Log.i(LOG_TAG, "Remove view is ready");
+                    if ( remoteId == mRemoteId ) {
+                        if (isCallInProgress()) {
+                            setRemoteView(remoteView);
+                        }
+                        mRemoteView = remoteView;
+                    }
+                }
+
+                @Override
+                public void onRemoteViewDestroyed(OTWrapper otWrapper, View remoteView, String remoteId) throws ListenerException {
+                    Log.i(LOG_TAG, "Remote view is destroyed");
+                    setRemoteView(null);
+                    mRemoteView = null;
+                }
+
+
+                @Override
+                public void onStartedPublishingMedia(OTWrapper otWrapper, boolean screensharing) throws ListenerException {
+                    Log.i(LOG_TAG, "Local started streaming video.");
+                    //Check if there are some connected remotes
+                    checkRemotes();
+                }
+
+                @Override
+                public void onStoppedPublishingMedia(OTWrapper otWrapper, boolean screensharing) throws ListenerException {
+                    Log.i(LOG_TAG, "Local stopped streaming video.");
+                }
+
+                @Override
+                public void onRemoteJoined(OTWrapper otWrapper, String remoteId) throws ListenerException {
+                    Log.i(LOG_TAG, "A new remote joined.");
+                    if (mRemoteId == null){ //one-to-one, the first to arrive, will be the used
+                        LiveVideoTestingUsingFirebase.this.mRemoteId = remoteId;
+                        initRemoteFragment(remoteId);
+                        if (mWrapper.isPublishing()){
+                            mWrapper.addRemote(mRemoteId);
+                        }
+                    }
+                }
+
+                @Override
+                public void onRemoteLeft(OTWrapper otWrapper, String remoteId) throws ListenerException {
+                    Log.i(LOG_TAG, "A new remote left.");
+                    if ( mRemoteId != null && remoteId == mRemoteId ) { //one-to-one
+                        mRemoteId = null;
+                    }
+                }
+
+                @Override
+                public void onRemoteVideoChanged(OTWrapper otWrapper, String remoteId, String reason, boolean videoActive, boolean subscribed) throws ListenerException {
+                    Log.i(LOG_TAG, "Remote video changed");
+                    if (isCallInProgress) {
+                        if (reason.equals("quality")) {
+                            //network quality alert
+                            mAlert.setBackgroundResource(R.color.quality_alert);
+                            mAlert.setTextColor(LiveVideoTestingUsingFirebase.this.getResources().getColor(R.color.white));
+                            mAlert.bringToFront();
+                            mAlert.setVisibility(View.VISIBLE);
+                            mAlert.postDelayed(new Runnable() {
+                                public void run() {
+                                    mAlert.setVisibility(View.GONE);
+                                }
+                            }, 7000);
+                        }
+
+                        if (!videoActive) {
+                            onRemoteAudioOnly(true); //video is not active
+                        } else {
+                            onRemoteAudioOnly(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(OTWrapper otWrapper, OpentokError error) throws ListenerException {
+                    Log.i(LOG_TAG, "Error "+error.getErrorCode()+"-"+error.getMessage());
+
+                    Toast.makeText(LiveVideoTestingUsingFirebase.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    mWrapper.disconnect(); //end communication
+                    mProgressDialog.dismiss();
+                    cleanViewsAndControls(); //restart views
+                }
+            });
+
+    //Advanced Listener from OTWrapper
+    private AdvancedListener mAdvancedListener =
+            new PausableAdvancedListener(new AdvancedListener<OTWrapper>() {
+
+                @Override
+                public void onCameraChanged(OTWrapper otWrapper) throws ListenerException {
+                    Log.i(LOG_TAG, "The camera changed");
+                }
+
+                @Override
+                public void onReconnecting(OTWrapper otWrapper) throws ListenerException {
+                    Log.i(LOG_TAG, "The session is reconnecting.");
+                    Toast.makeText(LiveVideoTestingUsingFirebase.this, R.string.reconnecting, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onReconnected(OTWrapper otWrapper) throws ListenerException {
+                    Log.i(LOG_TAG, "The session reconnected.");
+                    Toast.makeText(LiveVideoTestingUsingFirebase.this, R.string.reconnected, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onVideoQualityWarning(OTWrapper otWrapper, String remoteId) throws ListenerException {
+                    Log.i(LOG_TAG, "The quality has degraded");
+                    mAlert.setBackgroundResource(R.color.quality_warning);
+                    mAlert.setTextColor(LiveVideoTestingUsingFirebase.this.getResources().getColor(R.color.warning_text));
+                    mAlert.bringToFront();
+                    mAlert.setVisibility(View.VISIBLE);
+                    mAlert.postDelayed(new Runnable() {
+                        public void run() {
+                            mAlert.setVisibility(View.GONE);
+                        }
+                    }, 7000);
+                }
+
+                @Override
+                public void onVideoQualityWarningLifted(OTWrapper otWrapper, String remoteId) throws ListenerException {
+                    Log.i(LOG_TAG, "The quality has improved");
+                }
+
+                @Override
+                public void onError(OTWrapper otWrapper, OpentokError error) throws ListenerException {
+                    Log.i(LOG_TAG, "Error " + error.getErrorCode() + "-" + error.getMessage());
+                    Toast.makeText(LiveVideoTestingUsingFirebase.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    mWrapper.disconnect(); //end communication
+                    mProgressDialog.dismiss();
+                    cleanViewsAndControls(); //restart views
+                }
+            });
+    //Audio local button event
+    @Override
+    public void onDisableLocalAudio(boolean audio) {
+        if (mWrapper != null) {
+            mWrapper.enableLocalMedia(MediaType.AUDIO, audio);
+        }
+    }
+
+    //Video local button event
+    @Override
+    public void onDisableLocalVideo(boolean video) {
+        if (mWrapper != null) {
+            mWrapper.enableLocalMedia(MediaType.VIDEO, video);
+            if (mRemoteId != null) {
+                if (!video) {
+                    mLocalAudioOnlyImage = new ImageView(this);
+                    mLocalAudioOnlyImage.setImageResource(R.drawable.avatar);
+                    mLocalAudioOnlyImage.setBackgroundResource(R.drawable.bckg_audio_only);
+                    mPreviewViewContainer.addView(mLocalAudioOnlyImage, mLayoutParamsPreview);
+                } else {
+                    mPreviewViewContainer.removeView(mLocalAudioOnlyImage);
+                }
+            } else {
+                if (!video) {
+                    mLocalAudioOnlyView.setVisibility(View.VISIBLE);
+                    mPreviewViewContainer.addView(mLocalAudioOnlyView);
+                } else {
+                    mLocalAudioOnlyView.setVisibility(View.GONE);
+                    mPreviewViewContainer.removeView(mLocalAudioOnlyView);
+                }
+            }
+        }
+    }
+
+    //Remote control callbacks
+    @Override
+    public void onDisableRemoteAudio(boolean audio) {
+        if (mWrapper != null) {
+            mWrapper.enableReceivedMedia(mRemoteId, MediaType.AUDIO, audio);
+        }
+    }
+
+    @Override
+    public void onDisableRemoteVideo(boolean video) {
+        if (mWrapper != null) {
+            mWrapper.enableReceivedMedia(mRemoteId, MediaType.VIDEO, video);
+        }
+    }
+
+    //Camera control callback
+    @Override
+    public void onCameraSwap() {
+        if (mWrapper != null) {
+            mWrapper.cycleCamera();
+        }
+    }
+
+    @Override
+    public void onCall() {
+        if (mWrapper != null && isConnected) {
+            if (!isCallInProgress) {
+                mWrapper.startPublishingMedia(new PreviewConfig.PreviewConfigBuilder().
+                        name("Tokboxer").build(), false);
+                if ( mPreviewFragment != null ) {
+                    mPreviewFragment.setEnabled(true);
+                }
+                isCallInProgress = true;
+            } else {
+                mWrapper.stopPublishingMedia(false);
+                isCallInProgress = false;
+                cleanViewsAndControls();
+            }
         }
     }
 }

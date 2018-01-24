@@ -406,6 +406,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/news_feed"
             android:layout_width="0dp"
             android:layout_height="match_parent"

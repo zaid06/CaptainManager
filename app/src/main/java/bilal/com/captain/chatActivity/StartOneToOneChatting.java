@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -40,11 +42,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 import bilal.com.captain.Firebase;
+import bilal.com.captain.LiveVideoTestingUsingFirebase;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.config.OpenTokConfig;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
+
+
 
 public class StartOneToOneChatting extends AppCompatActivity {
 
@@ -86,6 +92,27 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                 startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
 
+            }
+        });
+
+        findViewById(R.id.call).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                OpenTokConfig.SESSION_ID = "1_MX40NjA0NDk1Mn5-MTUxNjcwMzE0Nzk1OX5yYjJFUHFRcG1PREpDN3NIV0szbzU1S0t-fg"+uid;
+
+                tempo_test();
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                OpenTokConfig.SESSION_ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                startActivity(new Intent(StartOneToOneChatting.this,LiveVideoTestingUsingFirebase.class));
             }
         });
 
@@ -335,6 +362,28 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
 
         }
+
+    }
+
+
+    private void tempo_test(){
+
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+        String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+        SingleChatModel singleChatModel = new SingleChatModel("", "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
+
+        FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+        singleChatModel.setFlag(false);
+
+        FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+
+        startActivity(new Intent(StartOneToOneChatting.this, LiveVideoTestingUsingFirebase.class));
+
+        editText.setText("");
 
     }
 }
