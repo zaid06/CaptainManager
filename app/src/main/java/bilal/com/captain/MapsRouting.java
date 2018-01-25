@@ -58,21 +58,15 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ImageButton mUpdateLocation;
-
     AlertDialog.Builder dialogLocationBuilder;
     AlertDialog dialogLocation;
-
-
     Tracker tracker;
     Bundle bundle = new Bundle();
     double startLatitude, startLongitude;
     double endLatitude, endLongitude;
     String popId;
     Marker popMarker;
-
     ProgressDialog progressDialog;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +98,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
 
         dialogBuilder();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -134,11 +127,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         HashMap<String, String> userData;
-
-
-
-
-
         if (tracker.checkGPSStatus()){
             startLatitude = tracker.userLatitude;
             startLongitude = tracker.userLongitude;
@@ -146,9 +134,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions()
                     .position(pjpPosition)
                     .title("Start"));
-//            userData.get("fname")
-
-//            title("PJP Location")
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pjpPosition,
@@ -157,17 +142,11 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             tracker.showSettingsAlert();
         }
 
-        // Add a marker in Sydney and move the camera
         LatLng popPosition = new LatLng(endLatitude, endLongitude);
         popMarker = mMap.addMarker(new MarkerOptions()
                 .position(popPosition)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
                 .title("End"));
-
-//        title("POP Location")
-
-
-//        mMap.addPolyline(new PolylineOptions().add(new LatLng(userLatitude,userLongitude), new LatLng(latitude,longitude)).width(5).color(R.color.colorMain));
 
         LatLng origin = new LatLng(startLatitude,startLongitude);
 
@@ -183,18 +162,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
                 builder.build(), 250, 250, 0);
 
         mMap.moveCamera(cameraUpdate);
-
-//        mMap.animateCamera(cameraUpdate);
-
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
-//                builder.build(), 0, 250, 0);
-
-
-
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(popPosition));
-
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(popPosition,
-//                15));
 
         new RoutesAsync().execute(url);
     }
@@ -233,75 +200,11 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-
-
-    public void animateMarker(final Marker marker, final LatLng toPosition,
-                              final boolean hideMarker) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = mMap.getProjection();
-        Point startPoint = proj.toScreenLocation(marker.getPosition());
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 500;
-
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startLatLng.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
-
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                    if (hideMarker) {
-                        marker.setVisible(false);
-                    } else {
-                        marker.setVisible(true);
-                    }
-                }
-            }
-        });
-    }
-
-
     public String getUrl(LatLng origin, LatLng dest){
-
-//        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-//
-//        // Destination of route
-//        String str_dest = "destination=" + 24.827677 + "," + 67.034857;
-//
-//
-//        // Sensor enabled
-//        String sensor = "sensor=false";
-//        String mode = "mode=driving";
-//
-//        // Building the parameters to the web service
-//        String parameters = "key=AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o"+"&"+ str_origin + "&" + str_dest + "&" + sensor; //+"&"+mode
-//
-//        // Output format
-//        String output = "json";
-
 
         String url = "https://maps.googleapis.com/maps/api/directions/json?origin="+origin.latitude+","+origin.longitude+"&destination="+dest.latitude+","+dest.longitude+"&%20waypoints=optimize:true%7C17.3916642,78.4346606%7C17.3865225743848,78.4374928101897%7C17.3813395082035,78.4382585808635&sensor=false&key=AIzaSyBz_uM4Zhlrp_tBIUECf5Wi19YiGwYMZ1o";
 
-        // Building the url to the web service
-//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-
         return url;
-
-
-
     }
 
     // Todo download url
@@ -313,13 +216,10 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         try {
             URL url = new URL(strUrl);
 
-            // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
 
-            // Connecting to url
             urlConnection.connect();
 
-            // Reading data from url
             iStream = urlConnection.getInputStream();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
@@ -355,11 +255,9 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected String doInBackground(String... url) {
 
-            // For storing data from web service
             String data = "";
 
             try {
-                // Fetching the data from web service
                 data = downloadUrl(url[0]);
                 Log.d("Background Task data", data.toString());
             } catch (Exception e) {
@@ -374,7 +272,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
 
             ParserTask parserTask = new ParserTask();
 
-            // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
 
         }
@@ -386,8 +283,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-//            progressDialog.show();
         }
 
         // Parsing the data in non-ui thread
@@ -402,8 +297,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
                 Log.d("ParserTask",jsonData[0].toString());
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
-
-                // Starts parsing data
                 routes = parser.parse(jObject);
                 Log.d("ParserTask","Executing routes");
                 Log.d("ParserTask",routes.toString());
@@ -415,7 +308,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 
@@ -423,15 +315,14 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             PolylineOptions lineOptions = null;
 
             if(result != null) {
-                // Traversing through all the routes
+
                 for (int i = 0; i < result.size(); i++) {
                     points = new ArrayList<>();
                     lineOptions = new PolylineOptions();
 
-                    // Fetching i-th route
+
                     List<HashMap<String, String>> path = result.get(i);
 
-                    // Fetching all the points in i-th route
                     for (int j = 0; j < path.size(); j++) {
                         HashMap<String, String> point = path.get(j);
 
@@ -442,7 +333,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
                         points.add(position);
                     }
 
-                    // Adding all the points in the route to LineOptions
                     lineOptions.addAll(points);
                     lineOptions.width(10);
                     lineOptions.color(R.color.colorMain);
@@ -451,15 +341,10 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
 
                 }
 
-                // Drawing polyline in the Google Map for the i-th route
                 if (lineOptions != null) {
                     mMap.addPolyline(lineOptions);
-
-//                    progressDialog.dismiss();
                 } else {
                     Log.d("onPostExecute", "without Polylines drawn");
-
-//                    progressDialog.dismiss();
                 }
 
             }else {
@@ -472,6 +357,5 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
 }

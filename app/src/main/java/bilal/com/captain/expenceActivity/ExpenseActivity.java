@@ -72,19 +72,19 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
 
         if (v.getId() == R.id.fuel) {
 
-            openAlert("Fuel", R.drawable.fuel);
+            openAlert("Fuel", R.drawable.fuel_1);
 
         } else if (v.getId() == R.id.puncture) {
 
-            openAlert("Puncture", R.drawable.puncture);
+            openAlert("Puncture", R.drawable.puncture_2);
 
         } else if (v.getId() == R.id.repair) {
 
-            openAlert("Repair", R.drawable.repair);
+            openAlert("Repair", R.drawable.repair_1);
 
         } else if (v.getId() == R.id.challan) {
 
-            openAlert("Challan", R.drawable.challan);
+            openAlert("Challan", R.drawable.challan_1);
 
         } else if (v.getId() == R.id.others) {
 

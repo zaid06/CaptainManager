@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ResideMenuItem itemText;
 
-
-
     LinearLayout complaint, expense;
     private Timer timer;
     private TimerTask timerTask;

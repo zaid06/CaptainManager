@@ -16,8 +16,8 @@ public class ExpenseDetails extends AppCompatActivity {
     private int[] tabIcons = {
             R.drawable.fuel_1,
             R.drawable.puncture_2,
-            R.drawable.repair,
-            R.drawable.challan,
+            R.drawable.repair_1,
+            R.drawable.challan_1,
             R.drawable.others
     };
 
@@ -37,7 +37,6 @@ public class ExpenseDetails extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
         viewPager.setOffscreenPageLimit(4);
-
     }
 
     private void setupTabIcons(){

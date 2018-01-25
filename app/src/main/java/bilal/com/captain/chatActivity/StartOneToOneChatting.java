@@ -113,10 +113,6 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
         chatTitle.setText(GlobalVariables.name);
 
-
-
-
-
         findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,14 +171,6 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                     editText.setText("");
                 }
-//                new SentReadMsgs( msg, "sender", firebaseAuth.getCurrentUser().getDisplayName(),dttm,databaseReference.push().getKey(),null,true);
-//
-//                databaseReference.child(uid).child(firebaseAuth.getCurrentUser().getUid()).child(sentReadMsgs.getKey()).setValue(sentReadMsgs);
-//
-//                sentReadMsgs.setFlag(false);
-//
-//                databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child(uid).child(sentReadMsgs.getKey()).setValue(sentReadMsgs);
-
 
             }
         });
@@ -327,12 +315,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
                     if(GalleryActivity.selectedItems != null && GalleryActivity.selectedItems.size() >0){
 
                         horizontal_scroll_view.setVisibility(View.VISIBLE);
-
 //                        progressDialog.show();
-
                         for (int i = 0; i < GalleryActivity.selectedItems.size(); i++){
-
-
 
                             DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
                             float dp = 100f;
@@ -350,7 +334,6 @@ public class StartOneToOneChatting extends AppCompatActivity {
                             Glide.with(getApplicationContext())
                                     .load(GalleryActivity.selectedItems.get(i))
                                     .into(imageView);
-
 
                             parentImageShow.addView(imageView);
 
@@ -405,7 +388,6 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
             progressDialog.dismiss();
 // ;
-
             editText.setText("");
 
 
@@ -423,6 +405,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                         selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
 
+                        progressDialog.setMessage(index+"File Uploaded");
+
                         uploadPictures(message);
                 }
             });
@@ -432,25 +416,4 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
     }
 
-
-    private void tempo_test(){
-
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-
-        String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-
-        SingleChatModel singleChatModel = new SingleChatModel("", "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
-
-        FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
-
-        singleChatModel.setFlag(false);
-
-        FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
-
-
-        startActivity(new Intent(StartOneToOneChatting.this, LiveVideoTestingUsingFirebase.class));
-
-        editText.setText("");
-
-    }
 }
