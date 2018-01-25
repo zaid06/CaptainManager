@@ -18,16 +18,40 @@ public class IncomeModel {
 
     String date;
 
-    public IncomeModel(int income, String key, String incometype, String date,String latitude, String longitude) {
+    String monthly;
+
+    String year;
+    /* format 2/2018
+                            month/year
+                                    */
+    public IncomeModel(int income, String key, String incometype, String date,String latitude, String longitude,String monthly,String year) {
         this.income = income;
         this.key = key;
         this.incometype = incometype;
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.monthly = monthly;
+        this.year = year;
     }
 
     public IncomeModel() {
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonthly() {
+        return monthly;
+    }
+
+    public void setMonthly(String monthly) {
+        this.monthly = monthly;
     }
 
     public String getIncometype() {

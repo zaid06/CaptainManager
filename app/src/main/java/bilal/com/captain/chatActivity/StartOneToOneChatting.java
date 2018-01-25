@@ -59,6 +59,7 @@ import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
 import bilal.com.captain.classes.BoldCustomTextView;
 
+import bilal.com.captain.fragments.AllUsersListForStartSingleChatting;
 import bilal.com.captain.galleryActivity.GalleryActivity;
 import bilal.com.captain.models.SingleChatModel;
 
@@ -69,6 +70,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
     EditText editText;
 
     BoldCustomTextView chatTitle;
+
+    ImageView chatbackbutton;
 
     Button send;
 
@@ -113,16 +116,24 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
         chatTitle.setText(GlobalVariables.name);
 
+
+        chatbackbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartOneToOneChatting.super.onBackPressed();
+            }
+        });
+
+
+
         findViewById(R.id.mPhotoPickerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ShowDialog();
-
-
-
             }
         });
+
+
 
 //        findViewById(R.id.call).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -197,6 +208,7 @@ public class StartOneToOneChatting extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivityForResult(new Intent(StartOneToOneChatting.this, GalleryActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
+                dialog.dismiss();
             }
         });
 
@@ -220,6 +232,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
         singleChattingAdapter = new SingleChattingAdapter(StartOneToOneChatting.this,arrayList);
 
         editText = (EditText) findViewById(R.id.messageEditText);
+
+        chatbackbutton = (ImageView) findViewById(R.id.chatbackbutton);
 
         send = (Button) findViewById(R.id.sendButton);
 

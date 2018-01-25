@@ -2,6 +2,7 @@ package bilal.com.captain;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -100,10 +101,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onStateChange(boolean active) {
                 if(active == true){
                     openAlert();
-
                 }
+
             }
         });
+
+
 
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
             @Override

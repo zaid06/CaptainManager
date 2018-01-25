@@ -14,4 +14,6 @@ public class GlobalVariables {
     public static String name;
 
     public static String groupName;
+
+    public static String year;
 }

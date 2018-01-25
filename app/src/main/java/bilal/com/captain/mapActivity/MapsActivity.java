@@ -82,6 +82,7 @@ import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.models.IncomeModel;
+import bilal.com.captain.models.YearModel;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -292,6 +293,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
+            String monthly = (DateFormat.format("MM-yyyy", new java.util.Date()).toString());
+
+            String year = (DateFormat.format("yyyy", new java.util.Date()).toString());
+
             String key = FirebaseDatabase.
                     getInstance().
                     getReference().
@@ -299,7 +304,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
                     push().getKey();
 
-            IncomeModel incomeModel = new IncomeModel(amount,key,type,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()));
+            IncomeModel incomeModel = new IncomeModel(amount,key,type,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()),monthly,year);
+
 
             FirebaseDatabase.
                     getInstance().

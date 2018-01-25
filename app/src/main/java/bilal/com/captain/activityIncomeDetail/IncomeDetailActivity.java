@@ -7,6 +7,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,8 @@ public class IncomeDetailActivity extends AppCompatActivity {
 
     ListView listView;
 
+    ImageView backbutton;
+
     IncomeAdapter incomeAdapter;
 
     ArrayList<StartRide> arrayList;
@@ -37,6 +40,13 @@ public class IncomeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_income_detail);
 
         initialize();
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IncomeDetailActivity.super.onBackPressed();
+            }
+        });
     }
 
     private final void initialize(){
@@ -46,6 +56,8 @@ public class IncomeDetailActivity extends AppCompatActivity {
         incomeAdapter = new IncomeAdapter(IncomeDetailActivity.this,arrayList);
 
         listView = (ListView) findViewById(R.id.list);
+
+        backbutton = (ImageView) findViewById(R.id.achievebackbutton);
 
         listView.setAdapter(incomeAdapter);
 

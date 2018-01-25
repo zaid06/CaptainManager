@@ -64,7 +64,9 @@
         <activity android:name=".chatActivity.StartGroupChattingActivity" />
         <activity android:name=".ExpenseDetails" />
         <activity android:name=".galleryActivity.GalleryActivity" />
-        <activity android:name=".LiveVideoTestingUsingFirebase"></activity>
+        <activity android:name=".LiveVideoTestingUsingFirebase" />
+        <activity android:name=".ShowYears.ShowYears" />
+        <activity android:name=".activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment"></activity>
     </application>
 
 </manifest>
