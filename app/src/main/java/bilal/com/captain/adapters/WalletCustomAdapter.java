@@ -17,10 +17,7 @@ import bilal.com.captain.models.IncomeModel;
  */
 
 public class WalletCustomAdapter extends BaseAdapter {
-    TextView date,cash;
-
     Context context;
-
 
     ArrayList<IncomeModel> data = new ArrayList<>();
 
@@ -49,13 +46,14 @@ public class WalletCustomAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        view = inflater.from(context).inflate(R.layout.cash_custom_layout,viewGroup,false);
+        final TextView date, cash;
+        view = inflater.from(context).inflate(R.layout.cash_custom_layout, viewGroup, false);
 
-        date = (TextView)view.findViewById(R.id.cashdate);
-        cash = (TextView)view.findViewById(R.id.cashcash);
+        date = (TextView) view.findViewById(R.id.cashdate);
+        cash = (TextView) view.findViewById(R.id.cashcash);
 
         date.setText(data.get(i).getDate());
-        cash.setText("Rs. "+data.get(i).getIncome());
+        cash.setText("Rs. " + data.get(i).getIncome());
 
         return view;
     }

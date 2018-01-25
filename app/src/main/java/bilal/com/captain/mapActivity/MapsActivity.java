@@ -300,7 +300,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         dialog.dismiss();
 
-                        finish();
+                        startActivity(new Intent(MapsActivity.this,MainActivity.class));
 
                         CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
@@ -313,7 +313,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         dialog.dismiss();
 
-                        finish();
+                        startActivity(new Intent(MapsActivity.this,MainActivity.class));
 
                         CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 
@@ -326,7 +326,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         dialog.dismiss();
 
-                        finish();
+                        startActivity(new Intent(MapsActivity.this,MainActivity.class));
 
                         CustomToast.showToast(MapsActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
 

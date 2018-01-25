@@ -1,13 +1,17 @@
 package bilal.com.captain;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -65,17 +69,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ResideMenuItem itemText;
 
 
-
     LinearLayout complaint, expense;
     private Timer timer;
     private TimerTask timerTask;
     TextView time;
     LinearLayout cashinhand;
     LinearLayout expenseDetails;
+    ImageView logout;
 
     boolean timerCheck = true;
 
-    TextView tv_cash,tv_expence,todaysGoal,tv_achieved,tv_remaining;
+    TextView tv_cash, tv_expence, todaysGoal, tv_achieved, tv_remaining;
 
     ArrayList<IncomeModel> incomeModelArrayList;
 
@@ -83,6 +87,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<ExpenseModel> expenseModelArrayList;
 
     int totalGoal = 0;
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.exit_alert, null);
+
+        final LinearLayout yes = (LinearLayout) view.findViewById(R.id.exityes);
+        final LinearLayout no = (LinearLayout) view.findViewById(R.id.exitno);
+
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        dialog.show();
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.super.onBackPressed();
+                dialog.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +136,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
             public void onStateChange(boolean active) {
-                if(active == true){
+                if (active == true) {
                     openAlert();
                 }
 
             }
         });
 
+
+        logout = (ImageView) findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMenu(view);
+            }
+        });
 
 
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
@@ -124,23 +167,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        cashinhand = (LinearLayout)findViewById(R.id.cash);
+        cashinhand = (LinearLayout) findViewById(R.id.cash);
 
         cashinhand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Global.curr = incomeModelArrayList;
-                startActivity(new Intent(MainActivity.this,CashInHand.class));
+                startActivity(new Intent(MainActivity.this, CashInHand.class));
             }
         });
 
-        expenseDetails = (LinearLayout)findViewById(R.id.remaining);
+        expenseDetails = (LinearLayout) findViewById(R.id.remaining);
 
         expenseDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ExpenseGlobal.e_array = expenseModelArrayList;
-                startActivity(new Intent(MainActivity.this,ExpenseDetails.class));
+                startActivity(new Intent(MainActivity.this, ExpenseDetails.class));
             }
         });
 
@@ -148,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(MainActivity.this,NewsFeedActivity.class));
+                startActivity(new Intent(MainActivity.this, NewsFeedActivity.class));
 
             }
         });
@@ -210,10 +253,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        setUpMenu();
 
 
-
 //        getDataFromServer();
         getDataFromServer();
         achieved();
+    }
+
+    private void showMenu(View v) {
+        PopupMenu show = new PopupMenu(this, v);
+
+        show.inflate(R.menu.captainmenu);
+
+        show.show();
+
+        final Firebase firebase = new Firebase();
+
+        show.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.signout:
+                        FirebaseDatabase.getInstance().getReference().child("Public_User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child(String.valueOf(firebase.getIsonline())).setValue("false");
+
+                        //FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                          //      .child(String.valueOf(firebase.getIsonline())).setValue("false");
+
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override
@@ -223,11 +294,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void openAlert(){
+    private void openAlert() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.swipealertlayout,null);
-        final EditText name = (EditText)view.findViewById(R.id.customerName);
-        LinearLayout submit = (LinearLayout)view.findViewById(R.id.swipeSubmit);
+        View view = getLayoutInflater().inflate(R.layout.swipealertlayout, null);
+        final EditText name = (EditText) view.findViewById(R.id.customerName);
+        LinearLayout submit = (LinearLayout) view.findViewById(R.id.swipeSubmit);
 
         alert.setView(view);
         final AlertDialog dialog = alert.create();
@@ -238,9 +309,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if((Util.etValidate(name))){
+                if ((Util.etValidate(name))) {
 
-                    try{
+                    try {
 
                         Tracker tracker = new Tracker(MainActivity.this);
                         String et_name = String.valueOf(name.getText().toString());
@@ -250,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
 
-                         String key =  FirebaseDatabase.
+                        String key = FirebaseDatabase.
                                 getInstance().
                                 getReference().
                                 child("Riding").
@@ -258,24 +329,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 push().
                                 getKey();
 
-                        Log.d("key", "onClick: "+key);
+                        Log.d("key", "onClick: " + key);
 
-                        StartRide startRide = new StartRide(key,et_name,et_lat,et_long,Double.valueOf(0),Double.valueOf(0),currtime);
+                        StartRide startRide = new StartRide(key, et_name, et_lat, et_long, Double.valueOf(0), Double.valueOf(0), currtime);
 
                         FirebaseDatabase.getInstance().getReference().child("Riding").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .child(startRide.getKey()).setValue(startRide);
 
                         dialog.dismiss();
 
-                        CustomToast.showToast(MainActivity.this,"Submitted", MDToast.TYPE_SUCCESS);
+                        CustomToast.showToast(MainActivity.this, "Submitted", MDToast.TYPE_SUCCESS);
 
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                        finish();
 
-                        intent.putExtra("key",startRide.getKey());
+                        intent.putExtra("key", startRide.getKey());
 
                         startActivity(intent);
-                    }catch(Throwable e){
-                        Log.d("Error", "onClick: "+e);
+                    } catch (Throwable e) {
+                        Log.d("Error", "onClick: " + e);
                     }
 
 
@@ -345,12 +417,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            Toast.makeText(MainActivity.this, "Menu is closed!", Toast.LENGTH_SHORT).show();
         }
     };
-//
+
+    //
     private void setUpMenu() {
 
         // attach to current activity;
         resideMenu = new ResideMenu(this);
-
 
 
         resideMenu.attachToActivity(this);
@@ -412,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Tracker tracker = new Tracker(MainActivity.this);
 
-            Toast.makeText(this, tracker.getLatitude()+"   "+tracker.getLongitude(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tracker.getLatitude() + "   " + tracker.getLongitude(), Toast.LENGTH_SHORT).show();
 
         } else if (view == itemDayEnd) {
 
@@ -426,14 +498,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resideMenu.closeMenu();
     }
 
-    private void getCurrentUserName(final ResideMenu r){
+    private void getCurrentUserName(final ResideMenu r) {
 
         FirebaseDatabase.getInstance().getReference().child("USER").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Firebase firebase = dataSnapshot.getValue(Firebase.class);
 
-                Log.d("data", "onChildAdded: "+firebase.getUsername());
+                Log.d("data", "onChildAdded: " + firebase.getUsername());
 
                 r.setImageAndName(/*"Bilal(Offline user)"*/firebase.getUsername(), "V 2.2.6", R.drawable.ic_user);
             }
@@ -458,7 +530,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-
 
 
     }
@@ -533,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    public void achieved(){
+    public void achieved() {
 
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
 
@@ -552,37 +623,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
 //                                DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-                            if(InternetConnection.internetConnectionAvailable(2000)){
-                                if(incomeModelArrayList != null && expenseModelArrayList != null){
+                            if (InternetConnection.internetConnectionAvailable(2000)) {
+                                if (incomeModelArrayList != null && expenseModelArrayList != null) {
 
                                     int totalIncome = 0;
 
                                     int expense = 0;
 
-                                    for (IncomeModel incomeModel : incomeModelArrayList){
+                                    for (IncomeModel incomeModel : incomeModelArrayList) {
 
                                         totalIncome += incomeModel.getIncome();
 
                                     }
 
-                                    for (ExpenseModel expenseModel : expenseModelArrayList){
+                                    for (ExpenseModel expenseModel : expenseModelArrayList) {
 
                                         expense += expenseModel.getExpence();
 
                                     }
 
-                                    tv_cash.setText("Rs. "+totalIncome);
+                                    tv_cash.setText("Rs. " + totalIncome);
 
-                                    tv_expence.setText(""+expense);
+                                    tv_expence.setText("" + expense);
 
-                                    tv_achieved.setText( (incomeModelArrayList.size())+"" );
+                                    tv_achieved.setText((incomeModelArrayList.size()) + "");
 
-                                    tv_remaining.setText( (totalGoal - incomeModelArrayList.size())+"" );
+                                    tv_remaining.setText((totalGoal - incomeModelArrayList.size()) + "");
 
                                     progressDialog.dismiss();
 
                                 }
-                            }else {
+                            } else {
 
                                 progressDialog.dismiss();
 

@@ -17,9 +17,6 @@ import bilal.com.captain.models.IncomeModel;
  */
 
 public class CreditCustomAdapter extends BaseAdapter {
-
-    TextView date,cash;
-
     Context context;
 
     public CreditCustomAdapter(Context context, ArrayList<IncomeModel> data) {
@@ -48,6 +45,8 @@ public class CreditCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+
+        final TextView date,cash;
 
         view = inflater.from(context).inflate(R.layout.cash_custom_layout,viewGroup,false);
 

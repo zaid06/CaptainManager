@@ -18,9 +18,6 @@ import bilal.com.captain.models.ExpenseModel;
  */
 
 public class RepairCustomAdapter extends BaseAdapter {
-
-    RegularCustomTextView sno,cash,date;
-    CardView cardView;
     Context context;
 
     ArrayList<ExpenseModel> repair = new ArrayList<>();
@@ -48,6 +45,9 @@ public class RepairCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+
+        final RegularCustomTextView sno,cash,date;
+        final CardView cardView;
 
         view = inflater.from(context).inflate(R.layout.expense_details_custom_layout,viewGroup,false);
 
