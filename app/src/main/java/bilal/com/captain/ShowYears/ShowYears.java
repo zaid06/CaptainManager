@@ -1,5 +1,6 @@
 package bilal.com.captain.ShowYears;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import bilal.com.captain.Global;
 import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
+import bilal.com.captain.activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment;
 import bilal.com.captain.adapters.ShowYearAdapter;
 import bilal.com.captain.models.IncomeModel;
 
@@ -36,6 +38,8 @@ public class ShowYears extends AppCompatActivity {
                 IncomeModel incomeModel = (IncomeModel) parent.getItemAtPosition(position);
 
                 GlobalVariables.year = incomeModel.getYear();
+
+                startActivity(new Intent(ShowYears.this, ActivityForHoldMonthlyAndWeeklyRecordFragment.class));
 
             }
         });

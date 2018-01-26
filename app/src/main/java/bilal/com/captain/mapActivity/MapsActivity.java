@@ -306,7 +306,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             IncomeModel incomeModel = new IncomeModel(amount,key,type,currtime,String.valueOf(tracker.getLatitude()),String.valueOf(tracker.getLongitude()),monthly,year);
 
-
             FirebaseDatabase.
                     getInstance().
                     getReference().
