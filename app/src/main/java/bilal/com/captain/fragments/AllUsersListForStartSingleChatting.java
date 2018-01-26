@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import bilal.com.captain.ChatGlobal;
 import bilal.com.captain.Firebase;
@@ -105,7 +106,14 @@ public class AllUsersListForStartSingleChatting extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Firebase firebase = dataSnapshot.getValue(Firebase.class);
+                for (int i=0; i<arrayList.size(); i++){
+                    if(!arrayList.get(i).getIsonline()){
+                        arrayList.remove(i);
 
+                        arrayList.add(i,firebase);
+                    }
+                }
             }
 
             @Override

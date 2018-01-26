@@ -16,7 +16,7 @@ public class MonthSelectionFromDropDown {
     }
 
     public String getMonthly() {
-        return monthly;
+        return this.monthly;
     }
 
     public void setMonthly(String monthly) {
@@ -24,7 +24,7 @@ public class MonthSelectionFromDropDown {
     }
 
     public String getMonthname() {
-        return monthname;
+        return this.monthname;
     }
 
     public void setMonthname(String monthname) {

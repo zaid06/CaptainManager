@@ -26,7 +26,7 @@ public class AdapterForMonthlyRecordShow extends ArrayAdapter<ModelForMonthlyRec
     Context context;
 
     public AdapterForMonthlyRecordShow(@NonNull Context context, ArrayList<ModelForMonthlyRecordsShow> arrayList) {
-        super(context, 0,arrayList);
+        super(context, 0, arrayList);
 
         this.context = context;
 
@@ -39,35 +39,35 @@ public class AdapterForMonthlyRecordShow extends ArrayAdapter<ModelForMonthlyRec
 
         ModelForMonthlyRecordsShow modelForMonthlyRecordsShow = getItem(position);
 
-        if(convertView == null){
+        if (convertView == null) {
 
-            if(modelForMonthlyRecordsShow.getType().equals("month")){
+            if (modelForMonthlyRecordsShow.getType().equals("month")) {
 
-                convertView = layoutInflater.inflate(R.layout.show_month_title_item,parent,false);
+                convertView = layoutInflater.inflate(R.layout.show_month_title_item, parent, false);
 
                 final BoldCustomTextView title = (BoldCustomTextView) convertView.findViewById(R.id.title);
 
                 setTitle(title, modelForMonthlyRecordsShow.getMonthly());
 
-            }else if(modelForMonthlyRecordsShow.getType().equals("record")){
-                convertView = layoutInflater.inflate(R.layout.cash_custom_layout,parent,false);
+            } else if (modelForMonthlyRecordsShow.getType().equals("record")) {
+                convertView = layoutInflater.inflate(R.layout.cash_custom_layout, parent, false);
 
                 final BoldCustomTextView cashcash = (BoldCustomTextView) convertView.findViewById(R.id.cashcash);
 
                 final RegularCustomTextView date = (RegularCustomTextView) convertView.findViewById(R.id.cashdate);
 
-                cashcash.setText("Rs. "+modelForMonthlyRecordsShow.getIncome());
+                cashcash.setText("Rs. " + modelForMonthlyRecordsShow.getIncome());
 
-                date.setText(""+modelForMonthlyRecordsShow.getDate());
+                date.setText("" + modelForMonthlyRecordsShow.getDate());
 
 
-            }else if(modelForMonthlyRecordsShow.getType().equals("total")){
+            } else if (modelForMonthlyRecordsShow.getType().equals("total")) {
 
-                convertView = layoutInflater.inflate(R.layout.show_total_item,parent,false);
+                convertView = layoutInflater.inflate(R.layout.show_total_item, parent, false);
 
                 final BoldCustomTextView total = (BoldCustomTextView) convertView.findViewById(R.id.total);
 
-                total.setText(""+modelForMonthlyRecordsShow.getTotal());
+                total.setText("" + modelForMonthlyRecordsShow.getTotal());
 
             }
 
@@ -77,33 +77,33 @@ public class AdapterForMonthlyRecordShow extends ArrayAdapter<ModelForMonthlyRec
         return convertView;
     }
 
-    private void setTitle(BoldCustomTextView boldCustomTextView, String month){
+    private void setTitle(BoldCustomTextView boldCustomTextView, String month) {
 
         String month_start_two_char = month.substring(0, 2);
 
-        if(month_start_two_char.equals("01")){
+        if (month_start_two_char.equals("01")) {
             boldCustomTextView.setText("January:");
-        }else if(month_start_two_char.equals("02")){
+        } else if (month_start_two_char.equals("02")) {
             boldCustomTextView.setText("February:");
-        }else if(month_start_two_char.equals("03")){
+        } else if (month_start_two_char.equals("03")) {
             boldCustomTextView.setText("March:");
-        }else if(month_start_two_char.equals("04")){
+        } else if (month_start_two_char.equals("04")) {
             boldCustomTextView.setText("April:");
-        }else if(month_start_two_char.equals("05")){
+        } else if (month_start_two_char.equals("05")) {
             boldCustomTextView.setText("May:");
-        }else if(month_start_two_char.equals("06")){
+        } else if (month_start_two_char.equals("06")) {
             boldCustomTextView.setText("June:");
-        }else if(month_start_two_char.equals("07")){
+        } else if (month_start_two_char.equals("07")) {
             boldCustomTextView.setText("July:");
-        }else if(month_start_two_char.equals("08")){
+        } else if (month_start_two_char.equals("08")) {
             boldCustomTextView.setText("August:");
-        }else if(month_start_two_char.equals("09")){
+        } else if (month_start_two_char.equals("09")) {
             boldCustomTextView.setText("September:");
-        }else if(month_start_two_char.equals("10")){
+        } else if (month_start_two_char.equals("10")) {
             boldCustomTextView.setText("October:");
-        }else if(month_start_two_char.equals("11")){
+        } else if (month_start_two_char.equals("11")) {
             boldCustomTextView.setText("November:");
-        }else if(month_start_two_char.equals("12")){
+        } else if (month_start_two_char.equals("12")) {
             boldCustomTextView.setText("December:");
         }
     }
