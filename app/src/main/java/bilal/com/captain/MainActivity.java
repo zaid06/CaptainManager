@@ -273,7 +273,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (menuItem.getItemId()) {
                     case R.id.signout:
                         FirebaseDatabase.getInstance().getReference().child("Public_User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child(String.valueOf(firebase.getIsonline())).setValue("false");
+                                .child("isonline").setValue(false);
+
+                        FirebaseDatabase.getInstance().getReference().child("USER").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child("user").child("isonline").setValue(false);
+
+                        FirebaseAuth.getInstance().signOut();
 
                         //FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                           //      .child(String.valueOf(firebase.getIsonline())).setValue("false");
