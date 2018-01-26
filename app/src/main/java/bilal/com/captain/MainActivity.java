@@ -136,7 +136,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onStateChange(boolean active) {
                 if (active == true) {
-                    openAlert();
+
+                    if(InternetConnection.internetConnectionAvailable(2000)){
+                        openAlert();
+                    }
+
+                    else{
+                        CustomToast.showToast(MainActivity
+                                .this,"Please Check Internet Connection",MDToast.TYPE_ERROR);
+                    }
+
                 }
 
             }

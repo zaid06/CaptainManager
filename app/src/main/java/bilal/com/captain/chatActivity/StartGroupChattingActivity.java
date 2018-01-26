@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -38,11 +39,14 @@ import java.util.Date;
 
 import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
+import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.fragments.MakingGroupOfUsers;
 import bilal.com.captain.galleryActivity.GalleryActivity;
+import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.SingleChatModel;
 
 public class StartGroupChattingActivity extends AppCompatActivity {
@@ -103,44 +107,46 @@ public class StartGroupChattingActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                String message = editText.getText().toString().trim();
+                if(InternetConnection.internetConnectionAvailable(2000)){
 
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+                    String message = editText.getText().toString().trim();
 
-                String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+                    String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+                    String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 
 
-                if(selectedItems != null && selectedItems.size() > 0){
-                    progressDialog.show();
-                    uploadPictures(message);
+                    if(selectedItems != null && selectedItems.size() > 0){
+                        progressDialog.show();
+                        uploadPictures(message);
 
-                }else {
+                    }else {
 
-                    SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getAdminkey()).push().getKey(), null);
+                        SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getAdminkey()).push().getKey(), null);
 
 //                FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getAdminkey()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
 //                singleChatModel.setFlag(false);
 
-                    for (int i = 0; i < GlobalVariables.groupNameUsersModel.getUsers().size(); i++) {
+                        for (int i = 0; i < GlobalVariables.groupNameUsersModel.getUsers().size(); i++) {
 
-                        if (GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
-                            singleChatModel.setFlag(true);
+                                singleChatModel.setFlag(true);
 
-                            FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                                FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                        } else {
+                            } else {
 
-                            singleChatModel.setFlag(false);
+                                singleChatModel.setFlag(false);
 
-                            FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                                FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                            }
                         }
+
+
+                        editText.setText("");
                     }
-
-
-                    editText.setText("");
-                }
 
 //                new SentReadMsgs( msg, "sender", firebaseAuth.getCurrentUser().getDisplayName(),dttm,databaseReference.push().getKey(),null,true);
 //
@@ -151,8 +157,16 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 //                databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child(uid).child(sentReadMsgs.getKey()).setValue(sentReadMsgs);
 
 
+                }
+
+                else{
+                    CustomToast.showToast(StartGroupChattingActivity.this,"Please Check Internet Connection", MDToast.TYPE_ERROR);
+                }
+
             }
-        });
+
+
+            });
 
         getMessages();
 

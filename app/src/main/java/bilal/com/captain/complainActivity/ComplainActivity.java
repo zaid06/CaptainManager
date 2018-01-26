@@ -54,8 +54,10 @@ import java.util.TimerTask;
 
 import bilal.com.captain.R;
 import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.classes.RegularCustomTextView;
+import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ComplainModel;
 
 public class ComplainActivity extends Activity implements Camera.PictureCallback, SurfaceHolder.Callback, View.OnClickListener {
@@ -211,7 +213,6 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
     private View.OnClickListener mDoneButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
 
         }
     };
@@ -673,8 +674,15 @@ public class ComplainActivity extends Activity implements Camera.PictureCallback
 
         if (v.getId() == R.id.ok_button) {
 
+            if(InternetConnection.internetConnectionAvailable(2000)){
 
-            new SavingFile().execute();
+                new SavingFile().execute();
+
+            }
+
+            else{
+                CustomToast.showToast(ComplainActivity.this,"Please Check Internet Connection",MDToast.TYPE_ERROR);
+            }
         }
 
 
