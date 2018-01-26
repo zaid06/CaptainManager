@@ -114,6 +114,7 @@ public class AllUsersListForStartSingleChatting extends Fragment {
                         arrayList.add(i,firebase);
                     }
                 }
+                usersListAdapter.notifyDataSetChanged();
             }
 
             @Override
