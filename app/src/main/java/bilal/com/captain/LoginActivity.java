@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import bilal.com.captain.CaptainInterfaces.Initialization;
@@ -123,6 +124,12 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
                 waitDialog.dismiss();
 
                 if(task.isSuccessful()){
+
+                    FirebaseDatabase.getInstance().getReference().child("Public_User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("isonline").setValue(true);
+
+                    FirebaseDatabase.getInstance().getReference().child("USER").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("user").child("isonline").setValue(true);
 
                     finish();
 

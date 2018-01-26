@@ -108,10 +108,14 @@ public class AllUsersListForStartSingleChatting extends Fragment {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Firebase firebase = dataSnapshot.getValue(Firebase.class);
                 for (int i=0; i<arrayList.size(); i++){
-                    if(!arrayList.get(i).getIsonline()){
-                        arrayList.remove(i);
-
-                        arrayList.add(i,firebase);
+                    if(arrayList.get(i).getId().equals(firebase.getId())){
+                        if(arrayList.get(i).getIsonline()){
+                            arrayList.remove(i);
+                            arrayList.add(i,firebase);
+                        }else{
+                            arrayList.remove(i);
+                            arrayList.add(i,firebase);
+                        }
                     }
                 }
                 usersListAdapter.notifyDataSetChanged();
