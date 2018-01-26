@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import bilal.com.captain.Util.SaveInSharedPreference;
+import bilal.com.captain.notifications.PushService;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        startService(new Intent(SplashActivity.this,PushService.class));
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions != null) {
             while(!hasCheck()){

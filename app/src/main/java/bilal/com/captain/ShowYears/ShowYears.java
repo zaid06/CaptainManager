@@ -44,6 +44,13 @@ public class ShowYears extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowYears.super.onBackPressed();
+            }
+        });
+
     }
 
     private void initialise(){

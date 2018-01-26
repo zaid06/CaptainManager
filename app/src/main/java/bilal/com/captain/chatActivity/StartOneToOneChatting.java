@@ -61,6 +61,7 @@ import bilal.com.captain.classes.BoldCustomTextView;
 
 import bilal.com.captain.fragments.AllUsersListForStartSingleChatting;
 import bilal.com.captain.galleryActivity.GalleryActivity;
+import bilal.com.captain.models.NotificationModel;
 import bilal.com.captain.models.SingleChatModel;
 
 
@@ -179,6 +180,10 @@ public class StartOneToOneChatting extends AppCompatActivity {
                     singleChatModel.setFlag(false);
 
                     FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                    NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"Bakhtiyar");
+
+                    FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(uid).child(notificationModel.getPushkey()).setValue(notificationModel);
 
                     editText.setText("");
                 }
@@ -403,6 +408,10 @@ public class StartOneToOneChatting extends AppCompatActivity {
             progressDialog.dismiss();
 // ;
             editText.setText("");
+
+            NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"Bakhtiyar");
+
+            FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(uid).child(notificationModel.getPushkey()).setValue(notificationModel);
 
 
         }else {
