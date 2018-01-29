@@ -51,6 +51,7 @@ import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
 import bilal.com.captain.models.IncomeModel;
+import bilal.com.captain.notifications.PushService;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
 
@@ -129,6 +130,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+
+            stopService(new Intent(MainActivity.this, PushService.class));
+
+            startService(new Intent(MainActivity.this, PushService.class));
+
+        }
 
         swipeButton = (com.ebanx.swipebtn.SwipeButton) findViewById(R.id.swipebutton);
 

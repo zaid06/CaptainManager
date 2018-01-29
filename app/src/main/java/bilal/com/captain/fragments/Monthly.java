@@ -77,7 +77,6 @@ total
 
         for (int i=0; i< Global.curr.size(); i++){
             if(GlobalVariables.year.equals(Global.curr.get(i).getYear() )&&( !temp.equals(Global.curr.get(i).getMonthly() ))){
-
                 arrayList.add(new ModelForMonthlyRecordsShow(
                         Global.curr.get(i).getIncome(),
                         Global.curr.get(i).getKey(),
@@ -89,7 +88,6 @@ total
                         Global.curr.get(i).getYear(),
                         "month")
                 );
-
                 arrayList.add(new ModelForMonthlyRecordsShow(
                         Global.curr.get(i).getIncome(),
                         Global.curr.get(i).getKey(),
@@ -103,11 +101,8 @@ total
                 );
                 total += Global.curr.get(i).getIncome();
                 temp = Global.curr.get(i).getMonthly();
-
                 count++;
-
             }else if(GlobalVariables.year.equals(Global.curr.get(i).getYear() )){
-
                 arrayList.add(new ModelForMonthlyRecordsShow(
                         Global.curr.get(i).getIncome(),
                         Global.curr.get(i).getKey(),
@@ -119,7 +114,6 @@ total
                         Global.curr.get(i).getYear(),
                         "record")
                 );
-
                 total += Global.curr.get(i).getIncome();
             }
 
