@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
 
+import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.SaveInSharedPreference;
 import bilal.com.captain.chatActivity.StartOneToOneChatting;
@@ -86,6 +87,7 @@ public class PushService extends Service {
 
     public void notif(NotificationModel notificationModel) {
 
+        GlobalVariables.notificationModel = notificationModel;
 
         Intent intent = new Intent(this, StartOneToOneChatting.class);
 
@@ -99,7 +101,7 @@ public class PushService extends Service {
             Notification.Builder notification = new Notification.Builder(this)
                     .setTicker("University")
                     .setContentTitle(notificationModel.getName())
-                    .setContentText("You Have Some Message")
+                    .setContentText(notificationModel.getMessage())
                     .setTicker("Notification form my app")
                     .setSmallIcon(R.drawable.chat)
                     .setAutoCancel(true)

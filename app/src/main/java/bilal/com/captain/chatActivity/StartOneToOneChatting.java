@@ -35,9 +35,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.io.File;
 import java.net.URI;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +50,9 @@ import bilal.com.captain.Firebase;
 
 import bilal.com.captain.LiveVideoTestingUsingFirebase;
 import bilal.com.captain.R;
+import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
+import bilal.com.captain.Util.SaveInSharedPreference;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
 import bilal.com.captain.config.OpenTokConfig;
@@ -61,7 +66,11 @@ import bilal.com.captain.classes.BoldCustomTextView;
 
 import bilal.com.captain.fragments.AllUsersListForStartSingleChatting;
 import bilal.com.captain.galleryActivity.GalleryActivity;
+
 import bilal.com.captain.models.NotificationModel;
+
+import bilal.com.captain.mapActivity.MapsActivity;
+
 import bilal.com.captain.models.SingleChatModel;
 
 
@@ -102,6 +111,12 @@ public class StartOneToOneChatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_one_to_one_chatting);
 
+        if(GlobalVariables.notificationModel != null){
+
+            FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+
+            GlobalVariables.notificationModel = null;
+        }
 
         bundle = getIntent().getExtras();
 
@@ -160,38 +175,67 @@ public class StartOneToOneChatting extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
+                
+                if(InternetConnection.internetConnectionAvailable(2000)){
 
+                    String message = editText.getText().toString().trim();
 
-                String message = editText.getText().toString().trim();
+                    String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+                    String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 
-                String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+                    if(selectedItems != null && selectedItems.size() > 0){
+                        progressDialog.show();
+                        uploadPictures(message);
 
-                if(selectedItems != null && selectedItems.size() > 0){
-                    progressDialog.show();
-                    uploadPictures(message);
+                    }else {
+                        SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
 
-                }else {
-                    SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
+                        FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+                        singleChatModel.setFlag(false);
 
-                    singleChatModel.setFlag(false);
+                        FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                        String temp = message;
 
-                    NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"Bakhtiyar");
+                        if(temp.length() > 6) {
 
-                    FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(uid).child(notificationModel.getPushkey()).setValue(notificationModel);
+                            sendNotification(message.substring(0,6)+"...");
+
+                        }else {
+
+                            sendNotification(message);
+
+                        }
+                        editText.setText("");
+                    }
 
                     editText.setText("");
+
+                }
+                
+                else{
+                    CustomToast.showToast(StartOneToOneChatting.this,"Please Check Internet Connection", MDToast.TYPE_ERROR);
+                }
+                    
+
                 }
 
-            }
+
+                
         });
 
         getMessages();
+
+    }
+
+    private void sendNotification(String message){
+
+        NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(), FirebaseAuth.getInstance().getCurrentUser().getUid(), SaveInSharedPreference.getInSharedPreference(StartOneToOneChatting.this).getName(),message);
+
+        FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(uid).child(notificationModel.getPushkey()).setValue(notificationModel);
 
     }
 
@@ -409,10 +453,15 @@ public class StartOneToOneChatting extends AppCompatActivity {
 // ;
             editText.setText("");
 
-            NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"Bakhtiyar");
+            if(message.length() > 6) {
 
-            FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(uid).child(notificationModel.getPushkey()).setValue(notificationModel);
+                sendNotification(message.substring(0,6)+"...");
 
+            }else {
+
+                sendNotification(message);
+
+            }
 
         }else {
 

@@ -39,4 +39,18 @@ public class SaveInSharedPreference {
 
     }
 
+    public void setName(String name){
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("name", name);
+        editor.apply();
+    }
+
+    public String getName(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("name", "");
+
+    }
+
 }

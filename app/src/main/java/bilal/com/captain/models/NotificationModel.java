@@ -11,13 +11,24 @@ public class NotificationModel {
 
     String name;
 
-    public NotificationModel(String pushkey, String uid, String name) {
+    String message;
+
+    public NotificationModel(String pushkey, String uid, String name, String message) {
         this.pushkey = pushkey;
         this.uid = uid;
         this.name = name;
+        this.message = message;
     }
 
     public NotificationModel() {
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getPushkey() {

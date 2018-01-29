@@ -20,7 +20,9 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 import bilal.com.captain.CaptainInterfaces.Initialization;
 import bilal.com.captain.R;
 import bilal.com.captain.Util.CustomToast;
+import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Util;
+import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
 
 public class ExpenseActivity extends AppCompatActivity implements Initialization, View.OnClickListener {
@@ -117,40 +119,49 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Util.etValidate(et_expence)){
 
-                    try {
-                        String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
+                if(InternetConnection.internetConnectionAvailable(2000)){
+                    if(Util.etValidate(et_expence)){
 
-                        long expence = Long.valueOf(et_expence.getText().toString().trim());
+                        try {
+                            String currtime = (DateFormat.format("dd-MM-yyyy", new java.util.Date()).toString());
 
-                        String key =  FirebaseDatabase.
-                                            getInstance().
-                                            getReference().
-                                            child("Expense").
-                                            child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                            push().
-                                            getKey();
+                            long expence = Long.valueOf(et_expence.getText().toString().trim());
 
-                        ExpenseModel expenseModel = new ExpenseModel(key,expence,type,currtime);
+                            String key =  FirebaseDatabase.
+                                    getInstance().
+                                    getReference().
+                                    child("Expense").
+                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                    push().
+                                    getKey();
 
-                        FirebaseDatabase.
-                                getInstance().
-                                getReference().
-                                child("Expense").
-                                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                                child(expenseModel.getKey()).
-                                setValue(expenseModel);
+                            ExpenseModel expenseModel = new ExpenseModel(key,expence,type,currtime);
 
-                        dialog.dismiss();
+                            FirebaseDatabase.
+                                    getInstance().
+                                    getReference().
+                                    child("Expense").
+                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                    child(expenseModel.getKey()).
+                                    setValue(expenseModel);
 
-                        CustomToast.showToast(ExpenseActivity.this,"Submitted",MDToast.TYPE_SUCCESS);
+                            dialog.dismiss();
 
-                    }catch (Throwable e){
-                        Log.d("Error", "onClick: "+e);
+                            CustomToast.showToast(ExpenseActivity.this,"Submitted",MDToast.TYPE_SUCCESS);
+
+                        }catch (Throwable e){
+                            Log.d("Error", "onClick: "+e);
+                        }
+
                     }
-
                 }
+
+                else{
+                    CustomToast.showToast(ExpenseActivity.this,"Please Check Internet Connection",MDToast.TYPE_ERROR);
+                }
+
+
             }
         });
 
