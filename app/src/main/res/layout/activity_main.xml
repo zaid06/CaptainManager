@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg9"
     android:orientation="vertical"
     android:paddingBottom="20dp"
@@ -16,65 +16,63 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10">
 
         <ImageView
-            android:visibility="invisible"
-            android:layout_gravity="center_vertical"
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="20dp"
-            android:src="@drawable/menu"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:src="@drawable/menu"
+            android:visibility="invisible" />
 
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="0dp"
-            android:layout_weight="6"
             android:layout_height="wrap_content"
 
+            android:layout_weight="6"
             android:gravity="center"
             android:text="Dashboard"
             android:textColor="@color/colorWhite"
-            android:textSize="35sp"
-            android:id="@+id/textView5"/>
+            android:textSize="35sp" />
 
         <ImageView
-            android:layout_gravity="center_vertical"
             android:id="@+id/logout"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
             android:paddingLeft="30dp"
             android:paddingTop="2dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent"
-            android:src="@drawable/menu"/>
+            android:src="@drawable/menu" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="1"
-                android:text="14/11/17 \t 12:30 pm"
-                android:textColor="@color/colorWhite"
-                android:textSize="15sp" />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:text="14/11/17 \t 12:30 pm"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp" />
 
 
-        </LinearLayout>
-
-
+    </LinearLayout>
 
 
     <LinearLayout
@@ -121,12 +119,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
+                android:layout_marginBottom="2dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Today's Goal"
                 android:textColor="@color/colorWhite"
-                android:layout_marginBottom="2dp"
                 android:textSize="18sp" />
 
 
@@ -141,9 +139,8 @@
             android:layout_weight="2.1"
             android:background="@color/colorMain"
             android:gravity="center"
-            android:orientation="vertical"
-            android:onClick="clickListener">
-
+            android:orientation="vertical">
+            <!--android:onClick="clickListener"-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -173,20 +170,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:gravity="left"
-
                 android:text="Cash In Hand"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -232,11 +224,11 @@
             <!--android:src="@drawable/ic_today_jc" />-->
 
             <TextView
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
-                android:layout_weight="1.2"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="Achieved"
                 android:textColor="@color/colorWhite"
@@ -281,11 +273,11 @@
             <!--android:src="@drawable/ic_today_jc" />-->
 
             <TextView
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
-                android:layout_weight="1.2"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="Remaining"
                 android:textColor="@color/colorWhite"
@@ -331,11 +323,11 @@
             <!--android:src="@drawable/ic_today_jc" />-->
 
             <TextView
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
-                android:layout_weight="1.2"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="Expense"
                 android:textColor="@color/colorWhite"
@@ -427,7 +419,6 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/news_feed"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -436,7 +427,8 @@
             android:layout_weight=".5"
             android:background="@color/colorMain"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
 
             <ImageView
@@ -495,28 +487,28 @@
     </LinearLayout>
 
     <com.ebanx.swipebtn.SwipeButton
+        android:id="@+id/swipebutton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="2dp"
-        app:inner_text="Swipe to start ride"
-        app:inner_text_size="23dp"
-        app:button_image_disabled="@drawable/ic_chevron_right_black_24dp"
-        app:button_top_padding="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         app:button_bottom_padding="15dp"
+        app:button_image_disabled="@drawable/ic_chevron_right_black_24dp"
         app:button_image_enabled="@drawable/ic_lock_open_black_24dp"
+        app:button_top_padding="15dp"
+        app:inner_text="Swipe to start ride"
         app:inner_text_background="@drawable/slider"
-        android:id="@+id/swipebutton" />
+        app:inner_text_size="23dp" />
 
     <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:layout_weight=""-->
-        <!--android:orientation="horizontal" />-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_gravity="center_vertical"-->
+    <!--android:layout_margin="5dp"-->
+    <!--android:layout_weight=""-->
+    <!--android:orientation="horizontal" />-->
 
 
 </LinearLayout>

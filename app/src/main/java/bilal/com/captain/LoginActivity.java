@@ -25,7 +25,9 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 import bilal.com.captain.CaptainInterfaces.Initialization;
 import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.InternetConnection;
+import bilal.com.captain.Util.OpenLocation;
 import bilal.com.captain.Util.SaveInSharedPreference;
+import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.Util.Util;
 
 public class LoginActivity extends AppCompatActivity implements Initialization, View.OnClickListener {
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
 
     ProgressDialog waitDialog;
 
+    Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,8 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
 
     @Override
     public void initialise() {
+
+        tracker = new Tracker(LoginActivity.this);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -92,27 +98,38 @@ public class LoginActivity extends AppCompatActivity implements Initialization, 
         switch (v.getId()){
 
             case R.id.login:
-                if(Util.etValidate(et_email) && Util.emailValidate(et_email) && Util.etValidate(et_password)){
+                if(tracker.checkGPSStatus()){
 
-                    String email = et_email.getText().toString().trim();
+                    if(Util.etValidate(et_email) && Util.emailValidate(et_email) && Util.etValidate(et_password)){
 
-                    String password = et_password.getText().toString().trim();
+                        String email = et_email.getText().toString().trim();
 
-                    if(InternetConnection.internetConnectionAvailable(2000)){
+                        String password = et_password.getText().toString().trim();
 
-                        authenticateUserWithFireBase(email,password);
+                        if(InternetConnection.internetConnectionAvailable(2000)){
 
-                    }else {
+                            authenticateUserWithFireBase(email,password);
 
-                        CustomToast.showToast(LoginActivity.this,"Please Check Internet", MDToast.TYPE_WARNING);
+                        }else {
+
+                            CustomToast.showToast(LoginActivity.this,"Please Check Internet", MDToast.TYPE_WARNING);
+
+                        }
 
                     }
+
+                }else {
+
+                    OpenLocation.openLocation(LoginActivity.this);
+
+                    return;
 
                 }
                 break;
 
             case R.id.signuptextview:
                 startActivity(new Intent(LoginActivity.this, bilal.com.captain.Signup.class));
+                break;
 
         }
 

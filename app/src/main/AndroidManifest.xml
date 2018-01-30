@@ -69,7 +69,8 @@
         <activity android:name=".galleryActivity.GalleryActivity" />
         <activity android:name=".LiveVideoTestingUsingFirebase" />
         <activity android:name=".ShowYears.ShowYears" />
-        <activity android:name=".activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment"></activity>
+        <activity android:name=".activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment" />
+        <activity android:name=".Camera"></activity>
     </application>
 
 </manifest>
