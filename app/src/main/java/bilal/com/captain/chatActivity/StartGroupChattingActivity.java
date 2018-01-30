@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -43,6 +44,7 @@ import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.cameraActivity.CameraActivity;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.fragments.MakingGroupOfUsers;
 import bilal.com.captain.galleryActivity.GalleryActivity;
@@ -87,6 +89,10 @@ public class StartGroupChattingActivity extends AppCompatActivity {
         groupbackbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GalleryActivity.selectedItems = null;
+                selectedItems = null;
+                url_snap_image = null;
+                CameraActivity.stringUri = null;
                 StartGroupChattingActivity.super.onBackPressed();
 
             }
@@ -120,6 +126,9 @@ public class StartGroupChattingActivity extends AppCompatActivity {
                         progressDialog.show();
                         uploadPictures(message);
 
+                    }else if(!TextUtils.isEmpty(url_snap_image)){
+                        progressDialog.show();
+                        uploadSnappedImage(message);
                     }else {
 
                         SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getAdminkey()).push().getKey(), null);
@@ -177,8 +186,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
         AlertDialog.Builder alert = new AlertDialog.Builder(StartGroupChattingActivity.this);
         View view = getLayoutInflater().inflate(R.layout.open_gallery_permission_alert,null);
 
-        final LinearLayout allow = (LinearLayout)view.findViewById(R.id.allow);
-        final LinearLayout dallow = (LinearLayout)view.findViewById(R.id.dontallow);
+        final ImageView allow = (ImageView) view.findViewById(R.id.allow);
+        final ImageView dallow = (ImageView)view.findViewById(R.id.dontallow);
 
         alert.setView(view);
         final AlertDialog dialog = alert.create();
@@ -198,7 +207,7 @@ public class StartGroupChattingActivity extends AppCompatActivity {
         dallow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(StartGroupChattingActivity.this, "Permission not granted", Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(StartGroupChattingActivity.this, CameraActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
                 dialog.dismiss();
             }
         });
@@ -299,6 +308,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
     ArrayList<String> selectedItems;
 
+    String url_snap_image = null;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -306,37 +317,40 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
                 if(GalleryActivity.selectedItems != null && GalleryActivity.selectedItems.size() >0){
 
-                    horizontal_scroll_view.setVisibility(View.VISIBLE);
-
 //                        progressDialog.show();
 
                     for (int i = 0; i < GalleryActivity.selectedItems.size(); i++){
 
-
-
-                        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
-                        float dp = 100f;
-                        float fpixels = metrics.density * dp;
-                        int pixels = (int) (fpixels + 0.5f);
-
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
-
-                        ImageView imageView = new ImageView(getApplicationContext());
-
-                        imageView.setLayoutParams(layoutParams);
-
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-
-                        Glide.with(getApplicationContext())
-                                .load(GalleryActivity.selectedItems.get(i))
-                                .into(imageView);
-
-
-                        parentImageShow.addView(imageView);
+                        showPictures(GalleryActivity.selectedItems.get(i));
+//                        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+//                        float dp = 100f;
+//                        float fpixels = metrics.density * dp;
+//                        int pixels = (int) (fpixels + 0.5f);
+//
+//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
+//
+//                        ImageView imageView = new ImageView(getApplicationContext());
+//
+//                        imageView.setLayoutParams(layoutParams);
+//
+//                        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//
+//                        Glide.with(getApplicationContext())
+//                                .load(GalleryActivity.selectedItems.get(i))
+//                                .into(imageView);
+//
+//
+//                        parentImageShow.addView(imageView);
 
                     }
 
                     selectedItems = GalleryActivity.selectedItems;
+
+                }else if(!TextUtils.isEmpty(CameraActivity.stringUri)){
+
+                    showPictures(CameraActivity.stringUri);
+
+                    url_snap_image = CameraActivity.stringUri;
 
                 }
 //                    else if(){
@@ -346,6 +360,41 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        GalleryActivity.selectedItems = null;
+        selectedItems = null;
+        url_snap_image = null;
+        CameraActivity.stringUri = null;
+        super.onBackPressed();
+    }
+
+    private void showPictures(String image_url){
+
+        horizontal_scroll_view.setVisibility(View.VISIBLE);
+
+        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+        float dp = 100f;
+        float fpixels = metrics.density * dp;
+        int pixels = (int) (fpixels + 0.5f);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
+
+        ImageView imageView = new ImageView(getApplicationContext());
+
+        imageView.setLayoutParams(layoutParams);
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        Glide.with(getApplicationContext())
+                .load(image_url)
+                .into(imageView);
+
+
+        parentImageShow.addView(imageView);
+
     }
 
     int index = 0;
@@ -388,17 +437,11 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
             editText.setText("");
             selectDownloadUrls.clear();
-
             selectedItems.clear();
-
             GalleryActivity.selectedItems = null;
-
             selectedItems = null;
-
             horizontal_scroll_view.setVisibility(View.GONE);
-
             parentImageShow.removeAllViews();
-
             progressDialog.dismiss();
 // ;
             editText.setText("");
@@ -424,5 +467,60 @@ public class StartGroupChattingActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void uploadSnappedImage(final String message){
+
+        final File file = new File(url_snap_image);
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+        FirebaseStorage.getInstance().getReference().child("Chatting").child(timeStamp).putFile(Uri.fromFile(file)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                index++;
+
+                progressDialog.setMessage(index+" File Uploaded");
+
+                selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
+
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+                String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+
+                SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getAdminkey()).push().getKey(), selectDownloadUrls);
+
+                for (int i = 0; i < GlobalVariables.groupNameUsersModel.getUsers().size(); i++) {
+
+                    if (GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                        singleChatModel.setFlag(true);
+
+                        FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                    } else {
+
+                        singleChatModel.setFlag(false);
+
+                        FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(GlobalVariables.groupNameUsersModel.getPrimarypushkey()).child(GlobalVariables.groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                    }
+                }
+
+                url_snap_image = null;
+
+                CameraActivity.stringUri = null;
+
+                parentImageShow.removeAllViews();
+
+                progressDialog.dismiss();
+
+                selectDownloadUrls.clear();
+
+                file.delete();
+            }
+        });
+
     }
 }

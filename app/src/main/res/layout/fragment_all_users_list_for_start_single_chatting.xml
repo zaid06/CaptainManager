@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/themeColor"
     tools:context="bilal.com.captain.fragments.AllUsersListForStartSingleChatting">
 
     <ListView
-        android:divider="@color/transparent"
+        android:divider="@color/colorMain"
+        android:dividerHeight="1dp"
         android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
