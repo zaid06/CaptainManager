@@ -139,8 +139,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                 viewHolder.gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                       String url = (String
-                               ) adapterView.getItemAtPosition(i);
+                       String url = (String) adapterView.getItemAtPosition(i);
                         openAlert(position,url);
                         return false;
 
