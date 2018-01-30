@@ -28,11 +28,10 @@
             android:visibility="invisible" />
 
 
-        <TextView
+        <bilal.com.captain.classes.BoldCustomTextView
             android:id="@+id/textView5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:layout_weight="6"
             android:gravity="center"
             android:text="Dashboard"
@@ -62,7 +61,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <TextView
+        <bilal.com.captain.classes.RegularCustomTextView
             android:id="@+id/time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -98,7 +97,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.5" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:id="@+id/todaysGoal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -116,7 +115,7 @@
             <!--android:padding="6dp"-->
             <!--android:src="@drawable/ic_today_jc" />-->
 
-            <TextView
+            <bilal.com.captain.classes.RegularCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -147,7 +146,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.5" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:id="@+id/tv_cash"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -166,7 +165,7 @@
             <!--android:padding="6dp"-->
             <!--android:src="@drawable/ic_today_jc" />-->
 
-            <TextView
+            <bilal.com.captain.classes.RegularCustomTextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -204,7 +203,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".5" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:id="@+id/tv_achieved"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -224,7 +223,7 @@
             <!--android:padding="6dp"-->
             <!--android:src="@drawable/ic_today_jc" />-->
 
-            <TextView
+            <bilal.com.captain.classes.RegularCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -252,7 +251,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".5" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:id="@+id/tv_remaining"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -273,7 +272,7 @@
             <!--android:padding="6dp"-->
             <!--android:src="@drawable/ic_today_jc" />-->
 
-            <TextView
+            <bilal.com.captain.classes.RegularCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -302,7 +301,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".5" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:id="@+id/tv_expence"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -323,7 +322,7 @@
             <!--android:padding="6dp"-->
             <!--android:src="@drawable/ic_today_jc" />-->
 
-            <TextView
+            <bilal.com.captain.classes.RegularCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -365,7 +364,7 @@
                 android:padding="0dp"
                 android:src="@drawable/mic" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -398,7 +397,7 @@
                 android:padding="6dp"
                 android:src="@drawable/expense" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
@@ -473,7 +472,7 @@
                 android:padding="6dp"
                 android:src="@drawable/chat" />
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
