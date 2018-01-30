@@ -580,6 +580,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
                 selectDownloadUrls.clear();
 
                 file.delete();
+
+                editText.setText("");
             }
         });
 

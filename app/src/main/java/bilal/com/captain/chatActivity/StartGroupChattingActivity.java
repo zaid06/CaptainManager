@@ -519,6 +519,8 @@ public class StartGroupChattingActivity extends AppCompatActivity {
                 selectDownloadUrls.clear();
 
                 file.delete();
+
+                editText.setText("");
             }
         });
 

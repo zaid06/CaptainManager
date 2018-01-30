@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import bilal.com.captain.Util.OpenLocation;
+import bilal.com.captain.Util.Tracker;
 
 /**
  * Created by shame on 2018-01-30.
@@ -16,9 +17,15 @@ public class UiThread {
     private Timer timer;
     private TimerTask timerTask;
 
+
+
+    private Tracker tracker;
+
     OpenLocation openLocation = new OpenLocation();
 
     public void thread(final Context context){
+
+         tracker = new Tracker(context);
 
         timer = new Timer();
 
@@ -26,7 +33,10 @@ public class UiThread {
             @Override
             public void run() {
 
-                openLocation.openLocation(context);
+
+                if(!tracker.checkGPSStatus()) {
+                    openLocation.openLocation(context);
+                }
 
             }
         };

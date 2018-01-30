@@ -136,15 +136,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            OpenLocation.openLocation(MainActivity.this);
 ////            return;
 //        }
-
-
-
-        if(!tracker.checkGPSStatus()){
-
             uiThread.thread(MainActivity.this);
 
 //            return;
-        }
+
 
 
 
