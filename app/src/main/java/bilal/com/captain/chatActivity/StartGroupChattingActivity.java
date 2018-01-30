@@ -401,7 +401,6 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
 // ;
-
             editText.setText("");
 
 
@@ -417,14 +416,13 @@ public class StartGroupChattingActivity extends AppCompatActivity {
 
                     index++;
 
+                    progressDialog.setMessage(index+" File Uploaded");
+
                     selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
 
                     uploadPictures(message);
                 }
             });
-
-
         }
-
     }
 }
