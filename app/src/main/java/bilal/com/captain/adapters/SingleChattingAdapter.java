@@ -153,6 +153,10 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                        String url = (String) adapterView.getItemAtPosition(i);
+
+                        //openAlert(position,url);
+
+
                         Log.d("url", url);
                        openAlert(position,url,"reciever");
                         return false;

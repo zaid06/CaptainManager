@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.FloatProperty;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -84,6 +86,8 @@ import bilal.com.captain.Util.Tracker;
 import bilal.com.captain.models.IncomeModel;
 import bilal.com.captain.models.YearModel;
 
+import static bilal.com.captain.Global.curr;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -91,6 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     com.ebanx.swipebtn.SwipeButton swipeButton;
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
+    FloatingActionButton focus;
     AlertDialog.Builder dialogLocationBuilder;
     AlertDialog dialogLocation;
     Tracker tracker;
@@ -419,7 +424,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
+       final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 20);
+
+        focus = (FloatingActionButton) findViewById(R.id.focus);
+
+
+        focus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mMap.animateCamera(cu);
+
+            }
+        });
+
+
+
+
 //                    15));
 
         //stop location updates
