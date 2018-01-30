@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Tracker tracker;
 
+    UiThread uiThread = new UiThread();
+
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -131,7 +133,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(!tracker.checkGPSStatus()){
             OpenLocation.openLocation(MainActivity.this);
+//            return;
+        }
 
+
+
+        if(!tracker.checkGPSStatus()){
+
+            uiThread.thread(MainActivity.this);
 //            return;
         }
 
