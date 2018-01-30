@@ -106,7 +106,7 @@
                 android:gravity="center"
                 android:text="12"
                 android:textColor="@color/colorWhite"
-                android:textSize="35sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <!--<ImageView-->
@@ -126,7 +126,7 @@
                 android:gravity="center"
                 android:text="Today's Goal"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
 
         </LinearLayout>
@@ -156,7 +156,7 @@
                 android:gravity="right"
                 android:text="Rs.0"
                 android:textColor="@color/colorWhite"
-                android:textSize="35sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <!--<ImageView-->
@@ -178,7 +178,7 @@
                 android:gravity="left"
                 android:text="Cash In Hand"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -214,7 +214,7 @@
                 android:gravity="center"
                 android:text="Rs. 0"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <!--<ImageView-->
@@ -233,7 +233,7 @@
                 android:gravity="center"
                 android:text="Achieved"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -262,7 +262,7 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/colorWhite"
-                android:textSize="30sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
 
@@ -282,7 +282,7 @@
                 android:gravity="center"
                 android:text="Remaining"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -312,7 +312,7 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/colorWhite"
-                android:textSize="30sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
 
@@ -333,7 +333,7 @@
                 android:text="Expense"
                 android:textColor="@color/colorWhite"
 
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -373,7 +373,7 @@
                 android:gravity="center"
                 android:text="Complaint"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -407,7 +407,7 @@
                 android:paddingLeft="5dp"
                 android:text="Expense"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -482,7 +482,7 @@
                 android:paddingLeft="5dp"
                 android:text="Chatting"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -14,4 +14,5 @@
     <dimen name="preview_height">78dp</dimen>
     <dimen name="preview_rightMargin">24dp</dimen>
     <dimen name="preview_bottomMargin">75dp</dimen>
+
 </resources>
