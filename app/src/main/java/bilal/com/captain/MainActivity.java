@@ -46,6 +46,7 @@ import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.activityIncomeDetail.IncomeDetailActivity;
+import bilal.com.captain.cameraActivity.CameraActivity;
 import bilal.com.captain.chatActivity.ChatActivity;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
@@ -131,9 +132,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(!tracker.checkGPSStatus()){
             OpenLocation.openLocation(MainActivity.this);
-
 //            return;
         }
+
+
+
+        findViewById(R.id.temporary).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+            }
+        });
 
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
             @Override

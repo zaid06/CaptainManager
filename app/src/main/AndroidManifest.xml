@@ -70,7 +70,7 @@
         <activity android:name=".LiveVideoTestingUsingFirebase" />
         <activity android:name=".ShowYears.ShowYears" />
         <activity android:name=".activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment" />
-        <activity android:name=".Camera"></activity>
+        <activity android:name=".cameraActivity.CameraActivity"></activity>
     </application>
 
 </manifest>

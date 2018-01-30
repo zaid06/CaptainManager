@@ -1,9 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="bilal.com.captain.Camera">
+    tools:context="bilal.com.captain.cameraActivity.CameraActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/toplayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorMain">
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="30dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_back_arrow" />
+
+        <bilal.com.captain.classes.BoldCustomTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Camera"
+            android:textColor="@color/colorWhite"
+            android:textSize="21sp" />
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/camera_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toplayout">
+
+        <ImageView
+            android:id="@+id/camera_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!--preview_view-->
+        <SurfaceView
+            android:id="@+id/preview_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:background="#88000000">
+
+        <LinearLayout
+            android:id="@+id/reset"
+            android:layout_width="170sp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/background_radius_tab"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:scaleType="fitCenter">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+
+                android:src="@drawable/clear_button" />
+
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/capture_image_button"
+            android:layout_width="112dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/camera_button_2"
+            android:scaleType="centerCrop"
+            android:text="SHOP DETAILS"
+            android:textSize="21sp" />
+
+
+        <!---->
+        <LinearLayout
+
+            android:id="@+id/done"
+            android:layout_width="170sp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/background_radius_tab"
+            android:gravity="center_horizontal"
+            android:outlineProvider="bounds"
+            android:padding="4dp"
+            android:scaleType="fitCenter">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="6dp"
+                android:background="@android:drawable/ic_menu_send"/>
+
+
+        </LinearLayout>
+
+
+        <!---->
+        <!--<TextView-->
+        <!--android:id="@+id/check"-->
+        <!--android:textSize="25sp"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="#fff"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:text="Saving..." />-->
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:padding="3dp"
+        android:id="@+id/flash"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/toplayout"
+        android:layout_margin="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/flash_on" />
+
+    <bilal.com.captain.classes.RegularCustomTextView
+        android:id="@+id/sizeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="0 X"
+        android:textColor="@color/colorWhite"
+        android:textSize="35sp" />
+
+</RelativeLayout>

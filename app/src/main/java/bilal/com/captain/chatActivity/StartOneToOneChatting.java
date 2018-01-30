@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -55,6 +56,7 @@ import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.SaveInSharedPreference;
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.adapters.SingleChattingAdapter;
+import bilal.com.captain.cameraActivity.CameraActivity;
 import bilal.com.captain.config.OpenTokConfig;
 
 import bilal.com.captain.GlobalVariables;
@@ -136,6 +138,10 @@ public class StartOneToOneChatting extends AppCompatActivity {
         chatbackbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GalleryActivity.selectedItems = null;
+                selectedItems = null;
+                url_snap_image = null;
+                CameraActivity.stringUri = null;
                 StartOneToOneChatting.super.onBackPressed();
             }
         });
@@ -188,7 +194,9 @@ public class StartOneToOneChatting extends AppCompatActivity {
                     if(selectedItems != null && selectedItems.size() > 0){
                         progressDialog.show();
                         uploadPictures(message);
-
+                    }else if(!TextUtils.isEmpty(url_snap_image)){
+                        progressDialog.show();
+                        uploadSnappedImage(message);
                     }else {
                         SingleChatModel singleChatModel = new SingleChatModel(message, "Sender", true, "hello", date + " " + time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(), null);
 
@@ -244,8 +252,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
         AlertDialog.Builder alert = new AlertDialog.Builder(StartOneToOneChatting.this);
         View view = getLayoutInflater().inflate(R.layout.open_gallery_permission_alert,null);
 
-        final LinearLayout allow = (LinearLayout)view.findViewById(R.id.allow);
-        final LinearLayout dallow = (LinearLayout)view.findViewById(R.id.dontallow);
+        final ImageView allow = (ImageView) view.findViewById(R.id.allow);
+        final ImageView dallow = (ImageView)view.findViewById(R.id.dontallow);
 
         alert.setView(view);
         final AlertDialog dialog = alert.create();
@@ -265,7 +273,7 @@ public class StartOneToOneChatting extends AppCompatActivity {
         dallow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(StartOneToOneChatting.this, "Permission not granted", Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(StartOneToOneChatting.this, CameraActivity.class), Util.REQUEST_CODE_CAPTURE_IMAGE);
                 dialog.dismiss();
             }
         });
@@ -370,6 +378,8 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
     ArrayList<String> selectedItems;
 
+    String url_snap_image = null;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
@@ -377,32 +387,39 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                     if(GalleryActivity.selectedItems != null && GalleryActivity.selectedItems.size() >0){
 
-                        horizontal_scroll_view.setVisibility(View.VISIBLE);
+//                        horizontal_scroll_view.setVisibility(View.VISIBLE);
 //                        progressDialog.show();
                         for (int i = 0; i < GalleryActivity.selectedItems.size(); i++){
 
-                            DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
-                            float dp = 100f;
-                            float fpixels = metrics.density * dp;
-                            int pixels = (int) (fpixels + 0.5f);
-
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
-
-                            ImageView imageView = new ImageView(getApplicationContext());
-
-                            imageView.setLayoutParams(layoutParams);
-
-                            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-
-                            Glide.with(getApplicationContext())
-                                    .load(GalleryActivity.selectedItems.get(i))
-                                    .into(imageView);
-
-                            parentImageShow.addView(imageView);
+                            showPictures(GalleryActivity.selectedItems.get(i));
+//                            DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+//                            float dp = 100f;
+//                            float fpixels = metrics.density * dp;
+//                            int pixels = (int) (fpixels + 0.5f);
+//
+//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
+//
+//                            ImageView imageView = new ImageView(getApplicationContext());
+//
+//                            imageView.setLayoutParams(layoutParams);
+//
+//                            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//
+//                            Glide.with(getApplicationContext())
+//                                    .load(GalleryActivity.selectedItems.get(i))
+//                                    .into(imageView);
+//
+//                            parentImageShow.addView(imageView);
 
                         }
 
                         selectedItems = GalleryActivity.selectedItems;
+
+                    }else if(!TextUtils.isEmpty(CameraActivity.stringUri)){
+
+                        showPictures(CameraActivity.stringUri);
+
+                        url_snap_image = CameraActivity.stringUri;
 
                     }
 //                    else if(){
@@ -412,6 +429,42 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        GalleryActivity.selectedItems = null;
+        selectedItems = null;
+        url_snap_image = null;
+        CameraActivity.stringUri = null;
+        super.onBackPressed();
+    }
+
+
+    private void showPictures(String image_url){
+
+        horizontal_scroll_view.setVisibility(View.VISIBLE);
+
+        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+        float dp = 100f;
+        float fpixels = metrics.density * dp;
+        int pixels = (int) (fpixels + 0.5f);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(pixels, pixels);
+
+        ImageView imageView = new ImageView(getApplicationContext());
+
+        imageView.setLayoutParams(layoutParams);
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        Glide.with(getApplicationContext())
+                .load(image_url)
+                .into(imageView);
+
+
+        parentImageShow.addView(imageView);
+
     }
 
     int index = 0;
@@ -485,6 +538,50 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
 
         }
+
+    }
+
+    private void uploadSnappedImage(final String message){
+
+        final File file = new File(url_snap_image);
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+        FirebaseStorage.getInstance().getReference().child("Chatting").child(timeStamp).putFile(Uri.fromFile(file)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                index++;
+
+                progressDialog.setMessage(index+" File Uploaded");
+
+                selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
+
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+                String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+                SingleChatModel singleChatModel = new SingleChatModel(message,"Sender",true,"hello",date+" "+time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(),selectDownloadUrls);
+
+                FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uid).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                singleChatModel.setFlag(false);
+
+                FirebaseDatabase.getInstance().getReference().child("Chatting").child(uid).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                url_snap_image = null;
+
+                CameraActivity.stringUri = null;
+
+                parentImageShow.removeAllViews();
+
+                progressDialog.dismiss();
+
+                selectDownloadUrls.clear();
+
+                file.delete();
+            }
+        });
 
     }
 
