@@ -14,9 +14,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:weightSum="10">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:src="@drawable/logo"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,18 +32,19 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:layout_weight="2.1"
-            android:background="@drawable/login_box2"
+            android:layout_weight="1.1"
+            android:background="@drawable/border_radius"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="13dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Username"
+                android:hint="User Name"
                 android:paddingLeft="13dp"
                 android:singleLine="true"
                 android:textColor="@color/colorWhite"
@@ -52,14 +60,15 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="2.1"
-            android:background="@drawable/login_box2"
+            android:layout_weight="1.1"
+            android:background="@drawable/border_radius"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="13dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -79,14 +88,15 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="2.1"
-            android:background="@drawable/login_box2"
+            android:layout_weight="1.1"
+            android:background="@drawable/border_radius"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText4"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="13dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -101,21 +111,21 @@
         </LinearLayout>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="2.1"
-            android:background="@drawable/login_box2"
+            android:layout_weight="1.1"
+            android:background="@drawable/border_radius"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="13dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -134,9 +144,9 @@
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="30dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:layout_weight="1.2">
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_weight=".8">
 
             <Button
                 android:id="@+id/button2"
@@ -151,7 +161,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
 

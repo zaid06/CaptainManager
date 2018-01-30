@@ -477,7 +477,7 @@ public class StartOneToOneChatting extends AppCompatActivity {
 
                         selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
 
-                        progressDialog.setMessage(index+"File Uploaded");
+                        progressDialog.setMessage(index+" File Uploaded");
 
                         uploadPictures(message);
                 }

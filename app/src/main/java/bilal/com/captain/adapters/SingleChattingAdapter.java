@@ -1,10 +1,12 @@
 package bilal.com.captain.adapters;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -99,6 +102,16 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     }
                 });
 
+                viewHolder.gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String url = (String) adapterView.getItemAtPosition(i);
+                        Log.d("url", url);
+                        openAlert(position,url,"sender");
+                        return false;
+
+                    }
+                });
 
 
             }else {
@@ -140,7 +153,12 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                        String url = (String) adapterView.getItemAtPosition(i);
-                        openAlert(position,url);
+
+                        //openAlert(position,url);
+
+
+                        Log.d("url", url);
+                       openAlert(position,url,"reciever");
                         return false;
 
                     }
@@ -154,19 +172,16 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
             }
 
         }
-
-
-
-
         return convertView;
     }
 
-    private void openAlert(final int position, final  String url) {
+    private void openAlert(final int position, final  String url,final String stakeHolders) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         View view = inflater.inflate(R.layout.imagedownload,null,false);
 
         final LinearLayout yes = (LinearLayout) view.findViewById(R.id.downloadyes);
-        final LinearLayout no = (LinearLayout) view.findViewById(R.id.downloadno);
+
+        final LinearLayout downloadno = (LinearLayout) view.findViewById(R.id.downloadno);
 
         alert.setView(view);
         final AlertDialog dialog = alert.create();
@@ -177,93 +192,51 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                downloadImages(url);
-                DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                downloadImage(url,stakeHolders);
+                dialog.dismiss();
+            }
+        });
 
-
-               Uri imageuri = url;
-
-                DownloadManager.Request request = new DownloadManager.Request(imageuri);
-
-                request.setTitle("Download Images");
-
-                request.setDescription("Downloading..");
-
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-                request.setDestinationUri(Uri.parse(Environment.getExternalStorageDirectory() + "/Captain/Download Images"));
-
-                downloadManager.enqueue(request);
+        downloadno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
 
-    private void downloadImages(String imageUrl){
+    private void downloadImage(String url, String stakeHolders){
 
-        try {
-//            java.net.URL url = new URL(imageUrl);
+        DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Activity.DOWNLOAD_SERVICE);
 
-            // TODO Bakhtiyar: I create this because some images are correct in server but Java think its corrupt
+        Uri uri = Uri.parse(url);
 
-            boolean success = false;
+        File ff = new File(String.valueOf(url.lastIndexOf('/') + 1));
 
-            int pos = imageUrl.lastIndexOf('/') + 1;
+        DownloadManager.Request request = new DownloadManager.Request(uri);
 
-            URI uri = null;
+        request.setDescription("Downloading.. " + ff.getName()).setTitle("Captain Manager");
 
-            try {
+        Toast.makeText(getContext(), "Downloading" , Toast.LENGTH_SHORT).show();
 
-                uri = new URI(imageUrl.substring(0, pos) + Uri.encode(imageUrl.substring(pos)));
+        request.setDestinationInExternalPublicDir(returnDestination(stakeHolders), ff.getName() + ".jpg");
 
-                Log.d("uri", "onClick: " + uri);
+        request.setVisibleInDownloadsUi(true);
 
-            } catch (Exception e) {
-                Log.d("exc", "onClick: " + e + uri);
-            }
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
+                | DownloadManager.Request.NETWORK_MOBILE);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        downloadManager.enqueue(request);
 
+    }
 
-            java.net.URL url = new URL(String.valueOf(uri));
+    private String returnDestination(String stakeholders){
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-
-            String name = imageUrl.substring(String.valueOf(imageUrl).lastIndexOf("/") + 1);
-
-            File file = null;
-
-            File myDir = new File(Environment.getExternalStorageDirectory() + "/Captain/Download Images" );
-            if (myDir.exists()) {
-                success = true;
-            } else {
-                success = myDir.mkdirs();
-            }
-
-            if (success) {
-
-                file = new File(myDir, name);
-                if (file.exists())
-                    file.delete();
-                try {
-                    FileOutputStream out = new FileOutputStream(file);
-                    myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    out.flush();
-                    out.close();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
+        if(stakeholders.equals("reciever")) {
+            return "/Captain/Recieved";
+        }else {
+            return "/Captain/Sent";
         }
-
-
     }
 
     static class ViewHolder{

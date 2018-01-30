@@ -41,6 +41,7 @@ import java.util.TimerTask;
 
 import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.InternetConnection;
+import bilal.com.captain.Util.OpenLocation;
 import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int totalGoal = 0;
 
+    Tracker tracker;
+
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -123,6 +126,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tracker = new Tracker(MainActivity.this);
+
+        if(!tracker.checkGPSStatus()){
+            OpenLocation.openLocation(MainActivity.this);
+
+//            return;
+        }
 
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
             @Override
