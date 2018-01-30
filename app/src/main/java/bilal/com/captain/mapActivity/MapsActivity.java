@@ -426,6 +426,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
        final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 20);
 
+        mMap.animateCamera(cu);
+
         focus = (FloatingActionButton) findViewById(R.id.focus);
 
 
