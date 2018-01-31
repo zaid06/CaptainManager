@@ -21,7 +21,7 @@ public class ExpenseDetails extends AppCompatActivity {
             R.drawable.puncture_2,
             R.drawable.repair_1,
             R.drawable.challan_1,
-            R.drawable.others
+            R.drawable.others_1
     };
 
     @Override

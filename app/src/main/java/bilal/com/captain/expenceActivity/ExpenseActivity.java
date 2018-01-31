@@ -90,7 +90,7 @@ public class ExpenseActivity extends AppCompatActivity implements Initialization
 
         } else if (v.getId() == R.id.others) {
 
-            openAlert("Others", R.drawable.others);
+            openAlert("Others", R.drawable.others_1);
 
         }
 

@@ -133,6 +133,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
             LatLng pjpPosition = new LatLng(startLatitude, startLongitude);
             mMap.addMarker(new MarkerOptions()
                     .position(pjpPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
                     .title("Start"));
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(pjpPosition));
@@ -145,7 +146,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         LatLng popPosition = new LatLng(endLatitude, endLongitude);
         popMarker = mMap.addMarker(new MarkerOptions()
                 .position(popPosition)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_point))
                 .title("End"));
 
         LatLng origin = new LatLng(startLatitude,startLongitude);

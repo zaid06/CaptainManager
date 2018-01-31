@@ -16,31 +16,22 @@ public class UiThread {
 
     private Timer timer;
     private TimerTask timerTask;
-
-
-
     private Tracker tracker;
-
     OpenLocation openLocation = new OpenLocation();
-
     public void thread(final Context context){
 
-         tracker = new Tracker(context);
+        tracker = new Tracker(context);
 
         timer = new Timer();
 
         timerTask = new TimerTask() {
             @Override
             public void run() {
-
-
                 if(!tracker.checkGPSStatus()) {
                     openLocation.openLocation(context);
                 }
-
             }
         };
-
         timer.schedule(timerTask,10000,10000);
     }
 

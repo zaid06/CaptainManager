@@ -43,17 +43,11 @@ public class PushService extends Service {
             FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).limitToLast(1).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                     NotificationModel notificationModel = dataSnapshot.getValue(NotificationModel.class);
-
                     if(! (SaveInSharedPreference.getInSharedPreference(getApplicationContext()).getNotification(notificationModel.getPushkey()))){
-
                         SaveInSharedPreference.getInSharedPreference(getApplicationContext()).setNotification(notificationModel.getPushkey());
-
                         notif(notificationModel);
-
                     }
-
                 }
 
                 @Override
