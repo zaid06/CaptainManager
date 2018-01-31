@@ -86,7 +86,7 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:padding="5dp"
+                android:padding="2dp"
                 android:scaleType="centerInside"
                 android:id="@+id/fab"
                 android:layout_margin="8dp"
