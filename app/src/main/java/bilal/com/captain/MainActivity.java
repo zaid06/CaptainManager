@@ -1007,11 +1007,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(isUser){
 
-                    sendScrenShotToSingleUser(firebase,message,file,dialog);
+                    sendScrenShotToUsers(firebase,null,message,file,dialog);
 
                 }else {
 
-                    sendDataToMultipleUser(groupNameUsersModel,message,file);
+                    sendScrenShotToUsers(null,groupNameUsersModel,message,file,dialog);
 
                 }
 
@@ -1027,7 +1027,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void sendScrenShotToSingleUser(final Firebase firebase, final String message, final File file, final AlertDialog dialog){
+    private void sendScrenShotToUsers(final Firebase firebase, final GroupNameUsersModel groupNameUsersModel, final String message, final File file, final AlertDialog dialog){
 
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
 
@@ -1051,19 +1051,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 SingleChatModel singleChatModel = new SingleChatModel(message,"Sender",true,"hello",date+" "+time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(),selectDownloadUrls);
 
-                FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(firebase.getId()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                if(isUser){
 
-                singleChatModel.setFlag(false);
+                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(firebase.getId()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                FirebaseDatabase.getInstance().getReference().child("Chatting").child(firebase.getId()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                    singleChatModel.setFlag(false);
 
-                if(message.length() > 6) {
+                    FirebaseDatabase.getInstance().getReference().child("Chatting").child(firebase.getId()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
 
-                    sendNotification(message.substring(0,6)+"...",firebase);
+                    if(message.length() > 6) {
 
-                }else {
+                        sendNotification(message.substring(0,6)+"...",firebase);
 
-                    sendNotification(message,firebase);
+                    }else {
+
+                        sendNotification(message,firebase);
+
+                    }
+
+                } else {
+                    for (int i = 0; i < groupNameUsersModel.getUsers().size(); i++) {
+
+                        if (groupNameUsersModel.getUsers().get(i).getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                            singleChatModel.setFlag(true);
+
+                            FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(groupNameUsersModel.getPrimarypushkey()).child(groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                        } else {
+
+                            singleChatModel.setFlag(false);
+
+                            FirebaseDatabase.getInstance().getReference().child("GroupChatting").child(groupNameUsersModel.getPrimarypushkey()).child(groupNameUsersModel.getUsers().get(i).getKey()).child(singleChatModel.getKey()).setValue(singleChatModel);
+                        }
+                    }
 
                 }
 

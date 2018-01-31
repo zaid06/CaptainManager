@@ -85,17 +85,16 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="15sp" />
 
-            <android.support.design.widget.FloatingActionButton
+            <ImageView
+                android:padding="5dp"
+                android:scaleType="centerInside"
                 android:id="@+id/fab"
                 android:layout_margin="8dp"
                 android:layout_width="0dp"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:src="@drawable/screen_shot"
-                android:backgroundTint="@color/colorMain"
-                app:borderWidth="0dp"
-                app:elevation="10dp"
-                app:fabSize="normal"
+                android:background="@color/colorMain"
                 android:layout_weight=".5"/>
 
         </LinearLayout>
