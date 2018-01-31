@@ -3,6 +3,7 @@ package bilal.com.captain.adapters;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -113,6 +114,16 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     }
                 });
 
+                viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String url = (String) parent.getItemAtPosition(position);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(url), "image/*");
+                        context.startActivity(intent);
+                    }
+                });
 
             }else {
 
@@ -160,6 +171,18 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                         Log.d("url", url);
                        openAlert(position,url,"reciever");
                         return false;
+
+                    }
+                });
+
+                viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String url = (String) parent.getItemAtPosition(position);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(url), "image/*");
+                        context.startActivity(intent);
 
                     }
                 });
