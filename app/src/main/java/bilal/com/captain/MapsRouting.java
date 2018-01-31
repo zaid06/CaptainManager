@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -126,7 +128,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        HashMap<String, String> userData;
         if (tracker.checkGPSStatus()){
             startLatitude = tracker.userLatitude;
             startLongitude = tracker.userLongitude;
@@ -179,8 +180,6 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
                     ContentValues cv = new ContentValues();
                     cv.put("latitude", String.valueOf(startLatitude));
                     cv.put("longitude", String.valueOf(startLongitude));
-
-
                     LatLng popUpdatedPosition = new LatLng(startLatitude, startLongitude);
                     popMarker.setPosition(popUpdatedPosition);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(popUpdatedPosition));

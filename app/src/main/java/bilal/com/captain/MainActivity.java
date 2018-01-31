@@ -3,33 +3,45 @@ package bilal.com.captain;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ebanx.swipebtn.OnStateChangeListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,17 +54,26 @@ import java.util.TimerTask;
 import bilal.com.captain.Util.CustomToast;
 import bilal.com.captain.Util.InternetConnection;
 import bilal.com.captain.Util.OpenLocation;
+import bilal.com.captain.Util.SaveInSharedPreference;
+import bilal.com.captain.Util.ScreenshotUtils;
 import bilal.com.captain.Util.Tracker;
 
 import bilal.com.captain.Util.Util;
 import bilal.com.captain.activityIncomeDetail.IncomeDetailActivity;
+import bilal.com.captain.adapters.ShowGroupsListAdapter;
+import bilal.com.captain.adapters.UsersListAdapter;
 import bilal.com.captain.cameraActivity.CameraActivity;
 import bilal.com.captain.chatActivity.ChatActivity;
+import bilal.com.captain.chatActivity.StartOneToOneChatting;
+import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
+import bilal.com.captain.models.GroupNameUsersModel;
 import bilal.com.captain.models.IncomeModel;
+import bilal.com.captain.models.NotificationModel;
+import bilal.com.captain.models.SingleChatModel;
 import bilal.com.captain.notifications.PushService;
 import bilal.com.captain.resideMenu.ResideMenu;
 import bilal.com.captain.resideMenu.ResideMenuItem;
@@ -85,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ArrayList<IncomeModel> incomeModelArrayList;
 
+    ArrayList<Firebase> arrayList_users;
+
+    ArrayList<GroupNameUsersModel> groupNameUsersModelArrayList;
 
     ArrayList<ExpenseModel> expenseModelArrayList;
 
@@ -93,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Tracker tracker;
 
     UiThread uiThread = new UiThread();
+
+    RelativeLayout rootContent;
 
     @Override
     public void onBackPressed() {
@@ -124,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    public enum ScreenshotType {
+        FULL, CUSTOM;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         tracker = new Tracker(MainActivity.this);
+
+        rootContent = (RelativeLayout) findViewById(R.id.rootContent);
 
 //        if(!tracker.checkGPSStatus()){
 //            OpenLocation.openLocation(MainActivity.this);
@@ -143,10 +174,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        findViewById(R.id.temporary).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+                takeScreenshot(ScreenshotType.FULL);
             }
         });
 
@@ -269,6 +300,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tv_achieved = (TextView) findViewById(R.id.tv_achieved);
 
+        arrayList_users = new ArrayList<>();
+
+        groupNameUsersModelArrayList = new ArrayList<>();
+
         complaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -299,6 +334,108 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        getDataFromServer();
         getDataFromServer();
         achieved();
+    }
+
+    private void takeScreenshot(ScreenshotType screenshotType) {
+        Bitmap b = null;
+        switch (screenshotType) {
+            case FULL:
+                //If Screenshot type is FULL take full page screenshot i.e our root content.
+                b = ScreenshotUtils.getScreenShot(rootContent);
+                break;
+
+        }
+
+        //If bitmap is not null
+        if (b != null) {
+//            showScreenShotImage(b);//show bitmap over imageview
+
+            File saveFile = ScreenshotUtils.getMainDirectoryName(this);//get the path to save screenshot
+
+            String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+            String mImageName="SS_"+ timeStamp +".jpg";
+
+            File file = ScreenshotUtils.store(b, mImageName, saveFile);//save the screenshot to selected path
+
+            if(file.exists()){
+
+                openAlertForSendMessage(file);
+//                Toast.makeText(this, "Do Here Of Sending", Toast.LENGTH_SHORT).show();
+
+            }
+
+//            shareScreenshot(file);//finally share screenshot
+        } else
+            //If bitmap is null show toast message
+            Toast.makeText(this, "Failed To take Screen Shot", Toast.LENGTH_SHORT).show();
+
+    }
+
+    boolean isUser = true;
+
+    private void openAlertForSendMessage(final File f){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        final View view = getLayoutInflater().inflate(R.layout.send_screen_shot_user_layout, null);
+        final LinearLayout cash = (LinearLayout) view.findViewById(R.id.users);
+        final LinearLayout wallet = (LinearLayout) view.findViewById(R.id.group);
+        final LinearLayout cancel = (LinearLayout) view.findViewById(R.id.cancel);
+        final TextView tv_cash = (TextView) view.findViewById(R.id.tv_cash);
+        final TextView tv_wallet = (TextView) view.findViewById(R.id.tv_wallet);
+        final ListView listView = (ListView) view.findViewById(R.id.list);
+        UsersListAdapter usersListAdapter = new UsersListAdapter(MainActivity.this,arrayList_users);
+        listView.setAdapter(usersListAdapter);
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.MapDialogTheme;
+        dialog.show();
+        cash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cash.setBackgroundColor(getResources().getColor(R.color.lightGray));
+                tv_cash.setTextColor(getResources().getColor(R.color.colorBlack));
+                wallet.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                tv_wallet.setTextColor(getResources().getColor(R.color.colorWhite));
+                isUser = true;
+                UsersListAdapter usersListAdapter = new UsersListAdapter(MainActivity.this,arrayList_users);
+                listView.setAdapter(usersListAdapter);
+            }
+        });
+        wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cash.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                tv_cash.setTextColor(getResources().getColor(R.color.colorWhite));
+                wallet.setBackgroundColor(getResources().getColor(R.color.lightGray));
+                tv_wallet.setTextColor(getResources().getColor(R.color.colorBlack));
+                isUser = false;
+                ShowGroupsListAdapter showGroupsListAdapter = new ShowGroupsListAdapter(MainActivity.this,groupNameUsersModelArrayList);
+                listView.setAdapter(showGroupsListAdapter);
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(isUser){
+                    Firebase firebase = (Firebase) parent.getItemAtPosition(position);
+                    createpopUpForScreenShotSending(f,firebase,null);
+                    dialog.dismiss();
+                }else {
+                    GroupNameUsersModel groupNameUsersModel = (GroupNameUsersModel) parent.getItemAtPosition(position);
+                    createpopUpForScreenShotSending(f,null,groupNameUsersModel);
+                    dialog.dismiss();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isUser = true;
+                dialog.dismiss();
+                f.delete();
+            }
+        });
     }
 
     private void showMenu(View v) {
@@ -584,6 +721,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     long totalExpence = 0;
 
+    ChildEventListener singleUserEventListners = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            Firebase firebase = dataSnapshot.getValue(Firebase.class);
+            if(!( FirebaseAuth.getInstance().getCurrentUser().getUid().equals(firebase.getId())) ) {
+                arrayList_users.add(firebase);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            Firebase firebase = dataSnapshot.getValue(Firebase.class);
+            for (int i=0; i<arrayList_users.size(); i++){
+                if(arrayList_users.get(i).getId().equals(firebase.getId())){
+                    if(arrayList_users.get(i).getIsonline()){
+                        arrayList_users.remove(i);
+                        arrayList_users.add(i,firebase);
+                    }else{
+                        arrayList_users.remove(i);
+                        arrayList_users.add(i,firebase);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    ChildEventListener groupUserEventListners = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            GroupNameUsersModel groupNameUsersModel = dataSnapshot.getValue(GroupNameUsersModel.class);
+
+            if (groupNameUsersModel.getAdminkey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                groupNameUsersModelArrayList.add(groupNameUsersModel);
+            } else {
+                boolean flag = false;
+                for (int i = 0; i < groupNameUsersModel.getUsers().size(); i++) {
+                    if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(groupNameUsersModel.getUsers().get(i).getKey())) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    groupNameUsersModelArrayList.add(groupNameUsersModel);
+                }
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
     ChildEventListener cashEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -743,5 +964,144 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 orderByChild("date").equalTo(currtime).
                 addChildEventListener(cashEventListener);
 
+        FirebaseDatabase.
+                getInstance().
+                getReference().
+                child("Public_User").
+                addChildEventListener(singleUserEventListners);
+
+        FirebaseDatabase.
+                getInstance().
+                getReference().
+                child("Groups").addChildEventListener(groupUserEventListners);
+
     }
+
+    private void createpopUpForScreenShotSending(final File file,final Firebase firebase,final GroupNameUsersModel groupNameUsersModel){
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        final View view = getLayoutInflater().inflate(R.layout.send_sms_screen_shot_alert, null);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.image);
+        imageView.setImageURI(Uri.fromFile(file));
+        final EditText editText = (EditText) view.findViewById(R.id.messageEditText);
+        final BoldCustomTextView title = (BoldCustomTextView) view.findViewById(R.id.title);
+        if(firebase == null){
+            title.setText(groupNameUsersModel.getGroupname());
+        }else if(groupNameUsersModel == null){
+            title.setText(firebase.getUsername());
+        }
+        final Button sendButton = (Button) view.findViewById(R.id.sendButton);
+        alert.setView(view);
+        final AlertDialog dialog = alert.create();
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.MapDialogTheme;
+        dialog.show();
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String message = editText.getText().toString().trim();
+
+                if(TextUtils.isEmpty(message)){
+                    message = "Find An Attachment";
+                }
+
+                if(isUser){
+
+                    sendScrenShotToSingleUser(firebase,message,file,dialog);
+
+                }else {
+
+                    sendDataToMultipleUser(groupNameUsersModel,message,file);
+
+                }
+
+            }
+        });
+        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                file.delete();
+            }
+        });
+
+    }
+
+    private void sendScrenShotToSingleUser(final Firebase firebase, final String message, final File file, final AlertDialog dialog){
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+
+        progressDialog.setMessage("Message Sending");
+
+        progressDialog.show();
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+
+        FirebaseStorage.getInstance().getReference().child("Chatting").child(timeStamp).putFile(Uri.fromFile(file)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                ArrayList<String> selectDownloadUrls = new ArrayList<>();
+
+                selectDownloadUrls.add(String.valueOf(taskSnapshot.getDownloadUrl()));
+
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+
+                String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+
+                SingleChatModel singleChatModel = new SingleChatModel(message,"Sender",true,"hello",date+" "+time, FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uid").push().getKey(),selectDownloadUrls);
+
+                FirebaseDatabase.getInstance().getReference().child("Chatting").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(firebase.getId()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                singleChatModel.setFlag(false);
+
+                FirebaseDatabase.getInstance().getReference().child("Chatting").child(firebase.getId()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(singleChatModel.getKey()).setValue(singleChatModel);
+
+                if(message.length() > 6) {
+
+                    sendNotification(message.substring(0,6)+"...",firebase);
+
+                }else {
+
+                    sendNotification(message,firebase);
+
+                }
+
+                file.delete();
+
+                progressDialog.dismiss();
+
+                dialog.dismiss();
+
+                CustomToast.showToast(MainActivity.this,"Send Successfully",MDToast.TYPE_SUCCESS);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                file.delete();
+
+                progressDialog.dismiss();
+
+                dialog.dismiss();
+
+                CustomToast.showToast(MainActivity.this,"Not Send",MDToast.TYPE_SUCCESS);
+            }
+        });
+
+
+    }
+
+    private void sendDataToMultipleUser(GroupNameUsersModel groupNameUsersModel, String message, File file){
+
+    }
+
+    private void sendNotification(String message, Firebase firebase){
+
+        NotificationModel notificationModel = new NotificationModel(FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey(), FirebaseAuth.getInstance().getCurrentUser().getUid(), SaveInSharedPreference.getInSharedPreference(MainActivity.this).getName(),message);
+
+        FirebaseDatabase.getInstance().getReference().child("ChattingNotification").child(firebase.getId()).child(notificationModel.getPushkey()).setValue(notificationModel);
+
+    }
+
 }
