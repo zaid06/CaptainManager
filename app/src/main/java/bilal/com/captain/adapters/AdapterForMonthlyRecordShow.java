@@ -42,38 +42,28 @@ public class AdapterForMonthlyRecordShow extends ArrayAdapter<ModelForMonthlyRec
         if (convertView == null) {
 
             if (modelForMonthlyRecordsShow.getType().equals("month")) {
-
                 convertView = layoutInflater.inflate(R.layout.show_month_title_item, parent, false);
 
-                final BoldCustomTextView title = (BoldCustomTextView) convertView.findViewById(R.id.title);
+                final ViewHolder viewHolder = new ViewHolder(convertView,"month");
 
-                setTitle(title, modelForMonthlyRecordsShow.getMonthly());
-
+                setTitle(viewHolder.title, modelForMonthlyRecordsShow.getMonthly());
             } else if (modelForMonthlyRecordsShow.getType().equals("record")) {
                 convertView = layoutInflater.inflate(R.layout.cash_custom_layout, parent, false);
 
-                final BoldCustomTextView cashcash = (BoldCustomTextView) convertView.findViewById(R.id.cashcash);
+                final ViewHolder viewHolder = new ViewHolder(convertView);
 
-                final RegularCustomTextView date = (RegularCustomTextView) convertView.findViewById(R.id.cashdate);
+                viewHolder.cashcash.setText("Rs. " + modelForMonthlyRecordsShow.getIncome());
 
-                cashcash.setText("Rs. " + modelForMonthlyRecordsShow.getIncome());
-
-                date.setText("" + modelForMonthlyRecordsShow.getDate());
-
-
+                viewHolder.date.setText("" + modelForMonthlyRecordsShow.getDate());
             } else if (modelForMonthlyRecordsShow.getType().equals("total")) {
-
                 convertView = layoutInflater.inflate(R.layout.show_total_item, parent, false);
 
                 final BoldCustomTextView total = (BoldCustomTextView) convertView.findViewById(R.id.total);
 
                 total.setText("" + modelForMonthlyRecordsShow.getTotal());
-
             }
 
         }
-
-
         return convertView;
     }
 
@@ -106,5 +96,25 @@ public class AdapterForMonthlyRecordShow extends ArrayAdapter<ModelForMonthlyRec
         } else if (month_start_two_char.equals("12")) {
             boldCustomTextView.setText("December:");
         }
+    }
+
+    static class ViewHolder{
+
+        BoldCustomTextView cashcash;
+
+        RegularCustomTextView date;
+
+        BoldCustomTextView title;
+
+        public ViewHolder(View v){
+            cashcash = (BoldCustomTextView) v.findViewById(R.id.cashcash);
+
+            date = (RegularCustomTextView) v.findViewById(R.id.cashdate);
+        }
+
+        public ViewHolder(View v, String month){
+            title = (BoldCustomTextView) v.findViewById(R.id.title);
+        }
+
     }
 }

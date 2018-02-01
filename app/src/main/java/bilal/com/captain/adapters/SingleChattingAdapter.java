@@ -111,7 +111,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                         String url = (String) adapterView.getItemAtPosition(i);
                         Log.d("url", url);
                         openAlert(position,url,"sender");
-                        return false;
+                        return true;
 
                     }
                 });
@@ -170,7 +170,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
 
                         Log.d("url", url);
                        openAlert(position,url,"reciever");
-                        return false;
+                        return true;
 
                     }
                 });
