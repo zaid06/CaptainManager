@@ -114,6 +114,7 @@ total
                         Global.curr.get(i).getYear(),
                         "record")
                 );
+                temp = Global.curr.get(i).getMonthly();
                 total += Global.curr.get(i).getIncome();
             }
 

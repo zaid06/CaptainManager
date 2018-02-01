@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,6 +44,7 @@ import bilal.com.captain.chatActivity.StartOneToOneChatting;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.classes.RegularCustomTextView;
 import bilal.com.captain.galleryActivity.GalleryActivity;
+import bilal.com.captain.imageViewActivity.ImageViewActivity;
 import bilal.com.captain.models.SingleChatModel;
 
 /**
@@ -117,11 +119,9 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                 viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String url = (String) parent.getItemAtPosition(position);
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(url), "image/*");
-                        context.startActivity(intent);
+                        final String url = (String) parent.getItemAtPosition(position);
+
+                        openImage(Uri.parse(url));
                     }
                 });
 
@@ -178,12 +178,9 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                 viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String url = (String) parent.getItemAtPosition(position);
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(url), "image/*");
-                        context.startActivity(intent);
+                        final String url = (String) parent.getItemAtPosition(position);
 
+                        openImage(Uri.parse(url));
                     }
                 });
 
@@ -345,4 +342,21 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
         }
     }
 
+    private void openImage(final Uri uri){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+
+
+        }else {
+
+            Intent intent = new Intent(context, ImageViewActivity.class);
+
+            intent.putExtra("url",String.valueOf(uri));
+
+            context.startActivity(intent);
+//            Intent intent = new Intent();
+//            intent.setAction(Intent.ACTION_VIEW);
+//            intent.setDataAndType(uri, "image/*");
+//            context.startActivity(intent);
+        }
+    }
 }

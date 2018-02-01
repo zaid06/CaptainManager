@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="bilal.com.captain">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,6 +26,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="bilal.com.captain.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource" />
+        </provider>
+
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,7 +83,8 @@
         <activity android:name=".LiveVideoTestingUsingFirebase" />
         <activity android:name=".ShowYears.ShowYears" />
         <activity android:name=".activityForHoldMonthlyRecordFragments.ActivityForHoldMonthlyAndWeeklyRecordFragment" />
-        <activity android:name=".cameraActivity.CameraActivity"></activity>
+        <activity android:name=".cameraActivity.CameraActivity" />
+        <activity android:name=".imageViewActivity.ImageViewActivity"></activity>
     </application>
 
 </manifest>

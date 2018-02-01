@@ -68,6 +68,7 @@ import bilal.com.captain.chatActivity.StartOneToOneChatting;
 import bilal.com.captain.classes.BoldCustomTextView;
 import bilal.com.captain.complainActivity.ComplainActivity;
 import bilal.com.captain.expenceActivity.ExpenseActivity;
+import bilal.com.captain.imageViewActivity.ImageViewActivity;
 import bilal.com.captain.mapActivity.MapsActivity;
 import bilal.com.captain.models.ExpenseModel;
 import bilal.com.captain.models.GroupNameUsersModel;
@@ -181,12 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, MapsActivity.class));
-            }
-        });
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
 
@@ -230,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,LiveVideoTestingUsingFirebase.class));
+                startActivity(new Intent(MainActivity.this, ImageViewActivity.class));
             }
         });
 
