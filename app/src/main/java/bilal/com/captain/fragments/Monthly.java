@@ -3,6 +3,7 @@ package bilal.com.captain.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import bilal.com.captain.Global;
 import bilal.com.captain.GlobalVariables;
 import bilal.com.captain.R;
 import bilal.com.captain.adapters.AdapterForMonthlyRecordShow;
+import bilal.com.captain.models.IncomeModel;
 import bilal.com.captain.models.ModelForMonthlyRecordsShow;
 
 /**
@@ -75,6 +77,12 @@ total
 
         String temp = "";
 
+        for (IncomeModel i:Global.curr){
+
+            Log.d("monthly", "initialise: "+i.getMonthly());
+
+        }
+
         for (int i=0; i< Global.curr.size(); i++){
             if(GlobalVariables.year.equals(Global.curr.get(i).getYear() )&&( !temp.equals(Global.curr.get(i).getMonthly() ))){
                 arrayList.add(new ModelForMonthlyRecordsShow(
@@ -102,6 +110,7 @@ total
                 total += Global.curr.get(i).getIncome();
                 temp = Global.curr.get(i).getMonthly();
                 count++;
+                Log.d("monthly", "initialise: "+Global.curr.get(i).getMonthly() );
             }else if(GlobalVariables.year.equals(Global.curr.get(i).getYear() )){
                 arrayList.add(new ModelForMonthlyRecordsShow(
                         Global.curr.get(i).getIncome(),
@@ -116,9 +125,13 @@ total
                 );
                 temp = Global.curr.get(i).getMonthly();
                 total += Global.curr.get(i).getIncome();
+
+                Log.d("monthly", "initialise: "+Global.curr.get(i).getMonthly() );
             }
 
         }
+
+        Log.d("arrayList", "initialise: "+arrayList);
 
         adapterForMonthlyRecordShow = new AdapterForMonthlyRecordShow(getContext(),arrayList);
 

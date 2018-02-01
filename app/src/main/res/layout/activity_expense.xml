@@ -9,20 +9,20 @@
     tools:context="bilal.com.captain.expenceActivity.ExpenseActivity">
 
     <LinearLayout
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal"
         android:id="@+id/toplayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
         android:layout_weight=".4"
-        android:background="@color/colorMain">
+        android:background="@color/colorMain"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_weight="1"
             android:id="@+id/button_back"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:layout_weight="1">
 
             <ImageView
                 android:layout_width="35dp"
@@ -35,11 +35,11 @@
 
 
         <bilal.com.captain.classes.BoldCustomTextView
-            android:layout_weight="1"
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="Expense"
             android:textColor="@color/colorWhite"
@@ -48,16 +48,16 @@
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -125,10 +125,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -194,10 +194,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 

@@ -171,7 +171,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
 
                         Log.d("url", url);
                        openAlert(position,url,"reciever");
-                        return false;
+                        return true;
 
                     }
                 });
