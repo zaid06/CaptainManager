@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Captain.iml" filepath="$PROJECT_DIR$/Captain.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\ikodePC-1\Desktop\Bakhtiyar_1\Captain\captainmanager.iml" filepath="C:\Users\ikodePC-1\Desktop\Bakhtiyar_1\Captain\captainmanager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/captainmanager.iml" filepath="$PROJECT_DIR$/captainmanager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../ikodePC-1/Desktop/Bakhtiyar_1/Captain/captainmanager.iml" filepath="$PROJECT_DIR$/../../../../ikodePC-1/Desktop/Bakhtiyar_1/Captain/captainmanager.iml" />
     </modules>
   </component>
 </project>

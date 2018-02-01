@@ -101,7 +101,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         v.getParent().requestDisallowInterceptTouchEvent(true);
-                        return false;
+                        return true;
                     }
                 });
 
@@ -111,7 +111,7 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                         String url = (String) adapterView.getItemAtPosition(i);
                         Log.d("url", url);
                         openAlert(position,url,"sender");
-                        return false;
+                        return true;
 
                     }
                 });
@@ -120,8 +120,9 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         final String url = (String) parent.getItemAtPosition(position);
+                        final String check = "sender";
 
-                        openImage(Uri.parse(url));
+                        openImage(Uri.parse(url),check,position);
                     }
                 });
 
@@ -180,7 +181,8 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         final String url = (String) parent.getItemAtPosition(position);
 
-                        openImage(Uri.parse(url));
+                        final String check = "receiver";
+                        openImage(Uri.parse(url),check,position);
                     }
                 });
 
@@ -342,8 +344,18 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
         }
     }
 
-    private void openImage(final Uri uri){
+    private void openImage(final Uri uri, final String check, final int position){
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+
+            Intent intent = new Intent(context, ImageViewActivity.class);
+
+            intent.putExtra("url",String.valueOf(uri));
+
+            intent.putExtra("check",check);
+
+            intent.putExtra("position",position);
+
+            context.startActivity(intent);
 
 
         }else {
@@ -351,6 +363,8 @@ public class SingleChattingAdapter extends ArrayAdapter<SingleChatModel> {
             Intent intent = new Intent(context, ImageViewActivity.class);
 
             intent.putExtra("url",String.valueOf(uri));
+
+            intent.putExtra("check",check);
 
             context.startActivity(intent);
 //            Intent intent = new Intent();
