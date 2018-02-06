@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -63,6 +64,7 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
     AlertDialog.Builder dialogLocationBuilder;
     AlertDialog dialogLocation;
     Tracker tracker;
+    ImageView backbutton;
     Bundle bundle = new Bundle();
     double startLatitude, startLongitude;
     double endLatitude, endLongitude;
@@ -103,6 +105,17 @@ public class MapsRouting  extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        backbutton = (ImageView) findViewById(R.id.maproutesbackbutton);
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     @Override

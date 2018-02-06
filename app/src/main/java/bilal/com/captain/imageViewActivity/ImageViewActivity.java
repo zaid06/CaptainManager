@@ -33,7 +33,9 @@ public class ImageViewActivity extends AppCompatActivity{
 
     private String TAG = "TAG";
 
-    Bundle bundle,b,p;
+    Bundle bundle;
+    Bundle checkBundle;
+    Bundle positionBundle;
 
     String url;
 
@@ -60,13 +62,13 @@ public class ImageViewActivity extends AppCompatActivity{
 
         url = bundle.getString("url");
 
-        b = getIntent().getExtras();
+        checkBundle = getIntent().getExtras();
 
-        check = b.getString("check");
+        check = checkBundle.getString("check");
 
-        p = getIntent().getExtras();
+        positionBundle = getIntent().getExtras();
 
-        position = p.getInt("position");
+        position = positionBundle.getInt("position");
 
         download = (ImageView)findViewById(R.id.downloadimage);
 

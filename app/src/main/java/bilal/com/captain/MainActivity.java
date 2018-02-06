@@ -222,12 +222,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ImageViewActivity.class));
-            }
-        });
+//        findViewById(R.id.goal).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, ImageViewActivity.class));
+//            }
+//        });
 
         findViewById(R.id.achieve).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -459,6 +459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                           //      .child(String.valueOf(firebase.getIsonline())).setValue("false");
 
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
                         return true;
                     default:
                         return false;

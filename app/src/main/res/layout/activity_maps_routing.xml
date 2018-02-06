@@ -16,6 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/colorMain">
+
+            <ImageView
+                android:id="@+id/maproutesbackbutton"
+                android:layout_width="30dp"
+                android:layout_height="27dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_back_arrow" />
+
+
+
             <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
