@@ -10,7 +10,7 @@
         android:background="@color/offWhite"
         android:orientation="vertical">
 
-        <TextView
+        <bilal.com.captain.classes.RegularCustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Do you want to download image?"
@@ -32,7 +32,7 @@
             android:background="@color/colorMain"
             android:padding="10dp">
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -52,7 +52,7 @@
             android:background="@color/colorMain"
             android:padding="10dp">
 
-            <TextView
+            <bilal.com.captain.classes.BoldCustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
